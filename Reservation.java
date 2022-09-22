@@ -1,7 +1,7 @@
 /*
  * 9/20/2022
  * This is the Reservation Class.
- * Macaws - R. Barrowclift, C. Hogg, M. Porter - ITP 220
+ * Macaws - R. Barrowclift, Connor Hogg, M. Porter - ITP 220
  */
 
 package macawsProject;
