@@ -1,11 +1,12 @@
-/*
- * 9/20/2022
- * This is the Customer Class.
- * Macaws - R. Barrowclift, C. Hogg, M. Porter - ITP 220
- */
-
 package macawsProject;
 
+/**
+ * Customer Class
+ *
+ * @authors R. Barrowclift, C. Hogg, M. Porter - ITP 220
+ * @version Sep 22, 2022
+ *
+ */
 public class Customer {
 	
 	// Create the instance variables for a customer.
