@@ -2,6 +2,11 @@ package macawsProject;
 
 /**
  * Customer Class
+ * 
+ * Creates a customer class to detail what makes up a customer:
+ * 	Customer Name (first & last)
+ * 	Customer Number
+ * 	Customer Email
  *
  * @authors R. Barrowclift, C. Hogg, M. Porter - ITP 220
  * @version Sep 22, 2022

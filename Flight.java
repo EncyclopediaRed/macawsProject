@@ -5,6 +5,13 @@ import java.time.LocalDate;
 
 /**
  * Flight Class
+ * 
+ * Creates a flight class to detail what makes up a flight:
+ *  Flight route designation
+ *  Flight number
+ *  Departure date
+ *  Departure time
+ *  Pilot
  *
  * @authors R. Barrowclift, C. Hogg, M. Porter - ITP 220
  * @version Sep 22, 2022

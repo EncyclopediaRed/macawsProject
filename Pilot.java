@@ -3,6 +3,10 @@ package macawsProject;
 /**
  * Pilot Class
  * 
+ * Creates a pilot class to detail what makes up a pilot:
+ *  Pilot Name
+ *  Pilot Number
+ *  Current Location?
  *
  * @authors R. Barrowclift, C. Hogg, M. Porter - ITP 220
  * @version Sep 22, 2022

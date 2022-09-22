@@ -3,6 +3,15 @@ package macawsProject;
 /**
  * Reservation Class
  * 
+ * Creates a reservation class to detail what makes up a reservation:
+ *  customer
+ *  flight
+ *  number of seats
+ *  seat number
+ *  cost
+ *  confirmation number
+ *  and a boolean to determine if the reservation is paid for
+ * 
  * @authors R. Barrowclift, C. Hogg, M. Porter - ITP 220
  * @version Sep 22, 2022
  *
