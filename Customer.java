@@ -3,7 +3,6 @@ package macawsProject;
 /**
  * Customer Class
  * 
- *  Added this line for testing sync functionality.
  *  
  * Creates a customer class to detail what makes up a customer:
  * 	Customer Name (first & last)
