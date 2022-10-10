@@ -25,22 +25,62 @@ public class Menu {
 		
 		Customer c = new Customer("Connor", "Hogg", "Hogg.Connor@gmail.com");
 		cust.add(c);
+		c = new Customer("David", "Bryan", "David.Bryan@gmail.com");
+		cust.add(c);
+		c = new Customer("John", "Gafildafield", "John.Gafildafield@gmail.com");
+		cust.add(c);
+		c = new Customer("Terry", "Bubbkis", "Terry.Bubbkis@gmail.com");
+		cust.add(c);
+		c = new Customer("Larry", "Outhouse", "Larry.Outhouse@gmail.com");
+		cust.add(c);
+		c = new Customer("Meg", "Griffen", "Meg.Griffen@gmail.com");
+		cust.add(c);
+		c = new Customer("Charles", "Hoag", "Charles.Hoag@gmail.com");
+		cust.add(c);
+		c = new Customer("Larry", "Harder", "Larry.Harder@gmail.com");
+		cust.add(c);
+		c = new Customer("James", "Madison", "James.Madison@gmail.com");
+		cust.add(c);
+		c = new Customer("Finley", "Davis", "Finley.Davis@gmail.com");
+		cust.add(c);
+		
+		
+		
+		
+		
 		for (int i=0; i<cust.size(); i++)
 			System.out.println(cust.get(i).toString());
-		Pilot p = new Pilot("Pilot 1");
-		pilot.add(p);
-		p = new Pilot("Pilot 2");
-		pilot.add(p);
-		p = new Pilot("Pilot 3");
-		pilot.add(p);
+		Pilot p1 = new Pilot("Pilot 1");
+		pilot.add(p1);
+		Pilot p2 = new Pilot("Pilot 2");
+		pilot.add(p2);
+		Pilot p3 = new Pilot("Pilot 3");
+		pilot.add(p3);
 		
 		String[][] seatMap = { { "  ", "1A", "1B", "  "},
 				   				{ "  ", "2A" ,"2B", "  " },
 				   				{ "3A", "3B", "3C", "3D", },
 				   				{ "4A", "4B", "4C", "4D", } };
 		
-		Flight f = new Flight("To Phonix", "01/22/2023", "4:22pm", seatMap, p);
-		flight.add(f);
+		Flight f1 = new Flight("ROA to PHX", "2022-11-12", "am", seatMap, p1);
+		flight.add(f1);
+		Flight f2 = new Flight("PHX to ROA", "2022-11-12", "am", seatMap, p2);
+		flight.add(f2);
+		Flight f3 = new Flight("ROA to PHX", "2022-11-12", "pm", seatMap, p3);
+		flight.add(f3);
+		Flight f4 = new Flight("PHX to ROA", "2022-11-12", "pm", seatMap, p1);
+		flight.add(f4);
+		Flight f5 = new Flight("ROA to PHX", "2022-11-12", "am", seatMap, p2);
+		flight.add(f5);
+		Flight f6 = new Flight("PHX to ROA", "2022-11-12", "am", seatMap, p3);
+		flight.add(f6);
+		Flight f7 = new Flight("ROA to PHX", "2022-11-12", "pm", seatMap, p1);
+		flight.add(f7);
+		Flight f8 = new Flight("PHX to ROA", "2022-11-12", "pm", seatMap, p2);
+		flight.add(f8);
+		
+		
+		
 		
 		for (int i=0; i<flight.size(); i++)
 			System.out.println(flight.get(i).toString());
