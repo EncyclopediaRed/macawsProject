@@ -1,5 +1,8 @@
 package macawsProject;
 
+import java.sql.Time;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu {
@@ -15,15 +18,47 @@ public class Menu {
  * @version Oct 6, 2022
  *
  */
+		ArrayList<Customer> cust = new ArrayList<Customer>();
+		ArrayList<Pilot> pilot = new ArrayList<Pilot>();
+		ArrayList<Reservation> res = new ArrayList<Reservation>();
+		ArrayList<Flight> flight = new ArrayList<Flight>();
+		
+		Customer c = new Customer("Connor", "Hogg", "Hogg.Connor@gmail.com");
+		cust.add(c);
+		for (int i=0; i<cust.size(); i++)
+			System.out.println(cust.get(i).toString());
+		Pilot p = new Pilot("Pilot 1");
+		pilot.add(p);
+		p = new Pilot("Pilot 2");
+		pilot.add(p);
+		p = new Pilot("Pilot 3");
+		pilot.add(p);
+		
+		String[][] seatMap = { { "  ", "1A", "1B", "  "},
+				   				{ "  ", "2A" ,"2B", "  " },
+				   				{ "3A", "3B", "3C", "3D", },
+				   				{ "4A", "4B", "4C", "4D", } };
+		
+		Flight f = new Flight("To Phonix", "01/22/2023", "4:22pm", seatMap, p);
+		flight.add(f);
+		
+		for (int i=0; i<flight.size(); i++)
+			System.out.println(flight.get(i).toString());
+		for (int i=0; i<cust.size(); i++)
+			System.out.println(cust.get(i).toString());
+		for (int i=0; i<pilot.size(); i++)
+			System.out.println(pilot.get(i).toString());
+		
 
-
+		
+		
 	int choice = 0;
 	while(choice !=11) {
 		choice = menu();
 		if(choice == 1) {
-			AirlineDriver.printSeatMap();
+			AirlineDriver.printSeatMap(flight);
 		} else if (choice ==2) {
-			AirlineDriver.printFlightInfo();
+			AirlineDriver.printFlightInfo(flight);
 		} else if (choice == 3) {
 			AirlineDriver.printPilots();
 		} else if (choice == 4) {
@@ -31,7 +66,7 @@ public class Menu {
 		} else if (choice == 5) {
 			AirlineDriver.printCustomerByNum();
 		} else if (choice ==6) {
-			AirlineDriver.bookReservation();
+			AirlineDriver.bookReservation(cust, pilot, res, flight);
 		} else if (choice ==7) {
 			AirlineDriver.cancelReservation();
 		} else if (choice ==8) {

@@ -1,6 +1,9 @@
 package macawsProject;
 
+import java.util.ArrayList;
 import java.util.Scanner;
+
+import javax.imageio.metadata.IIOMetadataFormatImpl;
 
 /**
  * AirlineDriver Class
@@ -22,11 +25,17 @@ public class AirlineDriver {
 	 * 
 	 * @param args
 	 */
-	public static void printSeatMap() {
-
+	public static void printSeatMap(ArrayList<Flight>f) {
+		Scanner scan = new Scanner(System.in);
+		System.out.println("What is the flight number of you want to print out the seats for? If you want a general layout just type Layout.");
+		String flights =scan.nextLine();
+		if (flights.equalsIgnoreCase("layout")) {
+		
+		
+		
 		// Create a 2D array to represent the seats
-		String[][] seatMap = { { "1A", "1B", },
-							   { "2A", "2B", },
+		String[][] seatMap = { { "  ", "1A", "1B", "  "},
+							   { "  ", "2A" ,"2B", "  " },
 							   { "3A", "3B", "3C", "3D", },
 							   { "4A", "4B", "4C", "4D", } };
 		
@@ -39,9 +48,24 @@ public class AirlineDriver {
 				System.out.print("| " + seatMap[i][j] + " |");
 			}
 			System.out.println();
-		}
+			}
+		
 		
 		}
+		
+		System.out.println();
+		int flightnum=Integer.parseInt(flights);
+		System.out.println("Airplane Seat Map");
+		System.out.println("=========================");
+		for (int i =0; i<f.size();i++) {
+			if (flightnum==f.get(i).getFlightNum()) {
+					System.out.println(f.get(i).toMString());
+					System.out.println("test");
+			}
+		}
+			
+}
+	
 	/**
 	 * Print the flight information
 	 * Flight number 
@@ -55,7 +79,9 @@ public class AirlineDriver {
 	 * 
 	 * @param args
 	 */
-	public static void printFlightInfo() {
+	public static void printFlightInfo(ArrayList<Flight>f) {
+		for (int i=0; i<f.size(); i++)
+			System.out.println(f.get(i).toString());
 
 		}
 	
@@ -74,9 +100,9 @@ public class AirlineDriver {
     	//12.	We need an option for printing all the reservations for a give Customer if given their customer number.
 	   	}
 	
-	public static void bookReservation() {
-    	//book a reservation the meat and potatos
-    	}
+	public static void bookReservation(ArrayList<Customer> cust, ArrayList<Pilot> pilot, ArrayList<Reservation> res, ArrayList<Flight> flight) {
+ 	
+	}
 	
 	public static void cancelReservation() {
     	//cancel a reservation the meat and potatos

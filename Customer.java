@@ -1,18 +1,6 @@
 package macawsProject;
+import java.util.ArrayList;
 
-/**
- * Customer Class
- * 
- *  
- * Creates a customer class to detail what makes up a customer:
- * 	Customer Name (first & last)
- * 	Customer Number
- * 	Customer Email
- *
- * @authors R. Barrowclift, C. Hogg, M. Porter - ITP 220
- * @version Sep 22, 2022
- *
- */
 public class Customer {
 	
 	// Create the instance variables for a customer.
@@ -36,9 +24,9 @@ public class Customer {
 	public Customer(String fName, String lName, String e) {
 		
 		// Assign each instance variable for a customer.
-		fName = firstName;
-		lName = lastName;
-		e = email;
+		firstName=fName;
+		lastName=lName;
+		email= e;
 		custNum = num;
 		num += 10;			
 	} // End of full argument constructor.
