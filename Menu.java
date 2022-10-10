@@ -48,8 +48,7 @@ public class Menu {
 		
 		
 		
-		for (int i=0; i<cust.size(); i++)
-			System.out.println(cust.get(i).toString());
+		
 		Pilot p1 = new Pilot("Pilot 1");
 		pilot.add(p1);
 		Pilot p2 = new Pilot("Pilot 2");
@@ -81,15 +80,6 @@ public class Menu {
 		
 		
 		
-		
-		for (int i=0; i<flight.size(); i++)
-			System.out.println(flight.get(i).toString());
-		for (int i=0; i<cust.size(); i++)
-			System.out.println(cust.get(i).toString());
-		for (int i=0; i<pilot.size(); i++)
-			System.out.println(pilot.get(i).toString());
-		
-
 		
 		
 	int choice = 0;

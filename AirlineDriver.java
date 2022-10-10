@@ -28,8 +28,9 @@ public class AirlineDriver {
 	public static void printSeatMap(ArrayList<Flight>f) {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("What is the flight number of you want to print out the seats for? If you want a general layout just type Layout.");
-		String flights =scan.nextLine();
-		if (flights.equalsIgnoreCase("layout")) {
+		int flightss =scan.nextInt();
+		scan.nextLine();
+		if (flightss==1) {
 		
 		
 		
@@ -51,21 +52,20 @@ public class AirlineDriver {
 			}
 		
 		
-		}
+		}else {
 		
 		System.out.println();
-		int flightnum=Integer.parseInt(flights);
+		
 		System.out.println("Airplane Seat Map");
 		System.out.println("=========================");
 		for (int i =0; i<f.size();i++) {
-			if (flightnum==f.get(i).getFlightNum()) {
+			if (flightss==f.get(i).getFlightNum()) {
 					System.out.println(f.get(i).toMString());
-					System.out.println("test");
-			}
+					
+				}
+			}	
 		}
-			
-}
-	
+}	
 	/**
 	 * Print the flight information
 	 * Flight number 
@@ -80,10 +80,26 @@ public class AirlineDriver {
 	 * @param args
 	 */
 	public static void printFlightInfo(ArrayList<Flight>f) {
-		for (int i=0; i<f.size(); i++)
-			System.out.println(f.get(i).toString());
-
+		boolean more=true;
+		while (more) {
+			System.out.println("Please select the flight that you would like to print the information on.");
+			Scanner scan = new Scanner(System.in);
+			for (int i=0; i<f.size(); i++) {
+				System.out.println((i +1) + ":     Flight Number " + f.get(i).getFlightNum() + " Flying " + f.get(i).getRoute() + " on " + f.get(i).getDate() + " at " + f.get(i).getTime() +".");
+			}
+			int flightnum=scan.nextInt();
+			scan.nextLine();
+			flightnum=flightnum-1;
+			System.out.println(f.get(flightnum).toString());
+			System.out.println("Airplane Seat Map");
+			System.out.println("=========================");
+			System.out.println(f.get(flightnum).toMString());
+			System.out.println("\nMore flights? true/false");
+			more=scan.nextBoolean();
+			}
 		}
+		
+		
 	
 	public static void printPilots() {
     	//11.	We need an option for printing each Pilot’s schedule for the week 

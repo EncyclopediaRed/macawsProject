@@ -68,14 +68,15 @@ public class Flight {
     } // End of method toString.
 
     // Create the getters and setters for each instance variable.
-    public int toMString() {
-    	 for (int i = 0; i < map.length; i++) {
+    public String toMString() {
+    	String javaisfun = ""; 
+    	for (int i = 0; i < map.length; i++) {
 					for (int j = 0; j < map[i].length; j++) {
 						System.out.print("| " + map[i][j] + " |");
 					}
 					System.out.println("");
     	 }
-		return -1;
+		return javaisfun;
     }
     
     public String getRoute() {
