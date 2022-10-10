@@ -131,32 +131,92 @@ public class AirlineDriver {
 
     	}
 	
+	public static void addCustomer(ArrayList<Customer> c) {
+		Scanner scan = new Scanner(System.in);
+		boolean more =true;
+		while (more) {
+			System.out.println("What's the customers First name?");
+			String fname=scan.nextLine();
+			System.out.println("What's the customers Last name?");
+			String Lname=scan.nextLine();
+			System.out.println("What's the customers email?");
+			String email=scan.nextLine();
+			Customer c1=new Customer(fname,Lname,email);
+			c.add(c1);
+		System.out.println("More Customers? true/false");
+		more=scan.nextBoolean();
+	   	}
+	}
+	
 	public static void printReservation() {
-    	// print who is sitting in a certian seat not a requriment but probaby a good idea
+		// print who is sitting in a certian seat not a requriment but probaby a good idea
+		Scanner scan = new Scanner(System.in);
+		boolean more =true;
+		while (more) {
+		System.out.println("More Customers? true/false");
+		more=scan.nextBoolean();
+	   	}
 	   	}
 	
-	public static void printCustomerByNum() {
-    	//12.	We need an option for printing all the reservations for a give Customer if given their customer number.
+	public static void printCustomerByNum(ArrayList<Customer> c) {
+		Scanner scan = new Scanner(System.in);
+		boolean more =true;
+		
+		//12.	We need an option for printing all the reservations for a give Customer if given their customer number.
+		while (more) {
+			for (int i=0; i<c.size();i++) {
+				System.out.println(c.get(i).toString());
+			}
+		System.out.println("More Customers? true/false");
+		more=scan.nextBoolean();
+	   	}
 	   	}
 	
 	public static void bookReservation(ArrayList<Customer> cust, ArrayList<Pilot> pilot, ArrayList<Reservation> res, ArrayList<Flight> flight) {
- 	
+		Scanner scan = new Scanner(System.in);
+		boolean more =true;
+		while (more) {
+		System.out.println("More Customers? true/false");
+		more=scan.nextBoolean();
+	   	}
 	}
 	
 	public static void cancelReservation() {
-    	//cancel a reservation the meat and potatos
+		Scanner scan = new Scanner(System.in);
+		boolean more =true;
+		while (more) {
+		System.out.println("More Customers? true/false");
+		more=scan.nextBoolean();
+	   	}
     	}
 	public static void printGrossIncome() {
-    	//print the Grossincome of the flight by flight number
+		//print the Grossincome of the flight by flight number
+		Scanner scan = new Scanner(System.in);
+		boolean more =true;
+		while (more) {
+		System.out.println("More Customers? true/false");
+		more=scan.nextBoolean();
+	   	}
     	}
 	public static void closeConnection() {
     	//Close the connection
     	}
 	public static void searchReservation() {
-    	//Close the connection
+		Scanner scan = new Scanner(System.in);
+		boolean more =true;
+		while (more) {
+		System.out.println("More Customers? true/false");
+		more=scan.nextBoolean();
+	   	}
     	}
 	public static void searchDeleted() {
-    	//search deleted flights by reservation number
+		//search deleted reservations
+		Scanner scan = new Scanner(System.in);
+		boolean more =true;
+		while (more) {
+		System.out.println("More Customers? true/false");
+		more=scan.nextBoolean();
+	   	}
     	}
 
 

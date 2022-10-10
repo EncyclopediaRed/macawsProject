@@ -83,7 +83,7 @@ public class Menu {
 		
 		
 	int choice = 0;
-	while(choice !=11) {
+	while(choice !=12) {
 		choice = menu();
 		if(choice == 1) {
 			AirlineDriver.printSeatMap(flight);
@@ -94,7 +94,7 @@ public class Menu {
 		} else if (choice == 4) {
 			AirlineDriver.printReservation();
 		} else if (choice == 5) {
-			AirlineDriver.printCustomerByNum();
+			AirlineDriver.printCustomerByNum(cust);
 		} else if (choice ==6) {
 			AirlineDriver.bookReservation(cust, pilot, res, flight);
 		} else if (choice ==7) {
@@ -105,7 +105,9 @@ public class Menu {
 			AirlineDriver.searchReservation();
 		} else if (choice ==10) {
 			AirlineDriver.searchDeleted();
-		} else if (choice ==11) { 
+		} else if (choice ==11) {
+			AirlineDriver.addCustomer(cust);
+		} else if (choice ==12) { 
 			AirlineDriver.closeConnection();
 			System.exit(0);
 			System.out.println("Thank you for choosing Java Airlines!\nHave a good day :).");
@@ -129,7 +131,8 @@ public static int menu() {
 	System.out.println("8.  Generate Profit by flight number.");
 	System.out.println("9.  Search Reservations");
 	System.out.println("10. Search deleted flights by reservation number.");
-	System.out.println("11.  Exit.");
+	System.out.println("11. Add a customer.");
+	System.out.println("12.  Exit.");
 	int ans = scan.nextInt();
 	return ans;
 	
