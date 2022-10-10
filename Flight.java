@@ -25,7 +25,8 @@ public class Flight {
     private String date;
     private String time;
     private int flightNum;
-    private String [][] map;
+    private String [][] pmap;
+    private int [][] idmap;
     private double profit;
     Pilot p;
     
@@ -42,7 +43,7 @@ public class Flight {
     } // End of no argument constructor.
 
     // Create a full argument constructor for a flight.
-    public Flight(String r, String string, String string2, String [][] m, Pilot p) {
+    public Flight(String r, String string, String string2, String [][] m, int [][] j, Pilot p) {
 
         // Assign each instance variable for a flight.
     	route = r;
@@ -50,7 +51,8 @@ public class Flight {
         time = string2;
         flightNum = num;
         num += 10;
-        map=m;
+        pmap=m;
+        idmap=j;
         this.p = p;
     } // End of full argument constructor.
     
@@ -70,9 +72,9 @@ public class Flight {
     // Create the getters and setters for each instance variable.
     public String toMString() {
     	String javaisfun = ""; 
-    	for (int i = 0; i < map.length; i++) {
-					for (int j = 0; j < map[i].length; j++) {
-						System.out.print("| " + map[i][j] + " |");
+    	for (int i = 0; i < pmap.length; i++) {
+					for (int j = 0; j < pmap[i].length; j++) {
+						System.out.print("| " + pmap[i][j] + " |");
 					}
 					System.out.println("");
     	 }
@@ -87,14 +89,21 @@ public class Flight {
         this.route = route;
     }
 
-  
-
-    public String[][] getMap() {
-		return map;
+ 
+	public String[][] getPmap() {
+		return pmap;
 	}
 
-	public void setMap(String[][] map) {
-		this.map = map;
+	public void setPmap(String[][] pmap) {
+		this.pmap = pmap;
+	}
+
+	public int[][] getIdmap() {
+		return idmap;
+	}
+
+	public void setIdmap(int[][] idmap) {
+		this.idmap = idmap;
 	}
 
 	public double getProfit() {

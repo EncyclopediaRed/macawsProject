@@ -35,8 +35,8 @@ public class Customer {
 	public String toString() {
 		
 		// Create the customer information to be displayed.
-		return "Customer Name: " + firstName + " " + lastName + "\nEmail: " + email
-				+ "\nID Number: " + custNum;		
+		return "Customer Name: " + firstName + " " + lastName + "Email: " + email
+				+ "ID Number: " + custNum;		
 	} // End of method toString.
 	
 	// Generate getters and setters for each of the instance variables.

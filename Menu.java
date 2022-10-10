@@ -56,30 +56,45 @@ public class Menu {
 		Pilot p3 = new Pilot("Pilot 3");
 		pilot.add(p3);
 		
-		String[][] seatMap = { { "  ", "1A", "1B", "  "},
-				   				{ "  ", "2A" ,"2B", "  " },
+		String[][] seatMap = { { "na", "1A", "1B", "na"},
+				   				{ "na", "2A" ,"2B", "na" },
 				   				{ "3A", "3B", "3C", "3D", },
 				   				{ "4A", "4B", "4C", "4D", } };
+		int[][] seats = { { -1, 1, 1, -1},
+   						{ -1, 1 ,1, -1},
+   								{ 2, 2, 2, 2 },
+   								{ 2, 2, 2, 2 } };
 		
-		Flight f1 = new Flight("ROA to PHX", "2022-11-12", "am", seatMap, p1);
+		
+		Flight f1 = new Flight("ROA to PHX", "2022-11-12", "am", seatMap, seats, p1);
 		flight.add(f1);
-		Flight f2 = new Flight("PHX to ROA", "2022-11-12", "am", seatMap, p2);
+		Flight f2 = new Flight("PHX to ROA", "2022-11-12", "am", seatMap, seats, p2);
 		flight.add(f2);
-		Flight f3 = new Flight("ROA to PHX", "2022-11-12", "pm", seatMap, p3);
+		Flight f3 = new Flight("ROA to PHX", "2022-11-12", "pm", seatMap,seats, p3);
 		flight.add(f3);
-		Flight f4 = new Flight("PHX to ROA", "2022-11-12", "pm", seatMap, p1);
+		Flight f4 = new Flight("PHX to ROA", "2022-11-12", "pm", seatMap,seats, p1);
 		flight.add(f4);
-		Flight f5 = new Flight("ROA to PHX", "2022-11-12", "am", seatMap, p2);
+		Flight f5 = new Flight("ROA to PHX", "2022-11-12", "am", seatMap,seats, p2);
 		flight.add(f5);
-		Flight f6 = new Flight("PHX to ROA", "2022-11-12", "am", seatMap, p3);
+		Flight f6 = new Flight("PHX to ROA", "2022-11-12", "am", seatMap,seats, p3);
 		flight.add(f6);
-		Flight f7 = new Flight("ROA to PHX", "2022-11-12", "pm", seatMap, p1);
+		Flight f7 = new Flight("ROA to PHX", "2022-11-12", "pm", seatMap,seats, p1);
 		flight.add(f7);
-		Flight f8 = new Flight("PHX to ROA", "2022-11-12", "pm", seatMap, p2);
+		Flight f8 = new Flight("PHX to ROA", "2022-11-12", "pm", seatMap,seats, p2);
 		flight.add(f8);
 		
+		/*ArrayList<String> j=new ArrayList<String>();
+		String f="test";
+		j.add(f);
+		double testing=12;
+		int tes=2;
+		Reservation rr= new Reservation(tes,j,testing,c,f8);
+		res.add(rr);
+		System.out.println(res);
 		
-		
+		for (int i=0;i<res.size();i++)
+			System.out.println(res.get(i).toString());
+		*/
 		
 		
 	int choice = 0;
@@ -92,7 +107,7 @@ public class Menu {
 		} else if (choice == 3) {
 			AirlineDriver.printPilots(pilot, flight);
 		} else if (choice == 4) {
-			AirlineDriver.printReservation();
+			AirlineDriver.printReservation(res);
 		} else if (choice == 5) {
 			AirlineDriver.printCustomerByNum(cust);
 		} else if (choice ==6) {
@@ -104,7 +119,7 @@ public class Menu {
 		} else if (choice ==9) {
 			AirlineDriver.searchReservation();
 		} else if (choice ==10) {
-			AirlineDriver.searchDeleted();
+			AirlineDriver.searchDeleted();	
 		} else if (choice ==11) {
 			AirlineDriver.addCustomer(cust);
 		} else if (choice ==12) { 

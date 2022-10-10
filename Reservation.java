@@ -1,5 +1,7 @@
 package macawsProject;
 
+import java.util.ArrayList;
+
 /**
  * Reservation Class
  * 
@@ -20,9 +22,8 @@ public class Reservation {
 
     // Create the instance variables for a reservation.
     private int numSeats;
-    private int seatNum;
+    private ArrayList<String> seatNum;
     private double cost;
-    private boolean status;
     private int resNum;
     Customer cust;
     Flight f;
@@ -39,52 +40,51 @@ public class Reservation {
     } // End of the no argument constructor.
 
     // Create a full argument constructor.
-    public Reservation(int n_s, int s_n, double c, boolean status, int r_id, Customer cust,
-        Flight f) {
+    public Reservation(int n_s, ArrayList<String> s_n, double c, Customer custt, Flight fi) {
 
         // Assign each instance variable for a reservation.
-        n_s = numSeats;
-        s_n = seatNum;
-        c = cost;
-        this.status = status;
-        r_id = resNum;
-        this.cust = cust;
-        this.f = f;
+        numSeats=n_s;
+        seatNum=s_n;
+        cost=c;
+        cust = custt;
+        f = fi;
         resNum = num;
         num += 100;
     } // End of the full argument constructor.
 
     // Create a toString method for displaying reservation, customer, and flight information.
-    public String toString() {
 
-        // Create the reservation information to be displayed.
-        return "Number of Seats: " + numSeats
-            + "\nSeat: " + seatNum
-            + "\nCost: " + cost
-            + "\nStatus: " + status
-            + "\nReservation ID Number: " + resNum
-            + cust.toString()
-            + f.toString();
-    } // End of method toString.
 
     // Create the getters and setters for each instance variable.
     public int getNumSeats() {
         return numSeats;
     }
 
-    public void setNumSeats(int numSeats) {
+    
+	@Override
+	public String toString() {
+	 return	"Number of Seats: " + numSeats
+        + "\nSeat: " + seatNum
+        + "\nCost: " + cost
+        + "\nReservation ID Number: " + resNum
+        + cust.toString()
+        + f.toString();
+	}
+
+	public void setNumSeats(int numSeats) {
         this.numSeats = numSeats;
     }
 
-    public int getSeatNum() {
-        return seatNum;
-    }
 
-    public void setSeatNum(int seatNum) {
-        this.seatNum = seatNum;
-    }
+    public ArrayList<String> getSeatNum() {
+		return seatNum;
+	}
 
-    public double getCost() {
+	public void setSeatNum(ArrayList<String> seatNum) {
+		this.seatNum = seatNum;
+	}
+
+	public double getCost() {
         return cost;
     }
 
@@ -92,13 +92,6 @@ public class Reservation {
         this.cost = cost;
     }
 
-    public boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
 
     public int getResNum() {
         return resNum;

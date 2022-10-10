@@ -148,11 +148,13 @@ public class AirlineDriver {
 	   	}
 	}
 	
-	public static void printReservation() {
+	public static void printReservation(ArrayList<Reservation> r) {
 		// print who is sitting in a certian seat not a requriment but probaby a good idea
 		Scanner scan = new Scanner(System.in);
 		boolean more =true;
 		while (more) {
+			for(int i=0; i<r.size();i++)
+				System.out.println(r.get(i).toString());
 		System.out.println("More Customers? true/false");
 		more=scan.nextBoolean();
 	   	}
@@ -172,14 +174,106 @@ public class AirlineDriver {
 	   	}
 	   	}
 	
-	public static void bookReservation(ArrayList<Customer> cust, ArrayList<Pilot> pilot, ArrayList<Reservation> res, ArrayList<Flight> flight) {
+	public static void bookReservation(ArrayList<Customer> c, ArrayList<Pilot> p, ArrayList<Reservation> r, ArrayList<Flight> f) {
 		Scanner scan = new Scanner(System.in);
 		boolean more =true;
+		int moreseats=0;
+		double cost=0;
+		Flight ff=f.get(0);
+		int partyNum=0;
+		int flightnum=0;
+		ArrayList<String> seatn =new ArrayList<String>();
+		String[][] seatMString = { { "  ", "1A", "1B", "  "},
+						{ "  ", "2A" ,"2B", "  " },
+						{ "3A", "3B", "3C", "3D", },
+						{ "4A", "4B", "4C", "4D", } };
+		int[][] seatMID = { { -1, 1, 1, -1},
+					{ -1, 1 ,1, -1},
+						{ 2, 2, 2, 2 },
+						{ 2, 2, 2, 2 } };
+		int row1=0;
+		int seatNum=0;
+		boolean repete=true;
 		while (more) {
-		System.out.println("More Customers? true/false");
-		more=scan.nextBoolean();
-	   	}
-	}
+			System.out.println("Do you need to add a new customer? Yes/No");
+			String answer=scan.nextLine();
+			if (answer.equalsIgnoreCase("yes")) {
+			addCustomer(c);
+			}
+			System.out.println("Please select the customer you want.");
+			for(int i=0;i<c.size();i++) {
+				System.out.println(i+ ":    " + c.get(i).toString());
+			}
+			int custNum=scan.nextInt();
+			System.out.println("How many people are in your party?");
+			partyNum=scan.nextInt();
+			Customer cc=c.get(custNum);
+			
+			while (repete) {
+				System.out.println("Please select the flight you want.");
+				for (int i=0; i<f.size();i++) {
+					System.out.println((i) + ":     Flight Number " + f.get(i).getFlightNum() + " Flying " + f.get(i).getRoute() + " on " + f.get(i).getDate() + " at " + f.get(i).getTime() +".");
+				}
+				flightnum=scan.nextInt();
+				ff=f.get(flightnum);
+				scan.nextLine();//scanner problem
+				moreseats=0;
+				System.out.println("Does the following flight have the seats you need? yes/no");
+				System.out.println("Rows 1 and 2 seats cost 850. Coach seats are 450. na Seats are not avalible.");
+				System.out.println("Airplane Seat Map" + "\n=========================");
+				System.out.println(f.get(flightnum).toMString());
+				String answ = scan.nextLine();
+				if (answ.equalsIgnoreCase("yes")) {
+					repete=false;
+				}else {
+					System.out.println("Try again");
+				}
+				}
+				while (moreseats!=partyNum) {
+					System.out.println("Does the following flight have the seats you need? yes/no");
+					System.out.println("Rows 1 and 2 seats cost 850. Coach seats are 450. na Seats are not avalible.");
+					System.out.println("Airplane Seat Map" + "\n=========================");
+					System.out.println(f.get(flightnum).toMString());
+						System.out.println("Please enter the seat's row, row starts at 1.");
+							seatMID=(f.get(flightnum).getIdmap());
+							seatMString=(f.get(flightnum).getPmap());
+							row1 = scan.nextInt();
+							scan.nextLine();
+							System.out.println("Please enter the seat's number, seat starts at 1.");
+							seatNum = scan.nextInt();
+							scan.nextLine();
+							row1=row1-1;
+							seatNum=seatNum-1;
+							String seatNums=seatMString[row1][seatNum];
+							if (seatNums.equalsIgnoreCase("1a") ||(seatNums.equalsIgnoreCase("1b"))||(seatNums.equalsIgnoreCase("2a"))||(seatNums.equalsIgnoreCase("2b"))){
+								//(f.get(flightnum).getProfit()+850);
+								cost=cost+850;
+								} else {
+								//(f.get(flightnum).getProfit()+450);
+								cost=cost+450;
+								}
+							seatn.add(seatNums);
+							seatMID[row1][seatNum]=c.get(custNum).getCustNum();
+							seatMString[row1][seatNum]="na";
+							f.get(flightnum).setPmap(seatMString);
+							f.get(flightnum).setIdmap(seatMID);
+							System.out.println("this is the seat num" +seatNum);
+							System.out.println(f.get(flightnum).toMString());
+							moreseats++;
+					}
+				Reservation rr= new Reservation(partyNum,seatn,cost,cc,ff);
+				r.add(rr);
+				for (int i=0;i<r.size();i++) {
+					System.out.println(r.get(i).toString());
+				}
+				System.out.println("More Reservations? true/false");
+				more=scan.nextBoolean();
+				}//more reservations loop
+			
+	   	}//more reservations loop
+
+		
+	
 	
 	public static void cancelReservation() {
 		Scanner scan = new Scanner(System.in);
