@@ -180,6 +180,7 @@ public class AirlineDriver {
 		int moreseats=0;
 		double cost=0;
 		Flight ff=f.get(0);
+		int findnums=0;
 		int partyNum=0;
 		int flightnum=0;
 		ArrayList<String> seatn =new ArrayList<String>();
@@ -253,6 +254,7 @@ public class AirlineDriver {
 								}
 							seatn.add(seatNums);
 							seatMID[row1][seatNum]=c.get(custNum).getCustNum()+partyNum;
+							findnums=seatMID[row1][seatNum];
 							seatMString[row1][seatNum]="na";
 							f.get(flightnum).setPmap(seatMString);
 							f.get(flightnum).setIdmap(seatMID);
@@ -267,10 +269,20 @@ public class AirlineDriver {
 				System.out.println("Booked reservation for " + c.get(custNum).getfirstName()+ " "+c.get(custNum).getlastName()+ " on flight " + f.get(flightnum).getFlightNum() + " flying "+ f.get(flightnum).getRoute()+ " on " + f.get(flightnum).getDate()+ " at "+ f.get(flightnum).getTime()+ " with " + partyNum + " seats for a total cost of "+ nf.format(cost) +".");
 				Reservation rr= new Reservation(partyNum,seatn,cost,cc,ff);
 				r.add(rr);
-				
-				
+				int index = r.indexOf(rr);
+				int resnum= r.get(index).getResNum();
+				seatMID=(f.get(flightnum).getIdmap());
+				for (int i = 0; i < seatMID.length; i++) {
+			        for (int j = 0; j < seatMID[i].length; j++) {
+			            if (seatMID[i][j] == findnums) {
+			            	seatMID[i][j] = resnum;
+			            }
+			        }
+				}
+				f.get(flightnum).setIdmap(seatMID);
 				System.out.println("More Reservations? true/false");
 				more=scan.nextBoolean();
+			   
 				}//more reservations loop
 			
 	   	}//more reservations loop
@@ -295,7 +307,7 @@ public class AirlineDriver {
 			cr.add(rr);
 			String[][] seatMString = (r.get(resnum).getF().getPmap());
 			int[][] seatMID= (r.get(resnum).getF().getIdmap());
-			int findnum=r.get(resnum).getCust().getCustNum()+r.get(resnum).getNumSeats();
+			int findnum=r.get(resnum).getResNum();
 			for (int i = 0; i < seatMID.length; i++) {
 		        for (int j = 0; j < seatMID[i].length; j++) {
 		            if (seatMID[i][j] == findnum) {
