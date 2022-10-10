@@ -33,6 +33,7 @@ public class Flight {
 
     // Create static a variable for a unique flight ID.
     public static int num = 500;
+    public static double num2=0;
 
     // Create a no argument constructor that generates a unique flight ID.
     public Flight() {
@@ -54,6 +55,7 @@ public class Flight {
         pmap=m;
         idmap=j;
         this.p = p;
+        profit=num2;
     } // End of full argument constructor.
     
  

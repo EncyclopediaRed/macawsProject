@@ -116,11 +116,11 @@ public class Menu {
 		} else if (choice ==7) {
 			AirlineDriver.cancelReservation(cust, pilot, res, resCanceled, flight);
 		} else if (choice ==8) {
-			AirlineDriver.printGrossIncome();
+			AirlineDriver.printGrossIncome(flight);
 		} else if (choice ==9) {
-			AirlineDriver.searchReservation();
+			AirlineDriver.searchReservation(res);
 		} else if (choice ==10) {
-			AirlineDriver.searchDeleted();	
+			AirlineDriver.searchDeleted(resCanceled);	
 		} else if (choice ==11) {
 			AirlineDriver.addCustomer(cust);
 		} else if (choice ==12) { 
