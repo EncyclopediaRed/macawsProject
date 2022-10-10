@@ -59,7 +59,7 @@ public class Flight {
     public String toString() {
 
         // Create the flight information to be displayed.
-        return "The details for this flight are as follows: "
+        return ""
             + "\nRoute: " + route
             + "\nDate: " + date
             + "\nTime: " + time

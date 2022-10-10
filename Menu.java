@@ -90,7 +90,7 @@ public class Menu {
 		} else if (choice ==2) {
 			AirlineDriver.printFlightInfo(flight);
 		} else if (choice == 3) {
-			AirlineDriver.printPilots();
+			AirlineDriver.printPilots(pilot, flight);
 		} else if (choice == 4) {
 			AirlineDriver.printReservation();
 		} else if (choice == 5) {
@@ -119,13 +119,13 @@ public class Menu {
 public static int menu() {
 	Scanner scan = new Scanner(System.in);
 	System.out.println("\nMenu:");
-	System.out.println("1.  Generate a map of the seats.");
-	System.out.println("2.  Generate flight information.");
-	System.out.println("3.  Generate Pilots.");
-	System.out.println("4.  Generate the Reservations by Flight and Seat Number.");
-	System.out.println("5.  Generate Customer information by Number.");
+	System.out.println("1.  Print a map of the seats by flight number.");
+	System.out.println("2.  Print flight information.");
+	System.out.println("3.  Print a Pilots Schedule.");
+	System.out.println("4.  Print the Reservations by Flight and Seat Number.");
+	System.out.println("5.  Print Customer information by Number customer Number.");
 	System.out.println("6.  Book a Reservation.");
-	System.out.println("7.  Cancel Reservation.");
+	System.out.println("7.  Cancel a Reservation.");
 	System.out.println("8.  Generate Profit by flight number.");
 	System.out.println("9.  Search Reservations");
 	System.out.println("10. Search deleted flights by reservation number.");

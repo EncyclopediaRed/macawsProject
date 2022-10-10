@@ -42,7 +42,7 @@ public class Pilot {
     public String toString() {
 
         // Create the pilot information to be displayed.
-        return "Pilot Name: " + pilotName + "\nID Number: " + pilotNum;
+        return "Pilot Name: " + pilotName + "\n Pilot's ID Number: " + pilotNum;
     } // End of method toString.
 
     // Create the getters and setters for each instance variable.

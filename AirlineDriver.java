@@ -27,45 +27,48 @@ public class AirlineDriver {
 	 */
 	public static void printSeatMap(ArrayList<Flight>f) {
 		Scanner scan = new Scanner(System.in);
-		System.out.println("What is the flight number of you want to print out the seats for? If you want a general layout just type Layout.");
-		int flightss =scan.nextInt();
-		scan.nextLine();
-		if (flightss==1) {
-		
-		
-		
-		// Create a 2D array to represent the seats
-		String[][] seatMap = { { "  ", "1A", "1B", "  "},
-							   { "  ", "2A" ,"2B", "  " },
-							   { "3A", "3B", "3C", "3D", },
-							   { "4A", "4B", "4C", "4D", } };
-		
-		// Print the seat map
-		System.out.println();
-		System.out.println("Airplane Seat Map");
-		System.out.println("=========================");
-		for (int i = 0; i < seatMap.length; i++) {
-			for (int j = 0; j < seatMap[i].length; j++) {
-				System.out.print("| " + seatMap[i][j] + " |");
+		boolean more=true;
+		while (more) {
+			System.out.println("What is the flight number of you want to print out the seats for? If you want a general layout enter 1.");
+			for (int i =0; i<f.size();i++) {
+			System.out.println(f.get(i).getFlightNum());
 			}
-			System.out.println();
-			}
+			int flightss =scan.nextInt();
+			scan.nextLine();
+			if (flightss==1) {
+			
+				// Create a 2D array to represent the seats
+				String[][] seatMap = { { "  ", "1A", "1B", "  "},
+						{ "  ", "2A" ,"2B", "  " },
+						{ "3A", "3B", "3C", "3D", },
+						{ "4A", "4B", "4C", "4D", } };
 		
-		
-		}else {
-		
-		System.out.println();
-		
-		System.out.println("Airplane Seat Map");
-		System.out.println("=========================");
-		for (int i =0; i<f.size();i++) {
-			if (flightss==f.get(i).getFlightNum()) {
-					System.out.println(f.get(i).toMString());
-					
+				// Print the seat map
+				System.out.println();
+				System.out.println("Airplane Seat Map");
+				System.out.println("=========================");
+				for (int i = 0; i < seatMap.length; i++) {
+					for (int j = 0; j < seatMap[i].length; j++) {
+						System.out.print("| " + seatMap[i][j] + " |");
+					}
+					System.out.println();
 				}
-			}	
-		}
-}	
+				}else {
+					System.out.println();
+		
+					System.out.println("Airplane Seat Map");
+					System.out.println("=========================");
+					for (int i =0; i<f.size();i++) {
+						if (flightss==f.get(i).getFlightNum()) {
+							System.out.println(f.get(i).toMString());
+						}
+					}	
+				}
+			System.out.println("More flights? true/false");
+			more=scan.nextBoolean();
+			}
+
+	}
 	/**
 	 * Print the flight information
 	 * Flight number 
@@ -80,10 +83,10 @@ public class AirlineDriver {
 	 * @param args
 	 */
 	public static void printFlightInfo(ArrayList<Flight>f) {
+		Scanner scan = new Scanner(System.in);
 		boolean more=true;
 		while (more) {
 			System.out.println("Please select the flight that you would like to print the information on.");
-			Scanner scan = new Scanner(System.in);
 			for (int i=0; i<f.size(); i++) {
 				System.out.println((i +1) + ":     Flight Number " + f.get(i).getFlightNum() + " Flying " + f.get(i).getRoute() + " on " + f.get(i).getDate() + " at " + f.get(i).getTime() +".");
 			}
@@ -101,10 +104,30 @@ public class AirlineDriver {
 		
 		
 	
-	public static void printPilots() {
+	public static void printPilots(ArrayList<Pilot> p, ArrayList<Flight> f) {
     	//11.	We need an option for printing each Pilot’s schedule for the week 
 		//(which flights are they flying---date, time direction.
-
+		Scanner scan = new Scanner(System.in);
+		boolean more =true;
+		while (more) {
+			System.out.println("Please select the Pilot's number you would like information on.");
+			for (int i=0; i<p.size(); i++) {
+				System.out.println("Pilot's number: " + p.get(i).getPilotNum() + " Their Name: " + p.get(i).getPilotName() +".");
+			}
+			int pilotn=scan.nextInt();
+			for (int i=0; i<f.size(); i++) {
+				if (pilotn==f.get(i).getP().getPilotNum()) {
+					System.out.println("The Details for this pilot's flight number: " + f.get(i).getFlightNum() + f.get(i).toString());
+					System.out.println("Airplane Seat Map" + "\n=========================");
+					System.out.println(f.get(i).toMString()+"\n");
+					}
+			}
+			
+			
+			
+		System.out.println("More Pilots? true/false");
+		more=scan.nextBoolean();
+		}//moreloop
 
     	}
 	
