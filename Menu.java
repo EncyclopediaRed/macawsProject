@@ -22,6 +22,7 @@ public class Menu {
 		ArrayList<Pilot> pilot = new ArrayList<Pilot>();
 		ArrayList<Reservation> res = new ArrayList<Reservation>();
 		ArrayList<Flight> flight = new ArrayList<Flight>();
+		ArrayList<Reservation> resCanceled = new ArrayList<Reservation>();
 		
 		Customer c = new Customer("Connor", "Hogg", "Hogg.Connor@gmail.com");
 		cust.add(c);
@@ -113,7 +114,7 @@ public class Menu {
 		} else if (choice ==6) {
 			AirlineDriver.bookReservation(cust, pilot, res, flight);
 		} else if (choice ==7) {
-			AirlineDriver.cancelReservation();
+			AirlineDriver.cancelReservation(cust, pilot, res, resCanceled, flight);
 		} else if (choice ==8) {
 			AirlineDriver.printGrossIncome();
 		} else if (choice ==9) {

@@ -2,7 +2,7 @@ package macawsProject;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-
+import java.text.NumberFormat;
 import javax.imageio.metadata.IIOMetadataFormatImpl;
 
 /**
@@ -224,16 +224,15 @@ public class AirlineDriver {
 				System.out.println(f.get(flightnum).toMString());
 				String answ = scan.nextLine();
 				if (answ.equalsIgnoreCase("yes")) {
+					System.out.println("Rows 1 and 2 seats cost 850. Coach seats are 450. na Seats are not avalible.");
+					System.out.println("Airplane Seat Map" + "\n=========================");
+					System.out.println(f.get(flightnum).toMString());
 					repete=false;
 				}else {
 					System.out.println("Try again");
 				}
 				}
 				while (moreseats!=partyNum) {
-					System.out.println("Does the following flight have the seats you need? yes/no");
-					System.out.println("Rows 1 and 2 seats cost 850. Coach seats are 450. na Seats are not avalible.");
-					System.out.println("Airplane Seat Map" + "\n=========================");
-					System.out.println(f.get(flightnum).toMString());
 						System.out.println("Please enter the seat's row, row starts at 1.");
 							seatMID=(f.get(flightnum).getIdmap());
 							seatMString=(f.get(flightnum).getPmap());
@@ -261,11 +260,12 @@ public class AirlineDriver {
 							System.out.println(f.get(flightnum).toMString());
 							moreseats++;
 					}
+				NumberFormat nf = NumberFormat.getCurrencyInstance(); 
+				System.out.println("Booked reservation for " + c.get(custNum).getfirstName()+ " "+c.get(custNum).getlastName()+ " on flight " + f.get(flightnum).getFlightNum() + " flying "+ f.get(flightnum).getRoute()+ " on " + f.get(flightnum).getDate()+ " at "+ f.get(flightnum).getTime()+ " for a total cost of "+ nf.format(cost));
 				Reservation rr= new Reservation(partyNum,seatn,cost,cc,ff);
 				r.add(rr);
-				for (int i=0;i<r.size();i++) {
-					System.out.println(r.get(i).toString());
-				}
+				
+				
 				System.out.println("More Reservations? true/false");
 				more=scan.nextBoolean();
 				}//more reservations loop
@@ -275,11 +275,25 @@ public class AirlineDriver {
 		
 	
 	
-	public static void cancelReservation() {
+	public static void cancelReservation(ArrayList<Customer> c, ArrayList<Pilot> p, ArrayList<Reservation> r, ArrayList<Reservation> cr,  ArrayList<Flight> f) {
 		Scanner scan = new Scanner(System.in);
 		boolean more =true;
 		while (more) {
-		System.out.println("More Customers? true/false");
+			System.out.println("Which Reservation would you like to cancel?");
+			for (int i=0;i<r.size();i++) {
+				System.out.println(i+ ": Reservation for " + r.get(i).getCust().getfirstName()+ " "+r.get(i).getCust().getlastName()+ "on flight " + r.get(i).getF().getFlightNum() + " flying "+ r.get(i).getF().getRoute()+ " on " + r.get(i).getF().getDate()+ " at "+ r.get(i).getF().getTime());
+				}
+			int resnum=scan.nextInt();
+			Reservation rr=r.get(resnum);
+			cr.add(rr);
+			String[][] seatMString = (r.get(resnum).getF().getPmap());
+			int[][] seatMID= (r.get(resnum).getF().getIdmap());
+			
+			
+			
+			r.remove(resnum);
+			
+		System.out.println("More Cancelations? true/false");
 		more=scan.nextBoolean();
 	   	}
     	}
