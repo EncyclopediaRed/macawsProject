@@ -1,7 +1,7 @@
 package macawsProject;
 
 import java.util.ArrayList;
-
+import java.text.NumberFormat;
 /**
  * Reservation Class
  * 
@@ -63,12 +63,10 @@ public class Reservation {
     
 	@Override
 	public String toString() {
-	 return	"Number of Seats: " + numSeats
-        + "\nSeat: " + seatNum
-        + "\nCost: " + cost
-        + "\nReservation ID Number: " + resNum
-        + cust.toString()
-        + f.toString();
+		 NumberFormat nf = NumberFormat.getCurrencyInstance(); 
+	 return cust.getfirstName() + "	" + cust.getlastName() + " reserved " +numSeats+ " seat's specifically,  " + seatNum + " costing:  " + nf.format(cost) + " having the Reservation ID Number: " + resNum + ". on flight number " + f.getFlightNum();
+ 
+        
 	}
 
 	public void setNumSeats(int numSeats) {

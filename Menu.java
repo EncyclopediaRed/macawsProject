@@ -65,37 +65,30 @@ public class Menu {
    						{ -1, 1 ,1, -1},
    								{ 2, 2, 2, 2 },
    								{ 2, 2, 2, 2 } };
+		int[][] seatscust = { { -1, 0, 0, -1},
+					{ -1, 0 ,0, -1},
+							{ 0, 0, 0, 0 },
+							{ 0, 0, 0, 0 } };
 		
 		
-		Flight f1 = new Flight("ROA to PHX", "2022-11-12", "am", seatMap, seats, p1);
+		Flight f1 = new Flight("ROA to PHX", "2022-11-12", "am", seatMap, seats, seatscust, p1);
 		flight.add(f1);
-		Flight f2 = new Flight("PHX to ROA", "2022-11-12", "am", seatMap, seats, p2);
+		Flight f2 = new Flight("PHX to ROA", "2022-11-12", "am", seatMap, seats, seatscust, p2);
 		flight.add(f2);
-		Flight f3 = new Flight("ROA to PHX", "2022-11-12", "pm", seatMap,seats, p3);
+		Flight f3 = new Flight("ROA to PHX", "2022-11-12", "pm", seatMap,seats, seatscust, p3);
 		flight.add(f3);
-		Flight f4 = new Flight("PHX to ROA", "2022-11-12", "pm", seatMap,seats, p1);
+		Flight f4 = new Flight("PHX to ROA", "2022-11-12", "pm", seatMap,seats, seatscust, p1);
 		flight.add(f4);
-		Flight f5 = new Flight("ROA to PHX", "2022-11-12", "am", seatMap,seats, p2);
+		Flight f5 = new Flight("ROA to PHX", "2022-11-12", "am", seatMap,seats, seatscust, p2);
 		flight.add(f5);
-		Flight f6 = new Flight("PHX to ROA", "2022-11-12", "am", seatMap,seats, p3);
+		Flight f6 = new Flight("PHX to ROA", "2022-11-12", "am", seatMap,seats, seatscust, p3);
 		flight.add(f6);
-		Flight f7 = new Flight("ROA to PHX", "2022-11-12", "pm", seatMap,seats, p1);
+		Flight f7 = new Flight("ROA to PHX", "2022-11-12", "pm", seatMap,seats, seatscust, p1);
 		flight.add(f7);
-		Flight f8 = new Flight("PHX to ROA", "2022-11-12", "pm", seatMap,seats, p2);
+		Flight f8 = new Flight("PHX to ROA", "2022-11-12", "pm", seatMap,seats, seatscust, p2);
 		flight.add(f8);
 		
-		/*ArrayList<String> j=new ArrayList<String>();
-		String f="test";
-		j.add(f);
-		double testing=12;
-		int tes=2;
-		Reservation rr= new Reservation(tes,j,testing,c,f8);
-		res.add(rr);
-		System.out.println(res);
-		
-		for (int i=0;i<res.size();i++)
-			System.out.println(res.get(i).toString());
-		*/
+
 		
 		
 	int choice = 0;
