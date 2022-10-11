@@ -69,6 +69,12 @@ public class Reservation {
         
 	}
 
+	public String toCString() {
+		 NumberFormat nf = NumberFormat.getCurrencyInstance(); 
+	 return "The following reservation was canceled: "+ cust.getfirstName() + "	" + cust.getlastName() + " reserved " +numSeats+ " seat's specifically,  " + seatNum + " costing:  " + nf.format(cost) + " having the Reservation ID Number: " + resNum + ". on flight number " + f.getFlightNum();
+       
+	}
+	
 	public void setNumSeats(int numSeats) {
         this.numSeats = numSeats;
     }
