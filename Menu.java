@@ -24,26 +24,26 @@ public class Menu {
 		ArrayList<Flight> flight = new ArrayList<Flight>();
 		ArrayList<Reservation> resCanceled = new ArrayList<Reservation>();
 		
-		Customer c = new Customer("Connor", "Hogg", "Hogg.Connor@gmail.com");
-		cust.add(c);
-		c = new Customer("David", "Bryan", "David.Bryan@gmail.com");
-		cust.add(c);
-		c = new Customer("John", "Gafildafield", "John.Gafildafield@gmail.com");
-		cust.add(c);
-		c = new Customer("Terry", "Bubbkis", "Terry.Bubbkis@gmail.com");
-		cust.add(c);
-		c = new Customer("Larry", "Outhouse", "Larry.Outhouse@gmail.com");
-		cust.add(c);
-		c = new Customer("Meg", "Griffen", "Meg.Griffen@gmail.com");
-		cust.add(c);
-		c = new Customer("Charles", "Hoag", "Charles.Hoag@gmail.com");
-		cust.add(c);
-		c = new Customer("Larry", "Harder", "Larry.Harder@gmail.com");
-		cust.add(c);
-		c = new Customer("James", "Madison", "James.Madison@gmail.com");
-		cust.add(c);
-		c = new Customer("Finley", "Davis", "Finley.Davis@gmail.com");
-		cust.add(c);
+		Customer c1 = new Customer("Connor", "Hogg", "Hogg.Connor@gmail.com");
+		cust.add(c1);
+		Customer c2 = new Customer("David", "Bryan", "David.Bryan@gmail.com");
+		cust.add(c2);
+		Customer c3 = new Customer("John", "Gafildafield", "John.Gafildafield@gmail.com");
+		cust.add(c3);
+		Customer c4 = new Customer("Terry", "Bubbkis", "Terry.Bubbkis@gmail.com");
+		cust.add(c4);
+		Customer c5 = new Customer("Larry", "Outhouse", "Larry.Outhouse@gmail.com");
+		cust.add(c5);
+		Customer c6 = new Customer("Meg", "Griffen", "Meg.Griffen@gmail.com");
+		cust.add(c6);
+		Customer c7 = new Customer("Charles", "Hoag", "Charles.Hoag@gmail.com");
+		cust.add(c7);
+		Customer c8 = new Customer("Larry", "Harder", "Larry.Harder@gmail.com");
+		cust.add(c8);
+		Customer c9 = new Customer("James", "Madison", "James.Madison@gmail.com");
+		cust.add(c9);
+		Customer c10 = new Customer("Finley", "Davis", "Finley.Davis@gmail.com");
+		cust.add(c10);
 		
 		
 		
@@ -88,7 +88,90 @@ public class Menu {
 		Flight f8 = new Flight("PHX to ROA", "2022-11-12", "pm", seatMap,seats, seatscust, p2);
 		flight.add(f8);
 		
+		ArrayList<String> seatss=new ArrayList<String>();
+		seatss.add("1A");
+		seatss.add("1B");
+		
 
+
+		
+		Reservation r1 = new Reservation(2, seatss, 1700, c1, f1, 1030);
+		String[][] seatMString2 = { { "NA", "NA", "NA", "NA"},
+									{ "NA", "2A" ,"2B", "NA" },
+									{ "3A", "3B", "3C", "3D", },
+									{ "4A", "4B", "4C", "4D", } };
+		
+		int[][] seatMID2 = { { -1, 1030, 1030, -1}, //RESERVATION NUMBER
+							{ -1, 1 ,1, -1},
+							{ 2, 2, 2, 2 },
+							{ 2, 2, 2, 2 } };
+			
+			
+		int[][] seatscust2 = { { -1, 100, 100, -1}, //customer number
+								{ -1, 0 ,0, -1},
+								{ 0, 0, 0, 0 },
+								{ 0, 0, 0, 0 } };
+		
+		f1.setPmap(seatMString2);
+		f1.setIdmap(seatMID2);
+		f1.setCustidmap(seatscust2);
+		res.add(r1);
+		
+		
+		Reservation r2 = new Reservation(2, seatss, 1700, c4, f4, 1040);
+		String[][] seatMString3 = { { "NA", "NA", "NA", "NA"},
+									{ "NA", "2A" ,"2B", "NA" },
+									{ "3A", "3B", "3C", "3D", },
+									{ "4A", "4B", "4C", "4D", } };
+		
+		int[][] seatMID3 = { { -1, 1040, 1040, -1}, //RESERVATION NUMBER
+							{ -1, 1 ,1, -1},
+							{ 2, 2, 2, 2 },
+							{ 2, 2, 2, 2 } };
+			
+			
+		int[][] seatscust3 = { { -1, 130, 130, -1}, //customer number
+								{ -1, 0 ,0, -1},
+								{ 0, 0, 0, 0 },
+								{ 0, 0, 0, 0 } };
+		
+		f4.setPmap(seatMString3);
+		f4.setIdmap(seatMID3);
+		f4.setCustidmap(seatscust3);
+		res.add(r2);
+		
+		Reservation r3 = new Reservation(2, seatss, 1700, c5, f5, 1050);
+		String[][] seatMString4 = { { "NA", "NA", "NA", "NA"},
+									{ "NA", "2A" ,"2B", "NA" },
+									{ "3A", "3B", "3C", "3D", },
+									{ "4A", "4B", "4C", "4D", } };
+		
+		int[][] seatMID4 = { { -1, 1050, 1050, -1}, //RESERVATION NUMBER
+							{ -1, 1 ,1, -1},
+							{ 2, 2, 2, 2 },
+							{ 2, 2, 2, 2 } };
+			
+			
+		int[][] seatscust4 = { { -1, 140, 140, -1}, //customer number
+								{ -1, 0 ,0, -1},
+								{ 0, 0, 0, 0 },
+								{ 0, 0, 0, 0 } };
+		
+		f5.setPmap(seatMString4);
+		f5.setIdmap(seatMID4);
+		f5.setCustidmap(seatscust4);
+		res.add(r3);
+		
+		
+		
+		Reservation cr1 = new Reservation(2, seatss, 1700, c5, f6, 1000);
+		Reservation cr2 = new Reservation(2, seatss, 1700, c6, f7, 1010);
+		Reservation cr3 = new Reservation(2, seatss, 1700, c8, f8, 1020);
+		resCanceled.add(cr3);
+		resCanceled.add(cr2);
+		resCanceled.add(cr1);
+		
+		
 		
 		
 	int choice = 0;
@@ -139,7 +222,7 @@ public static int menu() {
 	System.out.println("7.  Cancel a Reservation.");
 	System.out.println("8.  Generate Profit by flight number.");
 	System.out.println("9.  Search Reservations");
-	System.out.println("10. Search deleted flights by reservation number.");
+	System.out.println("10. Find canceled flights.");
 	System.out.println("11. Add a customer.");
 	System.out.println("12.  Exit.");
 	int ans = scan.nextInt();

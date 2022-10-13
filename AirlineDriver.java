@@ -271,7 +271,7 @@ public class AirlineDriver {
 							f.get(flightnum).setIdmap(seatMID);
 							f.get(flightnum).setCustidmap(seatscust);
 							System.out.println("this is the seat num" +seatNum);
-							System.out.println(f.get(flightnum).toMString());
+							System.out.println(f.get(flightnum).toMPString());
 							moreseats++;
 							//added one seat and returned all arryas back to their home, this is done each time for each addition
 					}
@@ -419,46 +419,44 @@ public class AirlineDriver {
 						System.out.println("Please enter the customers last name.");
 						String enter = scan.nextLine();
 						for (int i=0;i<r.size();i++) {
-							if(enter.equalsIgnoreCase(r.get(i).getCust().getlastName()));
-							System.out.println(r.get(i).toString());
+							if(enter.equalsIgnoreCase(r.get(i).getCust().getlastName())){
+								System.out.println(r.get(i).toString());
 							wastrue=false;
-						}if (wastrue);
+							}}if (wastrue);
 						System.out.println("There are no records under that peramiter.");
 					}else if (find==2) {
 						System.out.println("Please enter the customers email.");
 						String enter = scan.nextLine();
 						for (int i=0;i<r.size();i++) {
-							if(enter.equalsIgnoreCase(r.get(i).getCust().getlastName()));
+							if(enter.equalsIgnoreCase(r.get(i).getCust().getlastName())) {
 							System.out.println(r.get(i).toString());
 							wastrue=false;
-						}if (wastrue);
+							}}if (wastrue);
 						System.out.println("There are no records under that peramiter.");
 					}else if (find==3) {
-						System.out.println("Please enter the customers last name.");
+						System.out.println("Please enter the Reservation number.");
 						int enter = scan.nextInt();
 						scan.nextLine();
 						for (int i=0;i<r.size();i++) {
-							if(enter==r.get(i).getResNum());
+							if(enter==r.get(i).getResNum()){
 							System.out.println(r.get(i).toString());
 							wastrue=false;
-						}if (wastrue);
+							}}if (wastrue);
 						System.out.println("There are no records under that peramiter.");
 					}else if (find==4) {
-						System.out.println("Please enter the customers last name.");
+						System.out.println("Please enter the customer number.");
 						int enter = scan.nextInt();
 						scan.nextLine();
 						for (int i=0;i<r.size();i++) {
-							if(enter==r.get(i).getCust().getCustNum());
+							if(enter==r.get(i).getCust().getCustNum());{
 							System.out.println(r.get(i).toString());
 							wastrue=false;
-						}if (wastrue);
+							}}if (wastrue);
 						System.out.println("There are no records under that peramiter.");
 					}else if (find==5) {
 						for (int i=0;i<r.size();i++) {
 							System.out.println(i+ ": Canceled Reservation for " + r.get(i).getCust().getfirstName()+ " "+r.get(i).getCust().getlastName()+ "on flight " + r.get(i).getF().getFlightNum() + " flying "+ r.get(i).getF().getRoute()+ " on " + r.get(i).getF().getDate()+ " at "+ r.get(i).getF().getTime());
 							}
-					}else {
-						System.out.println("Please enter a different number.");
 					}
 					
 				System.out.println("More Searches? true/false");
@@ -486,47 +484,45 @@ public class AirlineDriver {
 				System.out.println("Please enter the customers last name.");
 				String enter = scan.nextLine();
 				for (int i=0;i<r.size();i++) {
-					if(enter.equalsIgnoreCase(r.get(i).getCust().getlastName()));
+					if(enter.equalsIgnoreCase(r.get(i).getCust().getlastName().toString())){
 					System.out.println(r.get(i).toCString());
 					wastrue=false;
-				}if (wastrue);
+				}}if (wastrue);
 				System.out.println("There are no records under that peramiter.");
 			}else if (find==2) {
 				System.out.println("Please enter the customers email.");
 				String enter = scan.nextLine();
 				for (int i=0;i<r.size();i++) {
-					if(enter.equalsIgnoreCase(r.get(i).getCust().getlastName()));
+					if(enter.equalsIgnoreCase(r.get(i).getCust().getlastName().toString())) {
 					System.out.println(r.get(i).toCString());
 					wastrue=false;
-				}if (wastrue);
+					}}if (wastrue);
 				System.out.println("There are no records under that peramiter.");
 			}else if (find==3) {
-				System.out.println("Please enter the customers last name.");
+				System.out.println("Please enter the Reservation number.");
 				int enter = scan.nextInt();
 				scan.nextLine();
 				for (int i=0;i<r.size();i++) {
-					if(enter==r.get(i).getResNum());
+					if(enter==r.get(i).getResNum()) {
 					System.out.println(r.get(i).toCString());
 					wastrue=false;
-				}if (wastrue);
+				}}if (wastrue);
 				System.out.println("There are no records under that peramiter.");
 			}else if (find==4) {
-				System.out.println("Please enter the customers last name.");
+				System.out.println("Please enter the customers number.");
 				int enter = scan.nextInt();
 				scan.nextLine();
 				for (int i=0;i<r.size();i++) {
-					if(enter==r.get(i).getCust().getCustNum());
+					if(enter==r.get(i).getCust().getCustNum()) {
 					System.out.println(r.get(i).toCString());
 					wastrue=false;
-				}if (wastrue);
+				}}if (wastrue);
 				System.out.println("There are no records under that peramiter.");
 			}else if (find==5) {
 				for (int i=0;i<r.size();i++) {
 					System.out.println(i+ ": Canceled Reservation for " + r.get(i).getCust().getfirstName()+ " "+r.get(i).getCust().getlastName()+ "on flight " + r.get(i).getF().getFlightNum() + " flying "+ r.get(i).getF().getRoute()+ " on " + r.get(i).getF().getDate()+ " at "+ r.get(i).getF().getTime());
-					}
-			}else {
-				System.out.println("Please enter a different number.");
-			}
+					}}
+			
 			
 		System.out.println("More Searches? true/false");
 		more=scan.nextBoolean();

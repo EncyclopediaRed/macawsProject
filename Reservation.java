@@ -50,8 +50,19 @@ public class Reservation {
         f = fi;
         resNum = num;
         num += 100;
-    } // End of the full argument constructor.
+    } 
+    
+    // for loading canceled reservations
+    public Reservation(int n_s, ArrayList<String> s_n, double c, Customer custt, Flight fi, int r) {
 
+        // Assign each instance variable for a reservation.
+        numSeats=n_s;
+        seatNum=s_n;
+        cost=c;
+        cust = custt;
+        f = fi;
+        resNum = r;
+    } 
     // Create a toString method for displaying reservation, customer, and flight information.
 
 
