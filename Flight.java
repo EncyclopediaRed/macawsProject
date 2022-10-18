@@ -1,8 +1,5 @@
 package macawsProject;
 
-import java.sql.Time;
-import java.time.LocalDate;
-
 /**
  * Flight Class
  * 
@@ -14,10 +11,10 @@ import java.time.LocalDate;
  *  Pilot
  *
  * @authors R. Barrowclift, C. Hogg, M. Porter - ITP 220
- * @version Sep 22, 2022
+ * @version September 22, 2022
  *
  */
-import java.util.ArrayList;
+
 public class Flight {
 
     // Create the instance variables for a flight.
@@ -72,7 +69,7 @@ public class Flight {
             + "\nDate: " + date
             + "\nTime: " + time
             + "\nFlight ID Number: " + flightNum
-            + "\nPilot: " + p.toString();
+            + "\n" + p.toString();
     } // End of method toString.
 
     // Create the getters and setters for each instance variable.

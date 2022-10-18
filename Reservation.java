@@ -15,7 +15,7 @@ import java.text.NumberFormat;
  *  and a boolean to determine if the reservation is paid for
  * 
  * @authors R. Barrowclift, C. Hogg, M. Porter - ITP 220
- * @version Sep 22, 2022
+ * @version September 22, 2022
  *
  */
 public class Reservation {
@@ -75,14 +75,15 @@ public class Reservation {
 	@Override
 	public String toString() {
 		 NumberFormat nf = NumberFormat.getCurrencyInstance(); 
-	 return cust.getfirstName() + "	" + cust.getlastName() + " reserved " +numSeats+ " seat's specifically,  " + seatNum + " costing:  " + nf.format(cost) + " having the Reservation ID Number: " + resNum + ". on flight number " + f.getFlightNum();
- 
+	 return cust.getfirstName() + " " + cust.getlastName() + " reserved " +numSeats+ " seats specifically,  " + seatNum + " costing:  " + nf.format(cost) + " having the Reservation ID Number: " + resNum + ". on Flight Number: " + f.getFlightNum()
+		+ "\n---------------------------------------------------------------------------------------------------------------------------------------"
+		+ "\n";	
         
 	}
 
 	public String toCString() {
 		 NumberFormat nf = NumberFormat.getCurrencyInstance(); 
-	 return "The following reservation was canceled: "+ cust.getfirstName() + "	" + cust.getlastName() + " reserved " +numSeats+ " seat's specifically,  " + seatNum + " costing:  " + nf.format(cost) + " having the Reservation ID Number: " + resNum + ". on flight number " + f.getFlightNum();
+	 return "The following reservation was canceled: "+ cust.getfirstName() + "	" + cust.getlastName() + " reserved " +numSeats+ " seats specifically,  " + seatNum + " costing:  " + nf.format(cost) + " having the Reservation ID Number: " + resNum + ". on Flight Number: " + f.getFlightNum();
        
 	}
 	

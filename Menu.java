@@ -1,7 +1,5 @@
 package macawsProject;
 
-import java.sql.Time;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -15,7 +13,7 @@ public class Menu {
  * Creates a menu class to detail what makes up a UI menu for a airline reservation system
  *
  * @authors R. Barrowclift, C. Hogg, M. Porter - ITP 220
- * @version Oct 6, 2022
+ * @version October 6, 2022
  *
  */
 		ArrayList<Customer> cust = new ArrayList<Customer>();
@@ -201,8 +199,8 @@ public class Menu {
 			AirlineDriver.addCustomer(cust);
 		} else if (choice ==12) { 
 			AirlineDriver.closeConnection();
-			System.exit(0);
 			System.out.println("Thank you for choosing Java Airlines!\nHave a good day :).");
+			System.exit(0);
 		}
 	}
 	
@@ -213,18 +211,18 @@ public class Menu {
 public static int menu() {
 	Scanner scan = new Scanner(System.in);
 	System.out.println("\nMenu:");
-	System.out.println("1.  Print a map of the seats by flight number.");
-	System.out.println("2.  Print flight information.");
-	System.out.println("3.  Print a Pilots Schedule.");
+	System.out.println("1.  Print a map of the seats by Flight Number.");
+	System.out.println("2.  Print Flight information.");
+	System.out.println("3.  Print a Pilot's Schedule.");
 	System.out.println("4.  Print the Reservations by Flight and Seat Number.");
-	System.out.println("5.  Print Customer information by Number customer Number.");
+	System.out.println("5.  Print Customer information by Customer Number.");
 	System.out.println("6.  Book a Reservation.");
 	System.out.println("7.  Cancel a Reservation.");
-	System.out.println("8.  Generate Profit by flight number.");
+	System.out.println("8.  Generate Profit by Flight Number.");
 	System.out.println("9.  Search Reservations");
 	System.out.println("10. Find canceled flights.");
-	System.out.println("11. Add a customer.");
-	System.out.println("12.  Exit.");
+	System.out.println("11. Add a Customer.");
+	System.out.println("12. Exit.");
 	int ans = scan.nextInt();
 	return ans;
 	

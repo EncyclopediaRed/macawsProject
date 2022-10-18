@@ -11,7 +11,7 @@ import javax.imageio.metadata.IIOMetadataFormatImpl;
  * Creates a driver class to test the functionality of the airline reservation system
  * 
  * @authors R. Barrowclift, C. Hogg, M. Porter - ITP 220
- * @version Oct 6, 2022
+ * @version October 6, 2022
  *
  */
 public class AirlineDriver {
@@ -74,7 +74,7 @@ public class AirlineDriver {
 		Scanner scan = new Scanner(System.in);
 		boolean more=true;
 		while (more) {
-			System.out.println("Please select the flight that you would like to print the information on.");
+			System.out.println("Please select the numerical value for the flight that you would like to print information on:");
 			for (int i=0; i<f.size(); i++) {
 				System.out.println((i +1) + ":     Flight Number " + f.get(i).getFlightNum() + " Flying " + f.get(i).getRoute() + " on " + f.get(i).getDate() + " at " + f.get(i).getTime() +".");
 			}
@@ -95,14 +95,14 @@ public class AirlineDriver {
 		Scanner scan = new Scanner(System.in);
 		boolean more =true;
 		while (more) {
-			System.out.println("Please select the Pilot's number you would like information on.");
+			System.out.println("Please select the Pilot's Number you would like information on:");
 			for (int i=0; i<p.size(); i++) {
-				System.out.println("Pilot's number: " + p.get(i).getPilotNum() + " Their Name: " + p.get(i).getPilotName() +".");
+				System.out.println("Pilot's number: " + p.get(i).getPilotNum() + " || Their Name: " + p.get(i).getPilotName() +".");
 			}
 			int pilotn=scan.nextInt();
 			for (int i=0; i<f.size(); i++) {
 				if (pilotn==f.get(i).getP().getPilotNum()) {
-					System.out.println("The Details for this pilot's flight number: " + f.get(i).getFlightNum() + f.get(i).toString());
+					System.out.println("The Details for this Pilot's Flight Number: " + f.get(i).getFlightNum() + f.get(i).toString());
 					System.out.println(f.get(i).toMString()+"\n");
 					}
 			}
@@ -111,7 +111,7 @@ public class AirlineDriver {
 			
 		System.out.println("More Pilots? true/false");
 		more=scan.nextBoolean();
-		}//moreloop
+		}//more loop
 
 }
 	
@@ -119,11 +119,11 @@ public class AirlineDriver {
 		Scanner scan = new Scanner(System.in);
 		boolean more =true;
 		while (more) {
-			System.out.println("What's the customers First name?");
+			System.out.println("What's the Customer's first name?");
 			String fname=scan.nextLine();
-			System.out.println("What's the customers Last name?");
+			System.out.println("What's the Customer's last name?");
 			String Lname=scan.nextLine();
-			System.out.println("What's the customers email?");
+			System.out.println("What's the Customer's email?");
 			String email=scan.nextLine();
 			Customer c1=new Customer(fname,Lname,email);
 			c.add(c1);
@@ -165,7 +165,7 @@ public class AirlineDriver {
 		double cost=0;//base cost holder
 		Flight ff=f.get(0);//base flight holder
 		int findnums=0;
-		int partyNum=0;//amoutn of people in the party
+		int partyNum=0;//amount of people in the party
 		int flightnum=0;//flight
 		ArrayList<String> seatn =new ArrayList<String>();//array to hold seat numbers
 		
@@ -191,27 +191,27 @@ public class AirlineDriver {
 		while (more) {
 			//do you want a new customer?
 			boolean repete=true;
-			System.out.println("Do you need to add a new customer? Yes/No");
+			System.out.println("Do you need to add a New Customer? Yes/No");
 			String answer=scan.nextLine();
 			if (answer.equalsIgnoreCase("yes")) {
 			addCustomer(c);
 			}
 			
 			// customer selection
-			System.out.println("Please select the customer you want.");
+			System.out.println("Please select the Customer you want:");
 			for(int i=0;i<c.size();i++) {
 				System.out.println(i+ ":    " + c.get(i).toString());
 			}
 			int custNum=scan.nextInt();
 			Customer cc=c.get(custNum);//needed to add into the reservation at the bottom
 			
-			//selects the amount of seets needed
+			//selects the amount of seats needed
 			System.out.println("How many people are in your party (seats needed)?");
 			partyNum=scan.nextInt();
 			
 			//function to select the flight, and pick their individual seats. They are asked after seeing avalible seets if they want to switch planes.
 			while (repete) {
-				System.out.println("Please select the flight you want.");
+				System.out.println("Please select the flight you want:");
 				for (int i=0; i<f.size();i++) {
 					System.out.println((i) + ":     Flight Number " + f.get(i).getFlightNum() + " Flying " + f.get(i).getRoute() + " on " + f.get(i).getDate() + " at " + f.get(i).getTime() +".");
 				}
@@ -220,13 +220,13 @@ public class AirlineDriver {
 				scan.nextLine();//scanner problem
 				moreseats=0;
 				
-				System.out.println("Rows 1 and 2 seats cost 850. Coach seats are 450. na Seats are not avalible.");
+				System.out.println("Rows 1 and 2 seats cost $850. Coach seats are $450. 'na' Seats are not avalible.");
 				System.out.println("Airplane Seat Map" + "\n=========================");
 				System.out.println(f.get(flightnum).toMPString());
-				System.out.println("Does the following flight have the seats you need? yes/no\n Seats with all numbers or na are not avalible.");
+				System.out.println("Does the following flight have the seats you need? yes/no\n Seats with all numbers or 'na' are not avalible.");
 				String answ = scan.nextLine();
 				if (answ.equalsIgnoreCase("yes")) {
-					System.out.println("Rows 1 and 2 seats cost 850. Coach seats are 450. na Seats are not avalible.");
+					System.out.println("Rows 1 and 2 seats cost $850. Coach seats are $450. 'na' Seats are not avalible.");
 					System.out.println("Airplane Seat Map" + "\n=========================");
 					System.out.println(f.get(flightnum).toMPString());
 					repete=false;
@@ -234,7 +234,7 @@ public class AirlineDriver {
 					System.out.println("Try again");
 				}
 				}
-			//function to add seats each run through adds one seat, with the actual added to the arraylist
+			//function to add seats each run through adds one seat, with the actual added to the ArrayList
 			//for a reservation happening at the end after the total loop is done
 				while (moreseats!=partyNum) {
 						
@@ -242,10 +242,10 @@ public class AirlineDriver {
 							seatMID=(f.get(flightnum).getIdmap());
 							seatMString=(f.get(flightnum).getPmap());
 							seatscust=(f.get(flightnum).getCustidmap());
-							System.out.println("Please enter the seat's row, row starts at 1.");
+							System.out.println("Please enter the seat's Row (row starts at 1):");
 							row1 = scan.nextInt();
 							scan.nextLine();//scanner problem
-							System.out.println("Please enter the seat's number, seat starts at 1.");
+							System.out.println("Please enter the seat's Number (seat starts at 1):");
 							seatNum = scan.nextInt();
 							scan.nextLine();//scanner problem
 							
@@ -270,7 +270,7 @@ public class AirlineDriver {
 							f.get(flightnum).setPmap(seatMString);
 							f.get(flightnum).setIdmap(seatMID);
 							f.get(flightnum).setCustidmap(seatscust);
-							System.out.println("this is the seat num" +seatNum);
+							System.out.println("This is the seat number: " + seatNum);
 							System.out.println(f.get(flightnum).toMPString());
 							moreseats++;
 							//added one seat and returned all arryas back to their home, this is done each time for each addition
@@ -282,7 +282,7 @@ public class AirlineDriver {
 				f.get(flightnum).setProfit(javaisfun);
 				
 				//booking reservation
-				System.out.println("Booked reservation for " + c.get(custNum).getfirstName()+ " "+c.get(custNum).getlastName()+ " on flight " + f.get(flightnum).getFlightNum() + " flying "+ f.get(flightnum).getRoute()+ " on " + f.get(flightnum).getDate()+ " at "+ f.get(flightnum).getTime()+ " with " + partyNum + " seats for a total cost of "+ nf.format(cost) +".");
+				System.out.println("Booked reservation for: " + c.get(custNum).getfirstName()+ " "+c.get(custNum).getlastName()+ " on flight " + f.get(flightnum).getFlightNum() + " flying "+ f.get(flightnum).getRoute()+ " on " + f.get(flightnum).getDate()+ " at "+ f.get(flightnum).getTime()+ " with " + partyNum + " seats for a total cost of "+ nf.format(cost) +".");
 				Reservation rr= new Reservation(partyNum,seatn,cost,cc,ff);
 				r.add(rr);
 				//finding the index of that reservation so we can set the one array to the reservation number
@@ -297,8 +297,8 @@ public class AirlineDriver {
 			        }
 				}
 				f.get(flightnum).setIdmap(seatMID);
-				//completly changes any thing that was added by the previous function to reservation
-				//number so it can be removed if a reservation is cannceled
+				//completely changes any thing that was added by the previous function to reservation
+				//number so it can be removed if a reservation is canceled
 				
 				//FINALLY MORE RESERVATIONS???
 				System.out.println("More Reservations? true/false");
@@ -328,9 +328,9 @@ public class AirlineDriver {
 			int resnum=scan.nextInt();
 			Reservation rr=r.get(resnum);
 			cr.add(rr);
-			//add it to our canceled arraylist
+			//add it to our canceled ArrayList
 			
-			//getting all our flight seat arrays so we can remove this resrvation from them
+			//getting all our flight seat arrays so we can remove this reservation from them
 			String[][] seatMString = (r.get(resnum).getF().getPmap());
 			int[][]custidArray=(r.get(resnum).getF().getCustidmap());
 			int[][] seatMID= (r.get(resnum).getF().getIdmap());
@@ -361,7 +361,7 @@ public class AirlineDriver {
 	   	}
     	}
 	public static void printGrossIncome(ArrayList<Flight> f) {
-		//print the Grossincome of the flight by flight number
+		//print the Gross income of the flight by flight number
 		Scanner scan = new Scanner(System.in);
 		boolean more =true;
 		while (more) {
@@ -379,9 +379,9 @@ public class AirlineDriver {
 					total=total+add;
 				}
 				
-				System.out.println("Total profit is " + nf.format(total)+".");
+				System.out.println("Total profit is: " + nf.format(total)+".");
 			}else { 
-			System.out.println("Which is the flight do you want to print out gross income for?");
+			System.out.println("Which is the flight you want to print out gross income for?");
 			for (int i =0; i<f.size();i++) {
 				System.out.println("Flight number: "+f.get(i).getFlightNum());
 			}
@@ -406,17 +406,17 @@ public class AirlineDriver {
 		boolean more =true;
 		while (more) {
 			
-					System.out.println("How would you like to search the  reservations?");
+					System.out.println("How would you like to search the Reservations?");
 					System.out.println("1.     By Last Name.");
 					System.out.println("2.     By Email.");
 					System.out.println("3.     By Reservation Number.");
-					System.out.println("4.     By Costomer Number.");
+					System.out.println("4.     By Customer Number.");
 					System.out.println("5.     Just list them.");
 					int find=scan.nextInt();
 					scan.nextLine();//scanner problems
 					boolean wastrue=true;
 					if(find==1) {
-						System.out.println("Please enter the customers last name.");
+						System.out.println("Please enter the Customer's last name:");
 						String enter = scan.nextLine();
 						for (int i=0;i<r.size();i++) {
 							if(enter.equalsIgnoreCase(r.get(i).getCust().getlastName())){
@@ -425,7 +425,7 @@ public class AirlineDriver {
 							}}if (wastrue);
 						System.out.println("There are no records under that peramiter.");
 					}else if (find==2) {
-						System.out.println("Please enter the customers email.");
+						System.out.println("Please enter the Customers email:");
 						String enter = scan.nextLine();
 						for (int i=0;i<r.size();i++) {
 							if(enter.equalsIgnoreCase(r.get(i).getCust().getlastName())) {
@@ -434,7 +434,7 @@ public class AirlineDriver {
 							}}if (wastrue);
 						System.out.println("There are no records under that peramiter.");
 					}else if (find==3) {
-						System.out.println("Please enter the Reservation number.");
+						System.out.println("Please enter the Reservation Number:");
 						int enter = scan.nextInt();
 						scan.nextLine();
 						for (int i=0;i<r.size();i++) {
@@ -444,7 +444,7 @@ public class AirlineDriver {
 							}}if (wastrue);
 						System.out.println("There are no records under that peramiter.");
 					}else if (find==4) {
-						System.out.println("Please enter the customer number.");
+						System.out.println("Please enter the Customer Number:");
 						int enter = scan.nextInt();
 						scan.nextLine();
 						for (int i=0;i<r.size();i++) {
@@ -471,17 +471,17 @@ public class AirlineDriver {
 		Scanner scan = new Scanner(System.in);
 		boolean more =true;
 		while (more) {
-			System.out.println("How would you like to search the canceled reservations?");
+			System.out.println("How would you like to search the canceled Reservations?");
 			System.out.println("1.     By Last Name.");
 			System.out.println("2.     By Email.");
 			System.out.println("3.     By Reservation Number.");
-			System.out.println("4.     By Costomer Number.");
+			System.out.println("4.     By Customer Number.");
 			System.out.println("5.     Just list them.");
 			int find=scan.nextInt();
 			scan.nextLine();//scanner problems
 			boolean wastrue=true;
 			if(find==1) {
-				System.out.println("Please enter the customers last name.");
+				System.out.println("Please enter the Customer's last name:");
 				String enter = scan.nextLine();
 				for (int i=0;i<r.size();i++) {
 					if(enter.equalsIgnoreCase(r.get(i).getCust().getlastName().toString())){
@@ -490,7 +490,7 @@ public class AirlineDriver {
 				}}if (wastrue);
 				System.out.println("There are no records under that peramiter.");
 			}else if (find==2) {
-				System.out.println("Please enter the customers email.");
+				System.out.println("Please enter the Customer's email:");
 				String enter = scan.nextLine();
 				for (int i=0;i<r.size();i++) {
 					if(enter.equalsIgnoreCase(r.get(i).getCust().getlastName().toString())) {
@@ -499,7 +499,7 @@ public class AirlineDriver {
 					}}if (wastrue);
 				System.out.println("There are no records under that peramiter.");
 			}else if (find==3) {
-				System.out.println("Please enter the Reservation number.");
+				System.out.println("Please enter the Reservation Number:");
 				int enter = scan.nextInt();
 				scan.nextLine();
 				for (int i=0;i<r.size();i++) {
@@ -509,7 +509,7 @@ public class AirlineDriver {
 				}}if (wastrue);
 				System.out.println("There are no records under that peramiter.");
 			}else if (find==4) {
-				System.out.println("Please enter the customers number.");
+				System.out.println("Please enter the Customer's number:");
 				int enter = scan.nextInt();
 				scan.nextLine();
 				for (int i=0;i<r.size();i++) {

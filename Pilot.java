@@ -1,5 +1,4 @@
 package macawsProject;
-import java.util.ArrayList;
 /**
  * Pilot Class
  * 
@@ -9,7 +8,7 @@ import java.util.ArrayList;
  *  Current Location?
  *
  * @authors R. Barrowclift, C. Hogg, M. Porter - ITP 220
- * @version Sep 22, 2022
+ * @version September 22, 2022
  *
  */
 public class Pilot {
@@ -42,7 +41,7 @@ public class Pilot {
     public String toString() {
 
         // Create the pilot information to be displayed.
-        return "Pilot Name: " + pilotName + "\n Pilot's ID Number: " + pilotNum;
+        return "Pilot Name: " + pilotName + "\nPilot ID Number: " + pilotNum;
     } // End of method toString.
 
     // Create the getters and setters for each instance variable.
