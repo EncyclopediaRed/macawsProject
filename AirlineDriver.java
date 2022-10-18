@@ -198,11 +198,14 @@ public class AirlineDriver {
 			}
 			
 			// customer selection
-			System.out.println("Please select the Customer you want:");
+			System.out.println();
+			System.out.println("***Please select a numerical value for the Customer you want***");
+			System.out.println();
 			for(int i=0;i<c.size();i++) {
-				System.out.println(i+ ":    " + c.get(i).toString());
+				System.out.println((i + 1) + ":    " + c.get(i).toString());
 			}
 			int custNum=scan.nextInt();
+			custNum = custNum - 1;
 			Customer cc=c.get(custNum);//needed to add into the reservation at the bottom
 			
 			//selects the amount of seats needed
@@ -211,11 +214,15 @@ public class AirlineDriver {
 			
 			//function to select the flight, and pick their individual seats. They are asked after seeing avalible seets if they want to switch planes.
 			while (repete) {
-				System.out.println("Please select the flight you want:");
+				System.out.println();
+				System.out.println("***Please select a numerical value for the flight you want***");
+				System.out.println();
 				for (int i=0; i<f.size();i++) {
-					System.out.println((i) + ":     Flight Number " + f.get(i).getFlightNum() + " Flying " + f.get(i).getRoute() + " on " + f.get(i).getDate() + " at " + f.get(i).getTime() +".");
+					System.out.println((i + 1) + ":     Flight Number " + f.get(i).getFlightNum() + " Flying " + f.get(i).getRoute() + " on " + f.get(i).getDate() + " at " + f.get(i).getTime() +"."
+										+ "\n----------------------------------------------------------------");
 				}
 				flightnum=scan.nextInt();
+				flightnum = flightnum - 1;
 				ff=f.get(flightnum);
 				scan.nextLine();//scanner problem
 				moreseats=0;
@@ -223,7 +230,7 @@ public class AirlineDriver {
 				System.out.println("Rows 1 and 2 seats cost $850. Coach seats are $450. 'na' Seats are not avalible.");
 				System.out.println("Airplane Seat Map" + "\n=========================");
 				System.out.println(f.get(flightnum).toMPString());
-				System.out.println("Does the following flight have the seats you need? yes/no\n Seats with all numbers or 'na' are not avalible.");
+				System.out.println("Does the following flight have the seat(s) you need? (Enter yes/no)\n***Seats labeled with all numbers or 'na' are NOT avalible***");
 				String answ = scan.nextLine();
 				if (answ.equalsIgnoreCase("yes")) {
 					System.out.println("Rows 1 and 2 seats cost $850. Coach seats are $450. 'na' Seats are not avalible.");
@@ -242,10 +249,10 @@ public class AirlineDriver {
 							seatMID=(f.get(flightnum).getIdmap());
 							seatMString=(f.get(flightnum).getPmap());
 							seatscust=(f.get(flightnum).getCustidmap());
-							System.out.println("Please enter the seat's Row (row starts at 1):");
+							System.out.println("Please enter the seat's Row (rows range from 1 -4):");
 							row1 = scan.nextInt();
 							scan.nextLine();//scanner problem
-							System.out.println("Please enter the seat's Number (seat starts at 1):");
+							System.out.println("Please enter the seat's Number (seats range from 1 - 4):");
 							seatNum = scan.nextInt();
 							scan.nextLine();//scanner problem
 							
@@ -282,7 +289,7 @@ public class AirlineDriver {
 				f.get(flightnum).setProfit(javaisfun);
 				
 				//booking reservation
-				System.out.println("Booked reservation for: " + c.get(custNum).getfirstName()+ " "+c.get(custNum).getlastName()+ " on flight " + f.get(flightnum).getFlightNum() + " flying "+ f.get(flightnum).getRoute()+ " on " + f.get(flightnum).getDate()+ " at "+ f.get(flightnum).getTime()+ " with " + partyNum + " seats for a total cost of "+ nf.format(cost) +".");
+				System.out.println("Booked reservation for: " + c.get(custNum).getfirstName()+ " "+c.get(custNum).getlastName()+ " on flight " + f.get(flightnum).getFlightNum() + " flying "+ f.get(flightnum).getRoute()+ " on " + f.get(flightnum).getDate()+ " at "+ f.get(flightnum).getTime()+ " with " + partyNum + " seat(s) for a total cost of "+ nf.format(cost) +".");
 				Reservation rr= new Reservation(partyNum,seatn,cost,cc,ff);
 				r.add(rr);
 				//finding the index of that reservation so we can set the one array to the reservation number
@@ -303,6 +310,7 @@ public class AirlineDriver {
 				//FINALLY MORE RESERVATIONS???
 				System.out.println("More Reservations? true/false");
 				more=scan.nextBoolean();
+				scan.nextLine();
 			 
 				}//more reservations loop
 }
