@@ -258,7 +258,9 @@ public class AirlineDriver {
             while (moreseats != partyNum) {
 
                 // gets the private maps from the flight
-                seatMID = (f.get(flightnum).getIdmap());
+              boolean fix=true;
+            	while (fix) {
+            	seatMID = (f.get(flightnum).getIdmap());
                 seatMString = (f.get(flightnum).getPmap());
                 seatscust = (f.get(flightnum).getCustidmap());
                 System.out.println("Please enter the seat's Row (rows range from 1 -4):");
@@ -267,10 +269,21 @@ public class AirlineDriver {
                 System.out.println("Please enter the seat's Number (seats range from 1 - 4):");
                 seatNum = scan.nextInt();
                 scan.nextLine();// scanner problem
-
-                // sets the seats back to the correct index
-                row1 = row1 - 1;
+                
+                
+                // sets the seats back to the correct index also checks to see if they can book the seat
+            	row1 = row1 - 1;
                 seatNum = seatNum - 1;
+                String seatfix=seatMString[row1][seatNum];
+                if (seatfix.equalsIgnoreCase("na")) {
+                	System.out.println("Please select a different seat this is not avalible.");
+                }else {
+                	fix=false;
+                }
+            	      	}
+            	
+                
+               
 
                 // adding the cost together
                 String seatNums = seatMString[row1][seatNum];
