@@ -2,20 +2,15 @@ package macawsProject;
 
 import java.util.ArrayList;
 import java.text.NumberFormat;
+
 /**
  * Reservation Class
  * 
- * Creates a reservation class to detail what makes up a reservation:
- *  customer
- *  flight
- *  number of seats
- *  seat number
- *  cost
- *  confirmation number
- *  and a boolean to determine if the reservation is paid for
+ * Creates a reservation class to detail what makes up a reservation: customer flight number of
+ * seats seat number cost confirmation number and a boolean to determine if the reservation is paid
+ * for
  * 
  * @authors R. Barrowclift, C. Hogg, M. Porter - ITP 220
- * @version September 22, 2022
  *
  */
 public class Reservation {
@@ -43,71 +38,73 @@ public class Reservation {
     public Reservation(int n_s, ArrayList<String> s_n, double c, Customer custt, Flight fi) {
 
         // Assign each instance variable for a reservation.
-        numSeats=n_s;
-        seatNum=s_n;
-        cost=c;
-        cust = custt;
-        f = fi;
-        resNum = num;
-        num += 100;
-    } 
-    
+        numSeats = n_s; // Assign the number of seats.
+        seatNum = s_n; // Assign the seat numbers.
+        cost = c; // Assign the cost.
+        cust = custt; // Assign the customer.
+        f = fi; // Assign the flight.
+        resNum = num; // Assign the reservation ID.
+        num += 100; // Increment the reservation ID.
+    }
+
     // for loading canceled reservations
     public Reservation(int n_s, ArrayList<String> s_n, double c, Customer custt, Flight fi, int r) {
 
         // Assign each instance variable for a reservation.
-        numSeats=n_s;
-        seatNum=s_n;
-        cost=c;
+        numSeats = n_s; 
+        seatNum = s_n;
+        cost = c;
         cust = custt;
-        f = fi;
+        f = fi; 
         resNum = r;
-    } 
+    }
     // Create a toString method for displaying reservation, customer, and flight information.
-
 
     // Create the getters and setters for each instance variable.
     public int getNumSeats() {
-        return numSeats;
+        return numSeats; 
     }
 
-    
-	@Override
-	public String toString() {
-		 NumberFormat nf = NumberFormat.getCurrencyInstance(); 
-	 return cust.getfirstName() + " " + cust.getlastName() + " reserved " +numSeats+ " seats specifically,  " + seatNum + " costing:  " + nf.format(cost) + " having the Reservation ID Number: " + resNum + ". on Flight Number: " + f.getFlightNum()
-		+ "\n---------------------------------------------------------------------------------------------------------------------------------------"
-		+ "\n";	
-        
-	}
+    @Override
+    public String toString() {
+        NumberFormat nf = NumberFormat.getCurrencyInstance();
+        return cust.getfirstName() + " " + cust.getlastName() + " reserved " + numSeats
+            + " seats specifically,  " + seatNum + " costing:  " + nf.format(cost)
+            + " having the Reservation ID Number: " + resNum + ". on Flight Number: "
+            + f.getFlightNum()
+            + "\n---------------------------------------------------------------------------------------------------------------------------------------"
+            + "\n";
 
-	public String toCString() {
-		 NumberFormat nf = NumberFormat.getCurrencyInstance(); 
-	 return "The following reservation was canceled: "+ cust.getfirstName() + "	" + cust.getlastName() + " reserved " +numSeats+ " seats specifically,  " + seatNum + " costing:  " + nf.format(cost) + " having the Reservation ID Number: " + resNum + ". on Flight Number: " + f.getFlightNum();
-       
-	}
-	
-	public void setNumSeats(int numSeats) {
+    }
+
+    public String toCString() {
+        NumberFormat nf = NumberFormat.getCurrencyInstance();
+        return "The following reservation was canceled: " + cust.getfirstName() + "	"
+            + cust.getlastName() + " reserved " + numSeats + " seats specifically,  " + seatNum
+            + " costing:  " + nf.format(cost) + " having the Reservation ID Number: " + resNum
+            + ". on Flight Number: " + f.getFlightNum();
+
+    }
+
+    public void setNumSeats(int numSeats) {
         this.numSeats = numSeats;
     }
 
-
     public ArrayList<String> getSeatNum() {
-		return seatNum;
-	}
+        return seatNum;
+    }
 
-	public void setSeatNum(ArrayList<String> seatNum) {
-		this.seatNum = seatNum;
-	}
+    public void setSeatNum(ArrayList<String> seatNum) {
+        this.seatNum = seatNum;
+    }
 
-	public double getCost() {
+    public double getCost() {
         return cost;
     }
 
     public void setCost(double cost) {
         this.cost = cost;
     }
-
 
     public int getResNum() {
         return resNum;
