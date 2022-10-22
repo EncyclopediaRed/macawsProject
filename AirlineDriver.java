@@ -294,6 +294,7 @@ public class AirlineDriver {
         while (more) {
             // do you want a new customer?
             boolean repeat = true;
+            System.out.println();
             System.out.println("Do you need to add a New Customer? Yes/No");
             String answer = scan.nextLine();
             if (answer.equalsIgnoreCase("yes")) {
@@ -307,6 +308,8 @@ public class AirlineDriver {
             for (int i = 0; i < c.size(); i++) {
                 System.out.println((i + 1) + ":    " + c.get(i).toString());
             }
+            
+            try {
             int custNum = scan.nextInt();
             custNum = custNum - 1;
             Customer cc = c.get(custNum);// needed to add into the reservation at the bottom
@@ -348,7 +351,9 @@ public class AirlineDriver {
                 } else {
                     System.out.println("Try again");
                 }
-            }
+            } 
+            
+            
             // function to add seats each run through adds one seat, with the actual added to the
             // ArrayList
             // for a reservation happening at the end after the total loop is done
@@ -404,6 +409,7 @@ public class AirlineDriver {
                 // added one seat and returned all arrays back to their home, this is done each time
                 // for each addition
             }
+            
             // setting the profit after calculating the total cost
             NumberFormat nf = NumberFormat.getCurrencyInstance();
             double javaisfun = f.get(flightnum).getProfit();
@@ -434,8 +440,8 @@ public class AirlineDriver {
             cost = 0;
             // completely changes any thing that was added by the previous function to reservation
             // number so it can be removed if a reservation is canceled
-
-            // FINALLY MORE RESERVATIONS???
+            
+         // FINALLY MORE RESERVATIONS???
             try {
                 System.out.println();
                 System.out.println("More Reservations? true/false");
@@ -447,6 +453,13 @@ public class AirlineDriver {
                 scan.nextLine();
             }
             scan.nextLine();
+            
+            } catch (Exception e) {
+                System.out.println("Invalid Input. Please enter a Customer number listed above");
+                scan.nextLine();
+            }
+
+            
 
         } // more reservations loop
     }
