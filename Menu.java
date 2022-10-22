@@ -171,7 +171,7 @@ public class Menu {
             } else if (choice == 7) {
                 AirlineDriver.cancelReservation(cust, pilot, res, resCanceled, flight);
             } else if (choice == 8) {
-                AirlineDriver.printGrossIncome(flight);
+                AirlineDriver.printGrossIncome(flight, res);
             } else if (choice == 9) {
                 AirlineDriver.searchReservation(res);
             } else if (choice == 10) {

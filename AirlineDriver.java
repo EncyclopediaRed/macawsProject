@@ -30,7 +30,7 @@ public class AirlineDriver {
         while (more) {
         	System.out.println();
             System.out.println(
-                "***What is the Flight Number you want to print out the seats for? (If you want a general layout enter 1)***");
+                "***Input the Flight Number you want to print out the seats for (For a general layout, enter '1')***");
             System.out.println();
             System.out.println("Flight Numbers: ");
             System.out.println();
@@ -42,6 +42,9 @@ public class AirlineDriver {
             if (flightss == 1) {
 
                 // Create a 2D array to represent the seats
+            	System.out.println();
+                System.out.println("Airplane Seat Map");
+                System.out.println("=========================");
                 String[][] seatMap = { { "  ", "1A", "1B", "  " },
                                        { "  ", "2A", "2B", "  " },
                                        { "3A", "3B", "3C", "3D", },
@@ -99,10 +102,10 @@ public class AirlineDriver {
         boolean more = true;
         while (more) {
         	System.out.println();
-            System.out.println("***Please select the Pilot's Number you would like information on***");
+            System.out.println("***Input the Pilot's Number you would like information on***");
             System.out.println();
             for (int i = 0; i < p.size(); i++) {
-                System.out.println("Pilot's number: " + p.get(i).getPilotNum() + " || Their Name: "
+                System.out.println("Pilot's Number: " + p.get(i).getPilotNum() + " || Their Name: "
                     + p.get(i).getPilotName() + ".\n---------------------------------------------");
             }
             int pilotn = scan.nextInt();
@@ -445,7 +448,7 @@ public class AirlineDriver {
         }
     }
 
-    public static void printGrossIncome(ArrayList<Flight> f) {
+    public static void printGrossIncome(ArrayList<Flight> f, ArrayList<Reservation> r) {
         // print the Gross income of the flight by flight number
         Scanner scan = new Scanner(System.in);
         boolean more = true;
@@ -461,14 +464,14 @@ public class AirlineDriver {
             double add = 0;
             double total = 0;
             if (answer == 1) {
-                for (int i = 0; i < f.size(); i++) {
-                    add = f.get(i).getProfit();
+                for (int i = 0; i < r.size(); i++) {
+                    add = r.get(i).getCost();
                     total = total + add;
                 }
                 System.out.println();
-                System.out.println("Total profit is: " + nf.format(total) + ".");
+                System.out.println("***Total profit is: " + nf.format(total) + "***");
             } else {
-                System.out.println("***Select the Flight Number that you want to print out Gross Income for***");
+                System.out.println("***Input the Flight Number that you want to print out Gross Income for***");
                 System.out.println();
                 for (int i = 0; i < f.size(); i++) {
                     System.out.println("Flight Number: " + f.get(i).getFlightNum() 
@@ -477,13 +480,15 @@ public class AirlineDriver {
 
                 int flightss = scan.nextInt();
                 scan.nextLine();
-                for (int i = 0; i < f.size(); i++) {
-                    if (f.get(i).getFlightNum() == flightss)
-                    profit = f.get(i).getProfit();
+                for (int i = 0; i < r.size(); i++) {
+                    if (r.get(i).getF().getFlightNum() == flightss) {
+                    		add = r.get(i).getCost();
+                    		profit = profit + add;
+                    }
                 }
                 System.out.println();
-                System.out.println("Gross income for flight number " + flightss + " is "
-                    + nf.format(profit) + ".");
+                System.out.println("***Gross income for flight number " + flightss + " is "
+                    + nf.format(profit) + "***");
             }
             System.out.println();
             System.out.println("More Profit information? true/false");
