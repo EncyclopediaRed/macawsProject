@@ -1,6 +1,7 @@
 package macawsProject;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.io.ObjectInputStream.GetField;
 import java.text.NumberFormat;
@@ -306,7 +307,6 @@ public class AirlineDriver {
             for (int i = 0; i < c.size(); i++) {
                 System.out.println((i + 1) + ":    " + c.get(i).toString());
             }
-            
             int custNum = scan.nextInt();
             custNum = custNum - 1;
             Customer cc = c.get(custNum);// needed to add into the reservation at the bottom
@@ -454,7 +454,7 @@ public class AirlineDriver {
     public static void cancelReservation(ArrayList<Customer> c, ArrayList<Pilot> p,
         ArrayList<Reservation> r, ArrayList<Reservation> cr, ArrayList<Flight> f) {
         Scanner scan = new Scanner(System.in);
-        
+
         // THIS ARRAY IS NEEDED TO ALLOW US TO RETURN THE Array people see when booking reservations
         // back to normal.
         String[][] other = { { "NA", "1A", "1B", "NA" },
@@ -463,70 +463,90 @@ public class AirlineDriver {
                              { "4A", "4B", "4C", "4D", } };
         boolean more = true;
         while (more) {
-        	
-        	// Check for empty Reservation ArrayList.
-        	if(r.size() == 0) {
-        		System.out.println("***No Reservations were found***");
-        		break;      		
-        	}
-      
+
+            // Check for empty Reservation ArrayList.
+            if (r.size() == 0) {
+                System.out.println("***No Reservations were found***");
+                break;
+            }
+
             // select which reservation you want.
-        	System.out.println();
-            System.out.println("***Select the numerical value for the Reservation you want to cancel (type '0' to exit without change)***");
+            System.out.println();
+            System.out.println(
+                "***Select the numerical value for the Reservation you want to cancel (type '0' to exit without change)***");
             System.out.println();
             for (int i = 0; i < r.size(); i++) {
-                System.out.println((i + 1) + ": Reservation for " + r.get(i).getCust().getfirstName()
-                    + " " + r.get(i).getCust().getlastName() + " (" + r.get(i).getCust().getEmail() + ") " + "on flight "
+                System.out.println((i + 1) + ": Reservation for "
+                    + r.get(i).getCust().getfirstName()
+                    + " " + r.get(i).getCust().getlastName() + " (" + r.get(i).getCust().getEmail()
+                    + ") " + "on flight "
                     + r.get(i).getF().getFlightNum() + " flying " + r.get(i).getF().getRoute()
                     + " on " + r.get(i).getF().getDate() + " at " + r.get(i).getF().getTime()
                     + "\n--------------------------------------------------------------------------------------------------------------");
             }
-            int resnum = scan.nextInt();
-            if (resnum == 0)
-            	break;
-            resnum = resnum - 1;
-            Reservation rr = r.get(resnum);
-            cr.add(rr);
-            // add it to our canceled ArrayList
+            try {
+                int resnum = scan.nextInt();
+                if (resnum == 0)
+                    break;
+                resnum = resnum - 1;
+                Reservation rr = r.get(resnum);
+                cr.add(rr);
+                // add it to our canceled ArrayList
 
-            // getting all our flight seat arrays so we can remove this reservation from them
-            String[][] seatMString = (r.get(resnum).getF().getPmap());
-            int[][] custidArray = (r.get(resnum).getF().getCustidmap());
-            int[][] seatMID = (r.get(resnum).getF().getIdmap());
-            int findnum = r.get(resnum).getResNum();
-            // removing the reservation
-            for (int i = 0; i < seatMID.length; i++) {
-                for (int j = 0; j < seatMID[i].length; j++) {
-                    if (seatMID[i][j] == findnum) {
-                        seatMID[i][j] = 0;// this is the reservation number array
-                        seatMString[i][j] = other[i][j];// this is the array the customers see when
-                                                        // booking
-                        custidArray[i][j] = 0;// this is the array we see when we want to see who is
-                                              // booking a seat
+                // getting all our flight seat arrays so we can remove this reservation from them
+                String[][] seatMString = (r.get(resnum).getF().getPmap());
+                int[][] custidArray = (r.get(resnum).getF().getCustidmap());
+                int[][] seatMID = (r.get(resnum).getF().getIdmap());
+                int findnum = r.get(resnum).getResNum();
+                // removing the reservation
+                for (int i = 0; i < seatMID.length; i++) {
+                    for (int j = 0; j < seatMID[i].length; j++) {
+                        if (seatMID[i][j] == findnum) {
+                            seatMID[i][j] = 0;// this is the reservation number array
+                            seatMString[i][j] = other[i][j];// this is the array the customers see
+                                                            // when
+                                                            // booking
+                            custidArray[i][j] = 0;// this is the array we see when we want to see
+                                                  // who is
+                                                  // booking a seat
+                        }
                     }
                 }
+                // putting the arrays back after we removed the reservation
+                r.get(resnum).getF().setIdmap(seatMID);
+                r.get(resnum).getF().setPmap(seatMString);
+                r.get(resnum).getF().setCustidmap(custidArray);
+                // removing the profit from the flight
+                double javaisfun = r.get(resnum).getF().getProfit();
+                double javaisreallyfun = r.get(resnum).getCost();
+                javaisfun = javaisfun - javaisreallyfun;
+                r.get(resnum).getF().setProfit(javaisfun);
+                r.remove(rr);// finally removing the reservation
+
+                System.out.println();
+                System.out.println("***Reservation Canceled***");
             }
-            // putting the arrays back after we removed the reservation
-            r.get(resnum).getF().setIdmap(seatMID);
-            r.get(resnum).getF().setPmap(seatMString);
-            r.get(resnum).getF().setCustidmap(custidArray);
-            // removing the profit from the flight
-            double javaisfun = r.get(resnum).getF().getProfit();
-            double javaisreallyfun = r.get(resnum).getCost();
-            javaisfun = javaisfun - javaisreallyfun;
-            r.get(resnum).getF().setProfit(javaisfun);
-            r.remove(rr);// finally removing the reservation 
+            catch (Exception e) {
+                System.out.println("Invalid Input. Please enter a valid Reservation number");
+                scan.nextLine();
+            }
+           
+            // Check for empty Reservation ArrayList.
+            if (r.size() == 0 && more) {
+                System.out.println("***No Reservations were found***");
+                more = false;
+            }
             
-            System.out.println();
-            System.out.println("***Reservation Canceled***");
-            System.out.println();
-            System.out.println("More Cancelations? true/false");
-            more = scan.nextBoolean();
-          	// Check for empty Reservation ArrayList.
-        	if(r.size() == 0 && more) {
-        		System.out.println("***No Reservations were found***");
-        		more = false;      		
-        	}
+            try {
+                System.out.println();
+                System.out.println("More Cancellations? true/false");
+                more = scan.nextBoolean();
+
+            }
+            catch (Exception e) {
+                System.out.println("Invalid Input. Please enter 'true' or 'false'");
+                scan.nextLine();
+            }
 
         }
     }
@@ -542,50 +562,59 @@ public class AirlineDriver {
             System.out.println();
             System.out.println("1.   The total profit for all schedualed flights.");
             System.out.println("2.   An individual flight.");
-            int answer = scan.nextInt();
-            double profit = 0;
-            double add = 0;
-            double total = 0;
-            if (answer == 1) {
-                for (int i = 0; i < r.size(); i++) {
-                    add = r.get(i).getCost();
-                    total = total + add;
-                }
-                System.out.println();
-                System.out.println("***Total profit is: " + nf.format(total) + "***");
-            } else {
-                System.out.println(
-                    "***Input the Flight Number that you want to print out Gross Income for***");
-                System.out.println();
-                for (int i = 0; i < f.size(); i++) {
-                    System.out.println("Flight Number: " + f.get(i).getFlightNum()
-                        + "\n-------------------");
-                }
-
-                int flightss = scan.nextInt();
-                scan.nextLine();
-                for (int i = 0; i < r.size(); i++) {
-                    if (r.get(i).getF().getFlightNum() == flightss) {
-                        add = r.get(i).getCost();
-                        profit = profit + add;
-                    }
-                }
-                System.out.println();
-                System.out.println("***Gross income for flight number " + flightss + " is "
-                    + nf.format(profit) + "***");
-            }
-            System.out.println();
             try {
-                System.out.println();
-                System.out.println("More Profit Information? true/false");
-                more = scan.nextBoolean();
+                int answer = scan.nextInt();
+
+                double profit = 0;
+                double add = 0;
+                double total = 0;
+                if (answer == 1) {
+                    for (int i = 0; i < r.size(); i++) {
+                        add = r.get(i).getCost();
+                        total = total + add;
+                    }
+                    System.out.println();
+                    System.out.println("***Total profit is: " + nf.format(total) + "***");
+                } else {
+                    System.out.println(
+                        "***Input the Flight Number that you want to print out Gross Income for***");
+                    System.out.println();
+                    for (int i = 0; i < f.size(); i++) {
+                        System.out.println("Flight Number: " + f.get(i).getFlightNum()
+                            + "\n-------------------");
+                    }
+                    int flightss = scan.nextInt();
+                    scan.nextLine();
+                    for (int i = 0; i < r.size(); i++) {
+                        if (r.get(i).getF().getFlightNum() == flightss) {
+                            add = r.get(i).getCost();
+                            profit = profit + add;
+                        }
+                    }
+                    System.out.println();
+                    System.out.println("***Gross income for flight number " + flightss + " is "
+                        + nf.format(profit) + "***");
+                }
 
             }
             catch (Exception e) {
-                System.out.println("Invalid Input. Please enter 'true' or 'false'");
+                System.out.println("Invalid Input. Please enter '1' or '2'");
                 scan.nextLine();
             }
         }
+
+        System.out.println();
+        try {
+            System.out.println();
+            System.out.println("More Profit Information? true/false");
+            more = scan.nextBoolean();
+
+        }
+        catch (Exception e) {
+            System.out.println("Invalid Input. Please enter 'true' or 'false'");
+            scan.nextLine();
+        }
+
     }
 
     public static void closeConnection() {
