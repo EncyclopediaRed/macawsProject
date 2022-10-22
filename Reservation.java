@@ -68,21 +68,24 @@ public class Reservation {
     @Override
     public String toString() {
         NumberFormat nf = NumberFormat.getCurrencyInstance();
-        return cust.getfirstName() + " " + cust.getlastName() + " reserved " + numSeats
-            + " seats specifically,  " + seatNum + " costing:  " + nf.format(cost)
-            + " having the Reservation ID Number: " + resNum + ". on Flight Number: "
+        return cust.getfirstName() + " " + cust.getlastName() + " (" + cust.getEmail() + ")" 
+        	+ " reserved " + numSeats + " seats specifically, " + seatNum + " costing: " 
+        	+ nf.format(cost) + " having the Reservation ID Number: " + resNum + " on Flight Number: "
             + f.getFlightNum()
-            + "\n---------------------------------------------------------------------------------------------------------------------------------------"
+            + "\n--------------------------------------------------------------------------"
+            + "------------------------------------------------------------------------------------"
             + "\n";
 
     }
 
     public String toCString() {
         NumberFormat nf = NumberFormat.getCurrencyInstance();
-        return "The following reservation was canceled: " + cust.getfirstName() + "	"
-            + cust.getlastName() + " reserved " + numSeats + " seats specifically,  " + seatNum
-            + " costing:  " + nf.format(cost) + " having the Reservation ID Number: " + resNum
-            + ". on Flight Number: " + f.getFlightNum();
+        return "The following reservation was canceled: " + cust.getfirstName() + " "
+            + cust.getlastName() + " (" + cust.getEmail() + ")" + " reserved " + numSeats 
+            + " seats specifically, " + seatNum + " costing: " + nf.format(cost) 
+            + "\nHaving the Reservation ID Number: " + resNum + " on Flight Number: " + f.getFlightNum()
+            + "\n---------------------------------------------------------------------------------------------------------------------------------------"
+            + "\n";
 
     }
 

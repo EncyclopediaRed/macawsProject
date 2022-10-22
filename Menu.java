@@ -150,7 +150,9 @@ public class Menu {
         resCanceled.add(cr3);
         resCanceled.add(cr2);
         resCanceled.add(cr1);
-
+        
+        System.out.println();
+        System.out.println("***Welcome to Java Airlines!***");
         int choice = 0;
         while (choice != 12) {
             choice = menu();
@@ -178,7 +180,7 @@ public class Menu {
                 AirlineDriver.addCustomer(cust);
             } else if (choice == 12) {
                 AirlineDriver.closeConnection();
-                System.out.println("Thank you for choosing Java Airlines!\nHave a good day :).");
+                System.out.println("Thank you for choosing Java Airlines!\nHave a good day :)");
                 System.exit(0);
             }
         }

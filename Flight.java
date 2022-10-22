@@ -67,6 +67,7 @@ public class Flight {
     // Create the getters and setters for each instance variable.
     public String toMString() {
         String javaisfun = "";
+        System.out.println();
         System.out.println("Airplane Seat Map");
         System.out.println("=========================");
         for (int i = 0; i < pmap.length; i++) {
