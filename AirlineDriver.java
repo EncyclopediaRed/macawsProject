@@ -148,11 +148,16 @@ public class AirlineDriver {
         boolean more = true;
         System.out.println();
         System.out.println("***Current Reservations***");
+        // Search for zero reservations.
+        if (r.size() == 0) {
+        	System.out.println();
+        	System.out.println("(No Reservations were found)");
+        }
         System.out.println();
         while (more) {
             for (int i = 0; i < r.size(); i++)
                 System.out.println(r.get(i).toString());
-            System.out.println("More Customers? true/false");
+            System.out.println("More Reservations? true/false");
             more = scan.nextBoolean();
         }
     }
@@ -250,15 +255,13 @@ public class AirlineDriver {
 
                     System.out.println(
                         "Rows 1 and 2 seats cost $850. Coach seats are $450. 'na' Seats are not available.");
-                    //System.out.println("Airplane Seat Map" + "\n=========================");
                     System.out.println(f.get(flightnum).toMPString());
-                    System.out.println(
-                        "Does the following flight have the seat(s) you need? (Enter yes/no)\n***Seats labeled with all numbers or 'na' are NOT available***");
+                    System.out.println("Does the following flight have the seat(s) you need? (Enter yes/no)"
+                    		+ "\n***Seats labeled with all numbers or 'na' are NOT available***");
                     String answ = scan.nextLine();
                     if (answ.equalsIgnoreCase("yes")) {
-                        System.out.println(
-                            "Rows 1 and 2 seats cost $850. Coach seats are $450. 'na' Seats are not available.");
-                        //System.out.println("Airplane Seat Map" + "\n=========================");
+                        System.out.println("Rows 1 and 2 seats cost $850. Coach seats are $450."
+                        		+ " 'na' Seats are not available.");
                         System.out.println(f.get(flightnum).toMPString());
                         repeat = false;
                     } else {
@@ -320,7 +323,7 @@ public class AirlineDriver {
                     System.out.println("This is the seat number: " + seatNum);
                     System.out.println(f.get(flightnum).toMPString());
                     moreseats++;
-                    // added one seat and returned all arryas back to their home, this is done each time
+                    // added one seat and returned all arrays back to their home, this is done each time
                     // for each addition
                 }
                 // setting the profit after calculating the total cost
@@ -350,6 +353,7 @@ public class AirlineDriver {
                     }
                 }
                 f.get(flightnum).setIdmap(seatMID);
+                cost = 0;
                 // completely changes any thing that was added by the previous function to reservation
                 // number so it can be removed if a reservation is canceled
 
@@ -382,7 +386,7 @@ public class AirlineDriver {
       
             // select which reservation you want.
         	System.out.println();
-            System.out.println("***Which Reservation would you like to cancel?***");
+            System.out.println("***Select the numerical value for the Reservation you want to cancel (type '0' to exit without change)***");
             System.out.println();
             for (int i = 0; i < r.size(); i++) {
                 System.out.println((i + 1) + ": Reservation for " + r.get(i).getCust().getfirstName()
@@ -392,6 +396,8 @@ public class AirlineDriver {
                     + "\n--------------------------------------------------------------------------------------------------------------");
             }
             int resnum = scan.nextInt();
+            if (resnum == 0)
+            	break;
             resnum = resnum - 1;
             Reservation rr = r.get(resnum);
             cr.add(rr);
@@ -426,12 +432,12 @@ public class AirlineDriver {
             r.remove(rr);// finally removing the reservation 
             
             System.out.println();
-            System.out.println("***Reservation Canceled!***");
+            System.out.println("***Reservation Canceled***");
             System.out.println();
             System.out.println("More Cancelations? true/false");
             more = scan.nextBoolean();
           	// Check for empty Reservation ArrayList.
-        	if(r.size() == 0) {
+        	if(r.size() == 0 && more) {
         		System.out.println("***No Reservations were found***");
         		more = false;      		
         	}
@@ -473,7 +479,6 @@ public class AirlineDriver {
                 scan.nextLine();
                 for (int i = 0; i < f.size(); i++) {
                     if (f.get(i).getFlightNum() == flightss)
-                        ;
                     profit = f.get(i).getProfit();
                 }
                 System.out.println();
@@ -494,6 +499,12 @@ public class AirlineDriver {
         Scanner scan = new Scanner(System.in);
         boolean more = true;
         while (more) {
+            // Search for an empty reservation array.
+            System.out.println();
+            if (r.size() == 0) {
+            	System.out.println("***No Reservations were found***");
+            	break;
+            }
         	System.out.println();
             System.out.println("How would you like to search the Reservations?");
             System.out.println("1.     By Last Name.");
@@ -586,7 +597,7 @@ public class AirlineDriver {
         boolean more = true;
         while (more) {
         	System.out.println();
-            System.out.println("How would you like to search the canceled Reservations?");
+            System.out.println("How would you like to search the Canceled Reservations?");
             System.out.println("1.     By Last Name.");
             System.out.println("2.     By Email.");
             System.out.println("3.     By Reservation Number.");
