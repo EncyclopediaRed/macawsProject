@@ -61,15 +61,17 @@ public class AirlineDriver {
                         }
                         System.out.println();
                     }
-                } else {
-
+                }else {
+                	boolean foundff=false;
                     for (int i = 0; i < f.size(); i++) {
                         if (flightss == f.get(i).getFlightNum()) {
                             System.out.println(f.get(i).toMString());
-                        } else {
+                            foundff=true;
+                        }
+                    }if (foundff==false) {
                             System.out.println("Invalid Flight Number");
                         }
-                    }
+                    foundff=false;
                 }
 
                 try {
@@ -89,10 +91,12 @@ public class AirlineDriver {
                     "Invalid Input. Please try again, entering in either '1' or a flight number.");
                 scan.nextLine();
             }
-
         }
-
     }
+
+        
+        
+   
 
     public static void printFlightInfo(ArrayList<Flight> f) {
         Scanner scan = new Scanner(System.in);
@@ -154,16 +158,18 @@ public class AirlineDriver {
             try {
                 int pilotn = scan.nextInt();
                 System.out.println();
+                boolean foundpp=false;
                 for (int i = 0; i < f.size(); i++) {
                     if (pilotn == f.get(i).getP().getPilotNum()) {
                         System.out.println("The Details for this Pilot's Flight Number: "
                             + f.get(i).getFlightNum() + f.get(i).toString());
                         System.out.println(f.get(i).toMString() + "\n");
-                    } else if (pilotn != f.get(i).getP().getPilotNum()) {
+                        foundpp=true;
+                    }} if (foundpp==false) {
                         System.out.println("That Pilot does not exist.");
                     }
-
-                }
+                    foundpp=false;
+                
 
                 try {
                     System.out.println();
