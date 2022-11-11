@@ -199,6 +199,8 @@ VALUES
 * If the seat is not reserved, print OPEN for the customer name
 * DOESN'T WORK YET!
 */
+DROP PROCEDURE IF EXISTS print_flight_seats;
+DELIMITER //
 CREATE PROCEDURE print_flight_seats(IN flight_id INT)
 BEGIN
     SELECT flight_seat_reservation.flight_id, CONCAT(seat.row, seat.col) AS seat, reservation_status.status_name AS status, CONCAT(customer.first_name, ' ', customer.last_name) AS customer
@@ -208,7 +210,8 @@ BEGIN
     LEFT JOIN reservation_status ON reservation.status_id = reservation_status.status_id
     LEFT JOIN customer ON reservation.customer_id = customer.customer_id
     WHERE flight_seat_reservation.flight_id = 202211122;
-END;
+END //
+DELIMITER ;
 
 
 /* Procedure to print pilot's schedule */
