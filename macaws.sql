@@ -203,13 +203,13 @@ DROP PROCEDURE IF EXISTS print_flight_seats;
 DELIMITER //
 CREATE PROCEDURE print_flight_seats(IN flight_id INT)
 BEGIN
-    SELECT flight_seat_reservation.flight_id, CONCAT(seat.row, seat.col) AS seat, reservation_status.status_name AS status, CONCAT(customer.first_name, ' ', customer.last_name) AS customer
-    FROM flight_seat_reservation
-    LEFT JOIN seat ON flight_seat_reservation.seat_id = seat.seat_id
-    LEFT JOIN reservation ON flight_seat_reservation.reservation_id = reservation.reservation_id
+    SELECT seat.seat_id, seat.row, seat.col, section.section, section.price, reservation_status.status_name
+    FROM seat
+    INNER JOIN section ON seat.section_id = section.section_id
+    LEFT JOIN reservation ON seat.seat_id = reservation.seat_id
     LEFT JOIN reservation_status ON reservation.status_id = reservation_status.status_id
-    LEFT JOIN customer ON reservation.customer_id = customer.customer_id
-    WHERE flight_seat_reservation.flight_id = 202211122;
+    WHERE seat.seat_id IN (SELECT seat_id FROM reservation WHERE flight_id = flight_id)
+    ORDER BY seat.row, seat.col;
 END //
 DELIMITER ;
 
