@@ -197,7 +197,6 @@ VALUES
 * 
 * Concatenate the row and column to get the seat number
 * If the seat is not reserved, print OPEN for the customer name
-* DOESN'T WORK YET!
 */
 DROP PROCEDURE IF EXISTS print_flight_seats;
 DELIMITER //
@@ -283,13 +282,16 @@ BEGIN
 END //
 DELIMITER ;
 
-/* Procedure to ADD a new reservation */
+/* Procedure to ADD a new reservation and set the seats selected to reserved*/
 DROP PROCEDURE IF EXISTS add_reservation;
 DELIMITER //
-CREATE PROCEDURE add_reservation(flight_id INT, seat_id INT, customer_id INT, status_id INT)
+CREATE PROCEDURE add_reservation(flight_id INT, seat_id INT, customer_id INT)
 BEGIN
   INSERT INTO reservation (flight_id, seat_id, customer_id, status_id)
-    VALUES (flight_id, seat_id, customer_id, status_id);
+    VALUES (flight_id, seat_id, customer_id, 0);
+  UPDATE seat
+    SET status_id = 1
+    WHERE seat_id = seat_id;
 END //
 DELIMITER ;
 
@@ -299,7 +301,7 @@ DELIMITER //
 CREATE PROCEDURE cancel_reservation(reservation_id INT)
 BEGIN
   UPDATE reservation
-    SET status_id = 1
+    SET status_id = 2
     WHERE reservation_id = reservation_id;
 END //
 DELIMITER ;
