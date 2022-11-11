@@ -1,98 +1,119 @@
 package macawsProject;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.io.ObjectInputStream.GetField;
 import java.text.NumberFormat;
-import javax.imageio.metadata.IIOMetadataFormatImpl;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * AirlineDriver Class
  * 
  * Creates a driver class to test the functionality of the airline reservation system
+ * Uses MySQL stored procedures to access the database and perform CRUD operations
  * 
  * @authors R. Barrowclift, C. Hogg, M. Porter - ITP 220
  *
  */
 public class AirlineDriverDB {
 
+
+    // Create static instances of the Connection, Statement, and Scanner Classes.
+	static Connection conn = null;
+	static Statement stmt = null;
+    
+	// Create a method that creates a new connection to a database.
+	public static Connection createConnection() {
+		
+		// Ask the user for user name, password, and database name.
+		String user = "itp220";
+		String pass = "itp220";
+		String name = "bbooks220";
+		String driver = "com.mysql.jdbc.Driver";
+		String url = "jdbc:mysql://localhost:3306/" + name;
+
+		System.out.println(driver);
+		System.out.println(url);
+		
+		// Create a try block that attempts to find the database.
+		try {
+			Class.forName(driver).newInstance();
+			conn = DriverManager.getConnection(url, user, pass);
+			System.out.println("Connection really is from : " + conn.getClass().getName());
+			System.out.println("Connection successful!");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// Return the connection.
+		return conn;
+	} // End of method createConnection.
+	
+	// Create a method that will close the connection to the database.
+	public static void closeConnection() {
+		
+		// Check if connection is null.
+		if (conn != null) {
+			// Close the connection.
+			try {
+				conn.close();
+				conn = null;
+				// stmt.close();
+				System.out.println("The connection was successfully closed");
+			} 
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} // End of if block.
+	} // End of method closeConnection.
+	
+	// Create a method that checks the connection status of the database.
+	public static void checkConnect() {
+		
+		// Check to see if the connection is null.
+		if (conn == null) {
+			conn = createConnection();
+		}
+		// Check to see if the Statement is null.
+		if (stmt == null) {
+			try {
+				stmt = conn.createStatement();
+			} 
+			catch (SQLException e) {
+				System.out.println("Cannot create the statement");
+			}
+		} // End of if block.
+	} // End of method checkConnect.
+
     /**
      * Print a the seat map of the airplane Each Seat is represented by a row number and seat letter
      * First Class is rows 1-2 and Economy is rows 3-4 First Class has 2 seats per row and Economy
-     * has 4 seats per row both divided by a aisle Use a 2D array to represent the seats and print
-     * the seat map
+     * has 4 seats per row both divided by a aisle. Use the seat_map procedure to get the seat map
      * 
      * @param f - Flight seat map
      */
     public static void printSeatMap(ArrayList<Flight> f) {
-        Scanner scan = new Scanner(System.in);
-        boolean more = true;
-
-        while (more) {
-            System.out.println();
-            System.out.println(
-                "***Input the Flight Number you want to print out the seats for (For a general layout, enter '1')***");
-            System.out.println();
-            System.out.println("Flight Numbers: ");
-            System.out.println();
-            for (int i = 0; i < f.size(); i++) {
-                System.out.println(f.get(i).getFlightNum() + "\n---");
-            }
-
+        // Create a for loop to print the seat map.
+        for (int i = 0; i < f.size(); i++) {
+            // Create a try block that attempts to print the seat map.
             try {
-                int flightss = scan.nextInt();
-                scan.nextLine();
-                if (flightss == 1) {
-
-                    // Create a 2D array to represent the seats
-                    System.out.println();
-                    System.out.println("Airplane Seat Map");
-                    System.out.println("=========================");
-                    String[][] seatMap = { { "  ", "1A", "1B", "  " },
-                                           { "  ", "2A", "2B", "  " },
-                                           { "3A", "3B", "3C", "3D", },
-                                           { "4A", "4B", "4C", "4D", } };
-
-                    // Print the seat map
-                    for (int i = 0; i < seatMap.length; i++) {
-                        for (int j = 0; j < seatMap[i].length; j++) {
-                            System.out.print("| " + seatMap[i][j] + " |");
-                        }
-                        System.out.println();
-                    }
-                } else {
-
-                    for (int i = 0; i < f.size(); i++) {
-                        if (flightss == f.get(i).getFlightNum()) {
-                            System.out.println(f.get(i).toMString());
-                        } else {
-                            System.out.println("Invalid Flight Number");
-                        }
-                    }
-                }
-
-                try {
-                    System.out.println();
-                    System.out.println("More flights? true/false");
-                    more = scan.nextBoolean();
-
-                }
-                catch (Exception e) {
-                    System.out.println("Invalid Input. Please enter 'true' or 'false'");
-                    scan.nextLine();
-                }
-
-            }
-            catch (Exception e) {
-                System.out.println(
-                    "Invalid Input. Please try again, entering in either '1' or a flight number.");
-                scan.nextLine();
-            }
-
-        }
-
-    }
+                // Create a String variable to hold the seat map.
+                String seatMap = "CALL seat_map(" + f.get(i).getFlightNum() + ")";
+                // Create a ResultSet variable to hold the seat map.
+                java.sql.ResultSet rs = stmt.executeQuery(seatMap);
+                // Create a while loop to print the seat map.
+                while (rs.next()) {
+                    // Print the seat map.
+                    System.out.println(rs.getString(1));
+                } // End of while loop.
+            } // End of try block.
+            catch (SQLException e) {
+                e.printStackTrace();
+            } // End of catch block.
+        } // End of for loop.
+    } // End of method printSeatMap.
 
     public static void printFlightInfo(ArrayList<Flight> f) {
         Scanner scan = new Scanner(System.in);
@@ -649,10 +670,6 @@ public class AirlineDriverDB {
             }
         }
 
-    }
-
-    public static void closeConnection() {
-        // Close the connection
     }
 
     public static void searchReservation(ArrayList<Reservation> r) {

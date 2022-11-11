@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS macaws;
 CREATE DATABASE IF NOT EXISTS macaws;
 
 USE macaws;
@@ -51,17 +52,6 @@ CREATE TABLE seat (
   FOREIGN KEY (section_id) REFERENCES section (section_id)
 );
 
-CREATE TABLE ticket (
-  ticket_id int NOT NULL AUTO_INCREMENT,
-  flight_id int NOT NULL,
-  seat_id int NOT NULL,
-  customer_id int NOT NULL,
-  PRIMARY KEY (ticket_id),
-  FOREIGN KEY (flight_id) REFERENCES flight (flight_id),
-  FOREIGN KEY (seat_id) REFERENCES seat (seat_id),
-  FOREIGN KEY (customer_id) REFERENCES customer (customer_id)
-);
-
 CREATE TABLE reservation_status (
   status_id int NOT NULL,
   status_name varchar(10) NOT NULL,
@@ -70,11 +60,25 @@ CREATE TABLE reservation_status (
 
 CREATE TABLE reservation (
   reservation_id int NOT NULL AUTO_INCREMENT,
-  ticket_id int NOT NULL,
+  flight_id int NOT NULL,
+  seat_id int NOT NULL,
+  customer_id int NOT NULL,
   status_id int NOT NULL,
   PRIMARY KEY (reservation_id),
-  FOREIGN KEY (ticket_id) REFERENCES ticket (ticket_id),
+  FOREIGN KEY (flight_id) REFERENCES flight (flight_id),
+  FOREIGN KEY (seat_id) REFERENCES seat (seat_id),
+  FOREIGN KEY (customer_id) REFERENCES customer (customer_id),
   FOREIGN KEY (status_id) REFERENCES reservation_status (status_id)
+);
+
+CREATE TABLE flight_seat_reservation (
+  flight_id int NOT NULL,
+  seat_id int NOT NULL,
+  reservation_id int NOT NULL,
+  PRIMARY KEY (flight_id, seat_id),
+  FOREIGN KEY (flight_id) REFERENCES flight (flight_id),
+  FOREIGN KEY (seat_id) REFERENCES seat (seat_id),
+  FOREIGN KEY (reservation_id) REFERENCES reservation (reservation_id)
 );
 
 /* DEMO DATA INSERTS */
@@ -122,6 +126,7 @@ VALUES
 
 INSERT INTO reservation_status (status_id, status_name)
 VALUES
+    (0,'Open'),
     (1,'Reserved'),
     (2,'Canceled');
 
@@ -136,7 +141,7 @@ VALUES
 	(202211132,'2022-11-13',3,2),
 	(202211133,'2022-11-13',1,3),
 	(202211134,'2022-11-13',2,4),
-    (202211141,'2022-11-12',1,1),
+  	(202211141,'2022-11-12',1,1),
 	(202211142,'2022-11-12',2,2),
 	(202211143,'2022-11-12',3,3),
 	(202211144,'2022-11-12',1,4),
@@ -144,7 +149,7 @@ VALUES
 	(202211152,'2022-11-13',3,2),
 	(202211153,'2022-11-13',1,3),
 	(202211154,'2022-11-13',2,4),
-    (202211161,'2022-11-12',1,1),
+  	(202211161,'2022-11-12',1,1),
 	(202211162,'2022-11-12',2,2),
 	(202211163,'2022-11-12',3,3),
 	(202211164,'2022-11-12',1,4),
@@ -152,33 +157,146 @@ VALUES
 	(202211172,'2022-11-13',3,2),
 	(202211173,'2022-11-13',1,3),
 	(202211174,'2022-11-13',2,4),
-    (202211181,'2022-11-12',1,1),
+  	(202211181,'2022-11-12',1,1),
 	(202211182,'2022-11-12',2,2),
 	(202211183,'2022-11-12',3,3),
 	(202211184,'2022-11-12',1,4);
 
-INSERT INTO ticket (ticket_id, flight_id, seat_id, customer_id)
+INSERT INTO reservation (reservation_id, flight_id, seat_id, customer_id, status_id)
 VALUES
-    (1,202211121,1,1001),
-    (2,202211121,2,1002),
-    (3,202211121,3,1003),
-    (4,202211121,4,1004),
-    (5,202211121,5,1005),
-    (6,202211121,6,1006),
-    (7,202211122,7,1001),
-    (8,202211122,8,1002),
-    (9,202211122,9,1003),
-    (10,202211122,10,1004);
+    /* First Flight is FULL */
+    (1,202211121,1,1001,0),
+    (2,202211121,2,1001,0),
+    (3,202211121,3,1001,0),
+    (4,202211121,4,1001,0),
+    (5,202211121,5,1002,0),
+    (6,202211121,6,1002,0),
+    (7,202211121,7,1003,0),
+    (8,202211121,8,1003,0),
+    (9,202211121,9,1003,0),
+    (10,202211121,10,1003,0),
+    (11,202211121,11,1004,0),
+    (12,202211121,12,1004,0),
+    /* Second Flight only has First Class seats Available */
+    (13,202211122,5,1006,0),
+    (14,202211122,6,1006,0),
+    (15,202211122,7,1006,0),
+    (16,202211122,8,1006,0),
+    (17,202211122,9,1004,0),
+    (18,202211122,10,1004,0),
+    (19,202211122,11,1005,0),
+    (20,202211122,12,1005,0),
+    /* Third Flight has one seat taken */
+    (21,202211123,1,1003,1);
 
-INSERT INTO reservation (reservation_id, ticket_id, status_id)
-VALUES
-    (1,1,1),
-    (2,2,1),
-    (3,3,1),
-    (4,4,1),
-    (5,5,1),
-    (6,6,1),
-    (7,7,1),
-    (8,8,1),
-    (9,9,1),
-    (10,10,2);
+/* STORED PROCEDURES */
+
+/* Procedure to print all seats on a flight and their status 
+* |  Flight ID  |  Seat  |  Status   |  Customer  |
+* |  202211122  |  1A    |  Reserved |  Eduardo Corrochio   |
+* 
+* Concatenate the row and column to get the seat number
+* If the seat is not reserved, print OPEN for the customer name
+* DOESN'T WORK YET!
+*/
+CREATE PROCEDURE print_flight_seats(IN flight_id INT)
+BEGIN
+    SELECT flight_seat_reservation.flight_id, CONCAT(seat.row, seat.col) AS seat, reservation_status.status_name AS status, CONCAT(customer.first_name, ' ', customer.last_name) AS customer
+    FROM flight_seat_reservation
+    LEFT JOIN seat ON flight_seat_reservation.seat_id = seat.seat_id
+    LEFT JOIN reservation ON flight_seat_reservation.reservation_id = reservation.reservation_id
+    LEFT JOIN reservation_status ON reservation.status_id = reservation_status.status_id
+    LEFT JOIN customer ON reservation.customer_id = customer.customer_id
+    WHERE flight_seat_reservation.flight_id = 202211122;
+END;
+
+
+/* Procedure to print pilot's schedule */
+DROP PROCEDURE IF EXISTS pilot_schedule;
+DELIMITER //
+CREATE PROCEDURE pilot_schedule(pilot_id INT)
+BEGIN
+  SELECT route.origin, route.destination, flight.depart_date, route.time, flight.flight_id, pilot.name, pilot.pilot_id
+    FROM flight NATURAL JOIN route NATURAL JOIN pilot
+    WHERE pilot_id = pilot_id
+    ORDER BY pilot_id, flight_id;
+END //
+DELIMITER ;
+
+/* Print ALL Reservations in the system */
+DROP PROCEDURE IF EXISTS print_reservations;
+DELIMITER //
+CREATE PROCEDURE print_reservations()
+BEGIN
+  SELECT * FROM reservation;
+END //
+
+/* Print ALL Reservations for a given flight */
+DROP PROCEDURE IF EXISTS print_flight_reservations;
+DELIMITER //
+CREATE PROCEDURE print_flight_reservations(flight_id INT)
+BEGIN
+  SELECT * FROM reservation
+    WHERE flight_id = flight_id;
+END //
+DELIMITER ;
+
+/* Print ALL Reservations for a given customer */
+DROP PROCEDURE IF EXISTS print_customer_reservations;
+DELIMITER //
+CREATE PROCEDURE print_customer_reservations(customer_id INT)
+BEGIN
+  SELECT * FROM reservation
+    WHERE customer_id = customer_id;
+END //
+DELIMITER ;
+
+/* Procedure to print ALL customers */
+DROP PROCEDURE IF EXISTS customer_details;
+DELIMITER //
+CREATE PROCEDURE customer_details(customer_id INT)
+BEGIN
+  SELECT customer.customer_id AS 'Customer #',
+      CONCAT(customer.first_name, ' ', customer.last_name) AS 'Name',
+      customer.email AS 'Email',
+      COUNT(reservation_id) AS '# of Reservations',
+      SUM(section.price) AS 'Total Cost'
+    FROM customer 
+      NATURAL JOIN reservation
+      NATURAL JOIN seat 
+      NATURAL JOIN section 
+    WHERE customer.customer_id = customer_id
+    GROUP BY customer.customer_id;
+END //
+DELIMITER ;
+
+/* Procedure to ADD a new customer */
+DROP PROCEDURE IF EXISTS add_customer;
+DELIMITER //
+CREATE PROCEDURE add_customer(first_name VARCHAR(255), last_name VARCHAR(255), email VARCHAR(255))
+BEGIN
+  INSERT INTO customer (first_name, last_name, email)
+    VALUES (first_name, last_name, email);
+END //
+DELIMITER ;
+
+/* Procedure to ADD a new reservation */
+DROP PROCEDURE IF EXISTS add_reservation;
+DELIMITER //
+CREATE PROCEDURE add_reservation(flight_id INT, seat_id INT, customer_id INT, status_id INT)
+BEGIN
+  INSERT INTO reservation (flight_id, seat_id, customer_id, status_id)
+    VALUES (flight_id, seat_id, customer_id, status_id);
+END //
+DELIMITER ;
+
+/* Procedure to CANCEL a reservation */
+DROP PROCEDURE IF EXISTS cancel_reservation;
+DELIMITER //
+CREATE PROCEDURE cancel_reservation(reservation_id INT)
+BEGIN
+  UPDATE reservation
+    SET status_id = 1
+    WHERE reservation_id = reservation_id;
+END //
+DELIMITER ;
