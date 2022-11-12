@@ -564,16 +564,6 @@ BEGIN
   SELECT * FROM reservation;
 END //
 
-/* Procedure to print ALL Reservations for a given flight */
-DROP PROCEDURE IF EXISTS print_flight_reservations;
-DELIMITER //
-CREATE PROCEDURE print_flight_reservations(flight_id INT)
-BEGIN
-  SELECT * FROM reservation
-    WHERE flight_id = flight_id;
-END //
-DELIMITER ;
-
 /* Procedure to print ALL Reservations for a given customer */
 DROP PROCEDURE IF EXISTS print_customer_reservations;
 DELIMITER //
@@ -624,47 +614,7 @@ BEGIN
 END //
 DELIMITER ;
 
-/* Procedure to ADD a reservation and UPDATE the seat in flight_seat_availability */
-DROP PROCEDURE IF EXISTS add_update_reservation_seat;
-DELIMITER //
-CREATE PROCEDURE add_reservation_seat(reservation_id INT, flight_id INT, seat_id INT)
-BEGIN
-  INSERT INTO reservation (customer_id, status_id)
-    VALUES (customer_id, status_id);
-  UPDATE flight_seat_availability
-    SET seat_id = seat_id
-    WHERE flight_id = flight_id;
-    SET available = 0
-    SET reservation_id = reservation_id;
-    WHERE flight_id = flight_id AND seat_id = seat_id;
-END //
-
-
-/* Procedure to CANCEL a reservation */
-DROP PROCEDURE IF EXISTS cancel_reservation;
-DELIMITER //
-CREATE PROCEDURE cancel_reservation(reservation_id INT)
-BEGIN
-  UPDATE reservation
-    SET status_id = 2
-    WHERE reservation_id = reservation_id;
-END //
-DELIMITER ;
-
-/* Procedure to UPDATE a reservation */
-DROP PROCEDURE IF EXISTS update_reservation;
-DELIMITER //
-CREATE PROCEDURE update_reservation(reservation_id INT, flight_id INT, seat_id INT, customer_id INT)
-BEGIN
-  UPDATE reservation
-    SET flight_id = flight_id, seat_id = seat_id, customer_id = customer_id
-    WHERE reservation_id = reservation_id;
-END //
-DELIMITER ;
-
 /* Procedure to print all seats and their availability for a flight */
-/* | Seat # | Availabliity |  Price  | */
-/* |    1   |     Yes      | $100.00 | */
 /* From flight_seat_availability table */
 /* 1 = Available, 0 = Open */
 DROP PROCEDURE IF EXISTS print_flight_seats;
@@ -678,4 +628,3 @@ BEGIN
   FROM seat NATURAL JOIN section NATURAL JOIN flight_seat_availability
   WHERE flight_id = 202211122;
 END //
-
