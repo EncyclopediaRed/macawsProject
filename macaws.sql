@@ -43,7 +43,7 @@ CREATE TABLE flight (
 );
 
 CREATE TABLE seat (
-  seat_id int NOT NULL AUTO_INCREMENT,
+  seat_id int NOT NULL,
   row int NOT NULL,
   col char(1) NOT NULL,
   section_id int NOT NULL,
@@ -60,24 +60,23 @@ CREATE TABLE reservation_status (
 
 CREATE TABLE reservation (
   reservation_id int NOT NULL AUTO_INCREMENT,
-  flight_id int NOT NULL,
-  seat_id int NOT NULL,
   customer_id int NOT NULL,
   status_id int NOT NULL,
   PRIMARY KEY (reservation_id),
-  FOREIGN KEY (flight_id) REFERENCES flight (flight_id),
-  FOREIGN KEY (seat_id) REFERENCES seat (seat_id),
   FOREIGN KEY (customer_id) REFERENCES customer (customer_id),
   FOREIGN KEY (status_id) REFERENCES reservation_status (status_id)
 );
 
 /* Create a table to store the flight seats and their availability based on reservations made */
 /* This table will be used to display the seat map for a flight */
-CREATE TABLE flight_seat_reservation (
+CREATE TABLE flight_seat_availability (
+  fs_id int NOT NULL AUTO_INCREMENT,
   flight_id int NOT NULL,
+  reservation_id int NOT NULL,
   seat_id int NOT NULL,
-  available tinyint(1) NOT NULL,
-  PRIMARY KEY (flight_id, seat_id),
+  available tinyint(1) NOT NULL, /* 1 = available, 0 = not available */
+  PRIMARY KEY (fs_id),
+  FOREIGN KEY (reservation_id) REFERENCES reservation (reservation_id),
   FOREIGN KEY (flight_id) REFERENCES flight (flight_id),
   FOREIGN KEY (seat_id) REFERENCES seat (seat_id)
 );
@@ -85,6 +84,7 @@ CREATE TABLE flight_seat_reservation (
 /* DEMO DATA INSERTS */
 INSERT INTO customer (customer_id, first_name, last_name, email) 
 VALUES
+    (1000,' ',' ',' '), /* Dummy customer for unreserved seats */
     (1001, 'Martin',  'Van Nostrand', 'drvannos@theclinic.org'),
     (1002, 'H.E.',    'Pennypacker',  'wealthy@industrialist.com'),
     (1003, 'Art', 	  'Vandelay',     'latex@vandelayindustries.com'),
@@ -129,7 +129,19 @@ INSERT INTO reservation_status (status_id, status_name)
 VALUES
     (0,'Open'),
     (1,'Reserved'),
-    (2,'Canceled');
+    (2,'Cancelled');
+
+INSERT INTO reservation (reservation_id, customer_id, status_id)
+VALUES
+  (1,1000,0), /* Dummy reservation for unreserved seats */
+  (2,1001,1),
+  (3,1002,1),
+  (4,1003,1),
+  (5,1004,1),
+  (6,1005,1),
+  (7,1006,1),
+  (8,1001,1),
+  (9,1006,2);
 
 /* flight_id is year(2022) + month(11) + day(12-18) + route_id(1-4) */
 INSERT INTO flight (flight_id, depart_date, pilot_id, route_id)
@@ -163,56 +175,374 @@ VALUES
 	(202211183,'2022-11-12',3,3),
 	(202211184,'2022-11-12',1,4);
 
-INSERT INTO reservation (reservation_id, flight_id, seat_id, customer_id, status_id)
+INSERT INTO flight_seat_availability (flight_id, seat_id, reservation_id, available)
 VALUES
     /* First Flight is FULL */
-    (1,202211121,1,1001,1),
-    (2,202211121,2,1001,1),
-    (3,202211121,3,1001,1),
-    (4,202211121,4,1001,1),
-    (5,202211121,5,1002,1),
-    (6,202211121,6,1002,1),
-    (7,202211121,7,1003,1),
-    (8,202211121,8,1003,1),
-    (9,202211121,9,1003,1),
-    (10,202211121,10,1003,1),
-    (11,202211121,11,1004,1),
-    (12,202211121,12,1004,1),
+    (202211121,1,2,0),
+    (202211121,2,2,0),
+    (202211121,3,2,0),
+    (202211121,4,2,0),
+    (202211121,5,3,0),
+    (202211121,6,3,0),
+    (202211121,7,3,0),
+    (202211121,8,3,0),
+    (202211121,9,4,0),
+    (202211121,10,4,0),
+    (202211121,11,5,0),
+    (202211121,12,6,0),
     /* Second Flight only has First Class seats Available */
-    (13,202211122,5,1006,1),
-    (14,202211122,6,1006,1),
-    (15,202211122,7,1006,1),
-    (16,202211122,8,1006,1),
-    (17,202211122,9,1004,1),
-    (18,202211122,10,1004,1),
-    (19,202211122,11,1005,1),
-    (20,202211122,12,1005,2), /* Canceled */
-    /* Third Flight has one seat taken */
-    (21,202211123,1,1003,1);
+    (202211122,1,1,1),
+    (202211122,2,1,1),
+    (202211122,3,1,1),
+    (202211122,4,1,1),
+    (202211122,5,7,0),
+    (202211122,6,7,0),
+    (202211122,7,7,0),
+    (202211122,8,7,0),
+    (202211122,9,9,0),
+    (202211122,10,9,0),
+    (202211122,11,9,0),
+    (202211122,12,8,1), /* available because reservation is cancelled */
+    /* Third Flight */
+    (202211123,1,1,1),
+    (202211123,2,1,1),
+    (202211123,3,1,1),
+    (202211123,4,1,1),
+    (202211123,5,1,1),
+    (202211123,6,1,1),
+    (202211123,7,1,1),
+    (202211123,8,1,1),
+    (202211123,9,1,1),
+    (202211123,10,1,1),
+    (202211123,11,1,1),
+    (202211123,12,1,1),
+    /* Fourth Flight */
+    (202211124,1,1,1),
+    (202211124,2,1,1),
+    (202211124,3,1,1),
+    (202211124,4,1,1),
+    (202211124,5,1,1),
+    (202211124,6,1,1),
+    (202211124,7,1,1),
+    (202211124,8,1,1),
+    (202211124,9,1,1),
+    (202211124,10,1,1),
+    (202211124,11,1,1),
+    (202211124,12,1,1),
+    /* Fifth Flight */
+    (202211131,1,1,1),
+    (202211131,2,1,1),
+    (202211131,3,1,1),
+    (202211131,4,1,1),
+    (202211131,5,1,1),
+    (202211131,6,1,1),
+    (202211131,7,1,1),
+    (202211131,8,1,1),
+    (202211131,9,1,1),
+    (202211131,10,1,1),
+    (202211131,11,1,1),
+    (202211131,12,1,1),
+    /* Sixth Flight */
+    (202211132,1,1,1),
+    (202211132,2,1,1),
+    (202211132,3,1,1),
+    (202211132,4,1,1),
+    (202211132,5,1,1),
+    (202211132,6,1,1),
+    (202211132,7,1,1),
+    (202211132,8,1,1),
+    (202211132,9,1,1),
+    (202211132,10,1,1),
+    (202211132,11,1,1),
+    (202211132,12,1,1),
+    /* Seventh Flight */
+    (202211133,1,1,1),
+    (202211133,2,1,1),
+    (202211133,3,1,1),
+    (202211133,4,1,1),
+    (202211133,5,1,1),
+    (202211133,6,1,1),
+    (202211133,7,1,1),
+    (202211133,8,1,1),
+    (202211133,9,1,1),
+    (202211133,10,1,1),
+    (202211133,11,1,1),
+    (202211133,12,1,1),
+    /* Eighth Flight */
+    (202211134,1,1,1),
+    (202211134,2,1,1),
+    (202211134,3,1,1),
+    (202211134,4,1,1),
+    (202211134,5,1,1),
+    (202211134,6,1,1),
+    (202211134,7,1,1),
+    (202211134,8,1,1),
+    (202211134,9,1,1),
+    (202211134,10,1,1),
+    (202211134,11,1,1),
+    (202211134,12,1,1),
+    /* Ninth Flight */
+    (202211141,1,1,1),
+    (202211141,2,1,1),
+    (202211141,3,1,1),
+    (202211141,4,1,1),
+    (202211141,5,1,1),
+    (202211141,6,1,1),
+    (202211141,7,1,1),
+    (202211141,8,1,1),
+    (202211141,9,1,1),
+    (202211141,10,1,1),
+    (202211141,11,1,1),
+    (202211141,12,1,1),
+    /* Tenth Flight */
+    (202211142,1,1,1),
+    (202211142,2,1,1),
+    (202211142,3,1,1),
+    (202211142,4,1,1),
+    (202211142,5,1,1),
+    (202211142,6,1,1),
+    (202211142,7,1,1),
+    (202211142,8,1,1),
+    (202211142,9,1,1),
+    (202211142,10,1,1),
+    (202211142,11,1,1),
+    (202211142,12,1,1),
+    /* Eleventh Flight */
+    (202211143,1,1,1),
+    (202211143,2,1,1),
+    (202211143,3,1,1),
+    (202211143,4,1,1),
+    (202211143,5,1,1),
+    (202211143,6,1,1),
+    (202211143,7,1,1),
+    (202211143,8,1,1),
+    (202211143,9,1,1),
+    (202211143,10,1,1),
+    (202211143,11,1,1),
+    (202211143,12,1,1),
+    /* Twelfth Flight */
+    (202211144,1,1,1),
+    (202211144,2,1,1),
+    (202211144,3,1,1),
+    (202211144,4,1,1),
+    (202211144,5,1,1),
+    (202211144,6,1,1),
+    (202211144,7,1,1),
+    (202211144,8,1,1),
+    (202211144,9,1,1),
+    (202211144,10,1,1),
+    (202211144,11,1,1),
+    (202211144,12,1,1),
+    /* Thirteenth Flight */
+    (202211151,1,1,1),
+    (202211151,2,1,1),
+    (202211151,3,1,1),
+    (202211151,4,1,1),
+    (202211151,5,1,1),
+    (202211151,6,1,1),
+    (202211151,7,1,1),
+    (202211151,8,1,1),
+    (202211151,9,1,1),
+    (202211151,10,1,1),
+    (202211151,11,1,1),
+    (202211151,12,1,1),
+    /* Fourteenth Flight */
+    (202211152,1,1,1),
+    (202211152,2,1,1),
+    (202211152,3,1,1),
+    (202211152,4,1,1),
+    (202211152,5,1,1),
+    (202211152,6,1,1),
+    (202211152,7,1,1),
+    (202211152,8,1,1),
+    (202211152,9,1,1),
+    (202211152,10,1,1),
+    (202211152,11,1,1),
+    (202211152,12,1,1),
+    /* Fifteenth Flight */
+    (202211153,1,1,1),
+    (202211153,2,1,1),
+    (202211153,3,1,1),
+    (202211153,4,1,1),
+    (202211153,5,1,1),
+    (202211153,6,1,1),
+    (202211153,7,1,1),
+    (202211153,8,1,1),
+    (202211153,9,1,1),
+    (202211153,10,1,1),
+    (202211153,11,1,1),
+    (202211153,12,1,1),
+    /* Sixteenth Flight */
+    (202211154,1,1,1),
+    (202211154,2,1,1),
+    (202211154,3,1,1),
+    (202211154,4,1,1),
+    (202211154,5,1,1),
+    (202211154,6,1,1),
+    (202211154,7,1,1),
+    (202211154,8,1,1),
+    (202211154,9,1,1),
+    (202211154,10,1,1),
+    (202211154,11,1,1),
+    (202211154,12,1,1),
+    /* Seventeenth Flight */
+    (202211161,1,1,1),
+    (202211161,2,1,1),
+    (202211161,3,1,1),
+    (202211161,4,1,1),
+    (202211161,5,1,1),
+    (202211161,6,1,1),
+    (202211161,7,1,1),
+    (202211161,8,1,1),
+    (202211161,9,1,1),
+    (202211161,10,1,1),
+    (202211161,11,1,1),
+    (202211161,12,1,1),
+    /* Eighteenth Flight */
+    (202211162,1,1,1),
+    (202211162,2,1,1),
+    (202211162,3,1,1),
+    (202211162,4,1,1),
+    (202211162,5,1,1),
+    (202211162,6,1,1),
+    (202211162,7,1,1),
+    (202211162,8,1,1),
+    (202211162,9,1,1),
+    (202211162,10,1,1),
+    (202211162,11,1,1),
+    (202211162,12,1,1),
+    /* Nineteenth Flight */
+    (202211163,1,1,1),
+    (202211163,2,1,1),
+    (202211163,3,1,1),
+    (202211163,4,1,1),
+    (202211163,5,1,1),
+    (202211163,6,1,1),
+    (202211163,7,1,1),
+    (202211163,8,1,1),
+    (202211163,9,1,1),
+    (202211163,10,1,1),
+    (202211163,11,1,1),
+    (202211163,12,1,1),
+    /* Twentieth Flight */
+    (202211164,1,1,1),
+    (202211164,2,1,1),
+    (202211164,3,1,1),
+    (202211164,4,1,1),
+    (202211164,5,1,1),
+    (202211164,6,1,1),
+    (202211164,7,1,1),
+    (202211164,8,1,1),
+    (202211164,9,1,1),
+    (202211164,10,1,1),
+    (202211164,11,1,1),
+    (202211164,12,1,1),
+    /* Twenty-first Flight */
+    (202211171,1,1,1),
+    (202211171,2,1,1),
+    (202211171,3,1,1),
+    (202211171,4,1,1),
+    (202211171,5,1,1),
+    (202211171,6,1,1),
+    (202211171,7,1,1),
+    (202211171,8,1,1),
+    (202211171,9,1,1),
+    (202211171,10,1,1),
+    (202211171,11,1,1),
+    (202211171,12,1,1),
+    /* Twenty-second Flight */
+    (202211172,1,1,1),
+    (202211172,2,1,1),
+    (202211172,3,1,1),
+    (202211172,4,1,1),
+    (202211172,5,1,1),
+    (202211172,6,1,1),
+    (202211172,7,1,1),
+    (202211172,8,1,1),
+    (202211172,9,1,1),
+    (202211172,10,1,1),
+    (202211172,11,1,1),
+    (202211172,12,1,1),
+    /* Twenty-third Flight */
+    (202211173,1,1,1),
+    (202211173,2,1,1),
+    (202211173,3,1,1),
+    (202211173,4,1,1),
+    (202211173,5,1,1),
+    (202211173,6,1,1),
+    (202211173,7,1,1),
+    (202211173,8,1,1),
+    (202211173,9,1,1),
+    (202211173,10,1,1),
+    (202211173,11,1,1),
+    (202211173,12,1,1),
+    /* Twenty-fourth Flight */
+    (202211174,1,1,1),
+    (202211174,2,1,1),
+    (202211174,3,1,1),
+    (202211174,4,1,1),
+    (202211174,5,1,1),
+    (202211174,6,1,1),
+    (202211174,7,1,1),
+    (202211174,8,1,1),
+    (202211174,9,1,1),
+    (202211174,10,1,1),
+    (202211174,11,1,1),
+    (202211174,12,1,1),
+    /* Twenty-fifth Flight */
+    (202211181,1,1,1),
+    (202211181,2,1,1),
+    (202211181,3,1,1),
+    (202211181,4,1,1),
+    (202211181,5,1,1),
+    (202211181,6,1,1),
+    (202211181,7,1,1),
+    (202211181,8,1,1),
+    (202211181,9,1,1),
+    (202211181,10,1,1),
+    (202211181,11,1,1),
+    (202211181,12,1,1),
+    /* Twenty-sixth Flight */
+    (202211182,1,1,1),
+    (202211182,2,1,1),
+    (202211182,3,1,1),
+    (202211182,4,1,1),
+    (202211182,5,1,1),
+    (202211182,6,1,1),
+    (202211182,7,1,1),
+    (202211182,8,1,1),
+    (202211182,9,1,1),
+    (202211182,10,1,1),
+    (202211182,11,1,1),
+    (202211182,12,1,1),
+    /* Twenty-seventh Flight */
+    (202211183,1,1,1),
+    (202211183,2,1,1),
+    (202211183,3,1,1),
+    (202211183,4,1,1),
+    (202211183,5,1,1),
+    (202211183,6,1,1),
+    (202211183,7,1,1),
+    (202211183,8,1,1),
+    (202211183,9,1,1),
+    (202211183,10,1,1),
+    (202211183,11,1,1),
+    (202211183,12,1,1),
+    /* Twenty-eighth Flight */
+    (202211184,1,1,1),
+    (202211184,2,1,1),
+    (202211184,3,1,1),
+    (202211184,4,1,1),
+    (202211184,5,1,1),
+    (202211184,6,1,1),
+    (202211184,7,1,1),
+    (202211184,8,1,1),
+    (202211184,9,1,1),
+    (202211184,10,1,1),
+    (202211184,11,1,1),
+    (202211184,12,1,1);
 
 /* STORED PROCEDURES */
-
-/* Procedure to print all seats on a flight and their status 
-* |  Flight ID  |  Seat  |  Status   |  Customer  |
-* |  202211122  |  1A    |  Reserved |  Eduardo Corrochio   |
-* 
-* Concatenate the row and column to get the seat number
-* If the seat is not reserved, print OPEN for the customer name
-*/
-DROP PROCEDURE IF EXISTS print_flight_seats;
-DELIMITER //
-CREATE PROCEDURE print_flight_seats(IN flight_id INT)
-BEGIN
-    SELECT seat.seat_id, seat.row, seat.col, section.section, section.price, reservation_status.status_name
-    FROM seat
-    INNER JOIN section ON seat.section_id = section.section_id
-    LEFT JOIN reservation ON seat.seat_id = reservation.seat_id
-    LEFT JOIN reservation_status ON reservation.status_id = reservation_status.status_id
-    WHERE seat.seat_id IN (SELECT seat_id FROM reservation WHERE flight_id = flight_id)
-    ORDER BY seat.row, seat.col;
-END //
-DELIMITER ;
-
 
 /* Procedure to print pilot's schedule */
 DROP PROCEDURE IF EXISTS pilot_schedule;
@@ -294,18 +624,21 @@ BEGIN
 END //
 DELIMITER ;
 
-/* Procedure to ADD a new reservation and set the seats selected to reserved*/
-DROP PROCEDURE IF EXISTS add_reservation;
+/* Procedure to ADD a reservation and UPDATE the seat in flight_seat_availability */
+DROP PROCEDURE IF EXISTS add_update_reservation_seat;
 DELIMITER //
-CREATE PROCEDURE add_reservation(flight_id INT, seat_id INT, customer_id INT)
+CREATE PROCEDURE add_reservation_seat(reservation_id INT, flight_id INT, seat_id INT)
 BEGIN
-  INSERT INTO reservation (flight_id, seat_id, customer_id, status_id)
-    VALUES (flight_id, seat_id, customer_id, 0);
-  UPDATE seat
-    SET status_id = 1
-    WHERE seat_id = seat_id;
+  INSERT INTO reservation (customer_id, status_id)
+    VALUES (customer_id, status_id);
+  UPDATE flight_seat_availability
+    SET seat_id = seat_id
+    WHERE flight_id = flight_id;
+    SET available = 0
+    SET reservation_id = reservation_id;
+    WHERE flight_id = flight_id AND seat_id = seat_id;
 END //
-DELIMITER ;
+
 
 /* Procedure to CANCEL a reservation */
 DROP PROCEDURE IF EXISTS cancel_reservation;
@@ -328,3 +661,21 @@ BEGIN
     WHERE reservation_id = reservation_id;
 END //
 DELIMITER ;
+
+/* Procedure to print all seats and their availability for a flight */
+/* | Seat # | Availabliity |  Price  | */
+/* |    1   |     Yes      | $100.00 | */
+/* From flight_seat_availability table */
+/* 1 = Available, 0 = Open */
+DROP PROCEDURE IF EXISTS print_flight_seats;
+DELIMITER //
+CREATE PROCEDURE print_flight_seats(flight_id INT)
+BEGIN
+  SELECT 
+    CONCAT(seat.row, seat.col) AS 'Seat #', 
+    CASE WHEN available = 0 THEN 'Reserved' ELSE 'Open' END AS 'Availability',
+    section.price AS 'Price'
+  FROM seat NATURAL JOIN section NATURAL JOIN flight_seat_availability
+  WHERE flight_id = 202211122;
+END //
+
