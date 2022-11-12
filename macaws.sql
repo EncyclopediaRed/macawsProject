@@ -71,14 +71,15 @@ CREATE TABLE reservation (
   FOREIGN KEY (status_id) REFERENCES reservation_status (status_id)
 );
 
+/* Create a table to store the flight seats and their availability based on reservations made */
+/* This table will be used to display the seat map for a flight */
 CREATE TABLE flight_seat_reservation (
   flight_id int NOT NULL,
   seat_id int NOT NULL,
-  reservation_id int NOT NULL,
+  available tinyint(1) NOT NULL,
   PRIMARY KEY (flight_id, seat_id),
   FOREIGN KEY (flight_id) REFERENCES flight (flight_id),
-  FOREIGN KEY (seat_id) REFERENCES seat (seat_id),
-  FOREIGN KEY (reservation_id) REFERENCES reservation (reservation_id)
+  FOREIGN KEY (seat_id) REFERENCES seat (seat_id)
 );
 
 /* DEMO DATA INSERTS */
@@ -225,7 +226,7 @@ BEGIN
 END //
 DELIMITER ;
 
-/* Print ALL Reservations in the system */
+/* Procedure to print ALL Reservations in the system */
 DROP PROCEDURE IF EXISTS print_reservations;
 DELIMITER //
 CREATE PROCEDURE print_reservations()
@@ -233,7 +234,7 @@ BEGIN
   SELECT * FROM reservation;
 END //
 
-/* Print ALL Reservations for a given flight */
+/* Procedure to print ALL Reservations for a given flight */
 DROP PROCEDURE IF EXISTS print_flight_reservations;
 DELIMITER //
 CREATE PROCEDURE print_flight_reservations(flight_id INT)
@@ -243,7 +244,7 @@ BEGIN
 END //
 DELIMITER ;
 
-/* Print ALL Reservations for a given customer */
+/* Procedure to print ALL Reservations for a given customer */
 DROP PROCEDURE IF EXISTS print_customer_reservations;
 DELIMITER //
 CREATE PROCEDURE print_customer_reservations(customer_id INT)
@@ -282,6 +283,17 @@ BEGIN
 END //
 DELIMITER ;
 
+/* Procedure to UPDATE a customer */
+DROP PROCEDURE IF EXISTS update_customer;
+DELIMITER //
+CREATE PROCEDURE update_customer(customer_id INT, first_name VARCHAR(255), last_name VARCHAR(255), email VARCHAR(255))
+BEGIN
+  UPDATE customer
+    SET first_name = first_name, last_name = last_name, email = email
+    WHERE customer_id = customer_id;
+END //
+DELIMITER ;
+
 /* Procedure to ADD a new reservation and set the seats selected to reserved*/
 DROP PROCEDURE IF EXISTS add_reservation;
 DELIMITER //
@@ -302,6 +314,17 @@ CREATE PROCEDURE cancel_reservation(reservation_id INT)
 BEGIN
   UPDATE reservation
     SET status_id = 2
+    WHERE reservation_id = reservation_id;
+END //
+DELIMITER ;
+
+/* Procedure to UPDATE a reservation */
+DROP PROCEDURE IF EXISTS update_reservation;
+DELIMITER //
+CREATE PROCEDURE update_reservation(reservation_id INT, flight_id INT, seat_id INT, customer_id INT)
+BEGIN
+  UPDATE reservation
+    SET flight_id = flight_id, seat_id = seat_id, customer_id = customer_id
     WHERE reservation_id = reservation_id;
 END //
 DELIMITER ;
