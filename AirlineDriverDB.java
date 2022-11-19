@@ -209,18 +209,32 @@ public class AirlineDriverDB {
         // scan.close();
     }
 
-    public static void addCustomer(ArrayList<Customer> c) {
+    public static void addCustomer() {
+		// Call the checkConnect method for database connectivity.
+		checkConnect();
         Scanner scan = new Scanner(System.in);
         boolean more = true;
         while (more) {
             System.out.println("What's the Customer's first name?");
-            String fname = scan.nextLine();
+            String fName = scan.nextLine();
             System.out.println("What's the Customer's last name?");
-            String Lname = scan.nextLine();
+            String lName = scan.nextLine();
             System.out.println("What's the Customer's email?");
             String email = scan.nextLine();
-            Customer c1 = new Customer(fname, Lname, email);
-            c.add(c1);
+            
+			// Store a procedure call in a String variable to add a new customer.
+			String stored = "CALL macaws.add_customer('" + fName + "', '" + lName + "', '" + email + "');";
+			
+			// Try to execute the SQL statement in stored variable.
+			try {
+				stmt = conn.prepareCall(stored);
+				stmt.executeUpdate(stored);
+			} // End of try block.
+			catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("SQL insert Exception");
+			} // End of catch block.
+
             System.out.println();
             System.out.println("***Customer Added!***");
             System.out.println();
@@ -228,10 +242,12 @@ public class AirlineDriverDB {
                 System.out.println();
                 System.out.println("More Customers? true/false");
                 more = scan.nextBoolean();
+                scan.nextLine();
 
             }
             catch (Exception e) {
                 System.out.println("Invalid Input. Please enter 'true' or 'false'");
+                scan.nextLine();
                 scan.nextLine();
             }
         }

@@ -22,30 +22,30 @@ public class MenuDB {
             choice = menu(); // call menu method and assign choice to the returned value
             if (choice == 0) {
                 AirlineDriverDB.createConnection();
-            } else if (choice == 1) { 
-                AirlineDriver.printSeatMap(flight);
+            /*} else if (choice == 1) { 
+                AirlineDriverDB.printSeatMap();
             } else if (choice == 2) {
-                AirlineDriver.printFlightInfo(flight);
+                AirlineDriverDB.printFlightInfo();
             } else if (choice == 3) {
-                AirlineDriver.printPilots(pilot, flight);
+                AirlineDriverDB.printPilots();
             } else if (choice == 4) {
-                AirlineDriver.printReservation(res);
+                AirlineDriverDB.printReservation();
             } else if (choice == 5) {
-                AirlineDriver.printCustomerByNum(cust);
+                AirlineDriverDB.printCustomerByNum();
             } else if (choice == 6) {
-                AirlineDriver.bookReservation(cust, pilot, res, flight);
+                AirlineDriverDB.bookReservation();
             } else if (choice == 7) {
-                AirlineDriver.cancelReservation(cust, pilot, res, resCanceled, flight);
+                AirlineDriverDB.cancelReservation();
             } else if (choice == 8) {
-                AirlineDriver.printGrossIncome(flight, res);
+                AirlineDriverDB.printGrossIncome();
             } else if (choice == 9) {
-                AirlineDriver.searchReservation(res);
+                AirlineDriverDB.searchReservation();
             } else if (choice == 10) {
-                AirlineDriver.searchDeleted(resCanceled);
+                AirlineDriverDB.searchDeleted(); */
             } else if (choice == 11) {
-                AirlineDriver.addCustomer(cust);
+                AirlineDriverDB.addCustomer();
             } else if (choice == 12) {
-                AirlineDriver.closeConnection();
+                AirlineDriverDB.closeConnection();
                 System.out.println("Thank you for choosing Java Airlines!\nHave a good day :)");
                 System.exit(0);
             }
@@ -56,7 +56,7 @@ public class MenuDB {
     public static int menu() {
         Scanner scan = new Scanner(System.in);
         System.out.println("\nMenu:");
-        System.out.println("0. Connect to the Database");
+        System.out.println("0.  Connect to the Database");
         System.out.println("1.  Print a map of the seats by Flight Number.");
         System.out.println("2.  Print Flight information.");
         System.out.println("3.  Print a Pilot's Schedule.");
