@@ -74,7 +74,7 @@ CREATE TABLE flight_seat_availability (
   flight_id int NOT NULL,
   reservation_id int NOT NULL,
   seat_id int NOT NULL,
-  available tinyint(1) NOT NULL, /* 1 = available, 0 = not available */
+  available tinyint(1) NOT NULL, /* 1 = available, 0 = reserved */
   PRIMARY KEY (fs_id),
   FOREIGN KEY (reservation_id) REFERENCES reservation (reservation_id),
   FOREIGN KEY (flight_id) REFERENCES flight (flight_id),
@@ -551,10 +551,20 @@ CREATE PROCEDURE pilot_schedule(pilot_id INT)
 BEGIN
   SELECT route.origin, route.destination, flight.depart_date, route.time, flight.flight_id, pilot.name, pilot.pilot_id
     FROM flight NATURAL JOIN route NATURAL JOIN pilot
-    WHERE pilot_id = pilot_id
+    WHERE pilot_id = pilot_id /* from user input held in a variable */
     ORDER BY pilot_id, flight_id;
 END //
 DELIMITER ;
+
+/* Procedure to print all the pilots and their flights */
+DROP PROCEDURE IF EXISTS all_pilots;
+DELIMITER //
+CREATE PROCEDURE all_pilots()
+BEGIN
+  SELECT pilot.name, pilot.pilot_id, flight.flight_id, route.origin, route.destination, flight.depart_date, route.time
+    FROM pilot NATURAL JOIN flight NATURAL JOIN route
+    ORDER BY pilot_id, flight_id;
+END //
 
 /* Procedure to print ALL Reservations in the system */
 DROP PROCEDURE IF EXISTS print_reservations;
@@ -570,7 +580,7 @@ DELIMITER //
 CREATE PROCEDURE print_customer_reservations(customer_id INT)
 BEGIN
   SELECT * FROM reservation
-    WHERE customer_id = customer_id;
+    WHERE customer_id = customer_id; /* from user input held in a variable */
 END //
 DELIMITER ;
 
@@ -588,8 +598,72 @@ BEGIN
       NATURAL JOIN reservation
       NATURAL JOIN seat 
       NATURAL JOIN section 
-    WHERE customer.customer_id = customer_id
+    WHERE customer.customer_id = customer_id /* from user input held in a variable */
     GROUP BY customer.customer_id;
+END //
+DELIMITER ;
+
+/******* MULTI-PART BOOK RESERVATION PROCEDURES *******/
+
+/* Procedure to add a reservation to the system */
+/* reservation table auto-increments reservation_id */
+/* need customer_id and change reservation status_id to 1 */
+DROP PROCEDURE IF EXISTS add_reservation;
+DELIMITER //
+CREATE PROCEDURE add_reservation(customer_id INT)
+BEGIN
+  INSERT INTO reservation (customer_id, status_id)
+    VALUES (customer_id, 1);
+END //
+DELIMITER ;
+
+/* Procedure to print all seats and their availability for a flight */
+/* From flight_seat_availability table */
+/* 1 = available, 0 = reserved */
+DROP PROCEDURE IF EXISTS print_flight_seats;
+DELIMITER //
+CREATE PROCEDURE print_flight_seats(flight_id INT)
+BEGIN
+  SELECT
+	  flight_seat_availability.fs_id AS 'Seat ID',
+    CONCAT(seat.row, seat.col) AS 'Seat #',
+    reservation_id AS 'Reservation ID', 
+    CASE WHEN available = 0 THEN 'Reserved' ELSE 'Open' END AS 'Availability',
+    section.price AS 'Price'
+  FROM seat NATURAL JOIN section NATURAL JOIN flight_seat_availability
+  WHERE flight_id = flight_id; /* must get flight_id from user input */
+END //
+DELIMITER ;
+
+/* Procedure to add a reservation to a seat on a flight and changes the seat availability to 0 (reserved)*/
+DROP PROCEDURE IF EXISTS add_seat_to_reservation;
+DELIMITER //
+CREATE PROCEDURE add_seat_to_reservation(reservation_id INT, fs_id INT)
+BEGIN
+  UPDATE flight_seat_availability
+    SET available = 0 AND
+	  reservation_id = reservation_id /* reservation_id is held as variable in Java */
+    WHERE fs_id = fs_id;
+END //
+DELIMITER ;
+
+/******* END MULTI-PART BOOK RESERVATION PROCEDURES *******/
+
+/* Procedure to cancel a reservation */
+/* UPDATES two tables at once */
+/* Must update the reservation table to change the reservation status to 2 (cancelled) */
+/* Must update the flight_seat_availability table to remove the 
+reservation_id and change the available value to 1 (OPEN) */
+DROP PROCEDURE IF EXISTS cancel_reservation;
+DELIMITER //
+CREATE PROCEDURE cancel_reservation(reservation_id INT)
+BEGIN
+ UPDATE reservation, flight_seat_availability
+    SET reservation.status_id = 2,
+    flight_seat_availability.available = 1,
+    flight_seat_availability.reservation_id = 1
+    WHERE reservation.reservation_id = reservation_id AND
+    flight_seat_availability.reservation_id = reservation_id;
 END //
 DELIMITER ;
 
@@ -603,6 +677,8 @@ BEGIN
 END //
 DELIMITER ;
 
+/
+
 /* Procedure to UPDATE a customer */
 DROP PROCEDURE IF EXISTS update_customer;
 DELIMITER //
@@ -613,18 +689,3 @@ BEGIN
     WHERE customer_id = customer_id;
 END //
 DELIMITER ;
-
-/* Procedure to print all seats and their availability for a flight */
-/* From flight_seat_availability table */
-/* 1 = Available, 0 = Open */
-DROP PROCEDURE IF EXISTS print_flight_seats;
-DELIMITER //
-CREATE PROCEDURE print_flight_seats(flight_id INT)
-BEGIN
-  SELECT 
-    CONCAT(seat.row, seat.col) AS 'Seat #', 
-    CASE WHEN available = 0 THEN 'Reserved' ELSE 'Open' END AS 'Availability',
-    section.price AS 'Price'
-  FROM seat NATURAL JOIN section NATURAL JOIN flight_seat_availability
-  WHERE flight_id = 202211122;
-END //
