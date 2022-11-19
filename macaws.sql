@@ -667,6 +667,8 @@ BEGIN
 END //
 DELIMITER ;
 
+/* Procedure to print all 
+
 /* Procedure to ADD a new customer */
 DROP PROCEDURE IF EXISTS add_customer;
 DELIMITER //
@@ -676,8 +678,6 @@ BEGIN
     VALUES (first_name, last_name, email);
 END //
 DELIMITER ;
-
-/
 
 /* Procedure to UPDATE a customer */
 DROP PROCEDURE IF EXISTS update_customer;
