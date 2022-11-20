@@ -568,7 +568,7 @@ END //
 
 /* Procedure to print all customers in customer table */
 /* Combine first name and last name into one column */
-DROP PROCEDURE IF EXISTS all_customers;
+DROP PROCEDURE IF EXISTS ;
 DELIMITER //
 CREATE PROCEDURE all_customers()
 BEGIN
@@ -582,11 +582,19 @@ END //
 DELIMITER ;
 
 /* Procedure to print ALL Reservations in the system */
+/* use the reservation, flight_seat_availabilty, and the customer tables */
+/* Exclude reservation id 1 */
 DROP PROCEDURE IF EXISTS print_reservations;
 DELIMITER //
 CREATE PROCEDURE print_reservations()
 BEGIN
-  SELECT * FROM reservation;
+  SELECT 
+    reservation.reservation_id,
+    CONCAT(customer.first_name, ' ', customer.last_name) AS 'Name',
+    flight_seat_availability.flight_id
+    FROM reservation NATURAL JOIN flight_seat_availability NATURAL JOIN customer
+    WHERE reservation.reservation_id != 1
+    ORDER BY reservation_id;
 END //
 
 /* Procedure to print ALL Reservations for a given customer */
