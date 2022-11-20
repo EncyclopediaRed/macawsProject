@@ -566,6 +566,21 @@ BEGIN
     ORDER BY pilot_id, flight_id;
 END //
 
+/* Procedure to print all customers in customer table */
+/* Combine first name and last name into one column */
+DROP PROCEDURE IF EXISTS all_customers;
+DELIMITER //
+CREATE PROCEDURE all_customers()
+BEGIN
+  SELECT 
+	  customer_id,
+    CONCAT(first_name, ' ', last_name) AS 'Name', 
+    email
+    FROM customer
+    ORDER BY customer_id;
+END //
+DELIMITER ;
+
 /* Procedure to print ALL Reservations in the system */
 DROP PROCEDURE IF EXISTS print_reservations;
 DELIMITER //
@@ -584,7 +599,7 @@ BEGIN
 END //
 DELIMITER ;
 
-/* Procedure to print ALL customers */
+/* Procedure to print ALL customers with reservation data */
 DROP PROCEDURE IF EXISTS customer_details;
 DELIMITER //
 CREATE PROCEDURE customer_details(customer_id INT)
