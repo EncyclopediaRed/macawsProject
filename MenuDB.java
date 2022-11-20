@@ -22,29 +22,29 @@ public class MenuDB {
             choice = menu(); // call menu method and assign choice to the returned value
             if (choice == 0) {
                 AirlineDriverDB.createConnection();
-            /*} else if (choice == 1) { 
-                AirlineDriverDB.printSeatMap();
-            } else if (choice == 2) {
-                AirlineDriverDB.printFlightInfo();
+//            } else if (choice == 1) { 
+//                AirlineDriverDB.printSeatMap();
+//            } else if (choice == 2) {
+//                AirlineDriverDB.printFlightInfo();
             } else if (choice == 3) {
                 AirlineDriverDB.printPilots();
-            } else if (choice == 4) {
-                AirlineDriverDB.printReservation();
-            } else if (choice == 5) {
-                AirlineDriverDB.printCustomerByNum();
-            } else if (choice == 6) {
-                AirlineDriverDB.bookReservation();
-            } else if (choice == 7) {
-                AirlineDriverDB.cancelReservation();
-            } else if (choice == 8) {
-                AirlineDriverDB.printGrossIncome();
-            } else if (choice == 9) {
-                AirlineDriverDB.searchReservation();
-            } else if (choice == 10) {
-                AirlineDriverDB.searchDeleted(); */
-            } else if (choice == 11) {
+//            } else if (choice == 4) {
+//                AirlineDriverDB.printReservation();
+              } else if (choice == 5) {
+                  AirlineDriverDB.printCustomerByNum();
+//            } else if (choice == 6) {
+//                AirlineDriverDB.bookReservation();
+//            } else if (choice == 7) {
+//                AirlineDriverDB.cancelReservation();
+//            } else if (choice == 8) {
+//                AirlineDriverDB.printGrossIncome();
+//            } else if (choice == 9) {
+//                AirlineDriverDB.searchReservation();
+//            } else if (choice == 10) {
+//                AirlineDriverDB.searchDeleted();
+              } else if (choice == 11) {
                 AirlineDriverDB.addCustomer();
-            } else if (choice == 12) {
+              } else if (choice == 12) {
                 AirlineDriverDB.closeConnection();
                 System.out.println("Thank you for choosing Java Airlines!\nHave a good day :)");
                 System.exit(0);

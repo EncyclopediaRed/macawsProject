@@ -2,6 +2,8 @@ package macawsProject;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.text.NumberFormat;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -25,12 +27,13 @@ public class AirlineDriverDB {
 	static Statement stmt = null;
     
 	// Create a method that creates a new connection to a database.
-	public static Connection createConnection() {
+	@SuppressWarnings("deprecation")
+    public static Connection createConnection() {
 		
 		// Ask the user for user name, password, and database name.
 		String user = "itp220";
 		String pass = "itp220";
-		String name = "bbooks220";
+		String name = "macaws";
 		String driver = "com.mysql.jdbc.Driver";
 		String url = "jdbc:mysql://localhost:3306/" + name;
 
@@ -158,55 +161,34 @@ public class AirlineDriverDB {
 
     }
 
-    public static void printPilots(ArrayList<Pilot> p, ArrayList<Flight> f) {
-        // 11. We need an option for printing each Pilots schedule for the week
-        // (which flights are they flying---date, time direction.
-        Scanner scan = new Scanner(System.in);
-        boolean more = true;
-        while (more) {
-            System.out.println();
-            System.out.println("***Input the Pilot's Number you would like information on***");
-            System.out.println();
-            for (int i = 0; i < p.size(); i++) {
-                System.out.println("Pilot's Number: " + p.get(i).getPilotNum() + " || Their Name: "
-                    + p.get(i).getPilotName() + ".\n---------------------------------------------");
+    /**
+     * Print the flight information for the flight number given
+     * 
+     * @param f - Flight information
+     */
+    public static void printPilots() {
+        // Call the checkConnect method for database connectivity.
+        checkConnect();
+        String stored = "CALL macaws.all_pilots();";
+
+        try {
+            stmt = conn.prepareCall(stored);
+            ResultSet rs = stmt.executeQuery(stored);
+            while (rs.next()) {
+                System.out.println(
+                    "Flight ID: " + rs.getInt("Flight ID") + 
+                    " | Pilot Name: " + rs.getString("Pilot Name") + 
+                    " | Origin: " + rs.getString("Origin") +
+                    " | Destination: " + rs.getString("Destination") +
+                    " | Departing: " + rs.getString("Departing") +
+                    " | Time: " + rs.getString("Time")
+                    );
             }
-
-            try {
-                int pilotn = scan.nextInt();
-                System.out.println();
-                for (int i = 0; i < f.size(); i++) {
-                    if (pilotn == f.get(i).getP().getPilotNum()) {
-                        System.out.println("The Details for this Pilot's Flight Number: "
-                            + f.get(i).getFlightNum() + f.get(i).toString());
-                        System.out.println(f.get(i).toMString() + "\n");
-                    } else if (pilotn != f.get(i).getP().getPilotNum()) {
-                        System.out.println("That Pilot does not exist.");
-                    }
-
-                }
-
-                try {
-                    System.out.println();
-                    System.out.println("More pilots? true/false");
-                    more = scan.nextBoolean();
-
-                }
-                catch (Exception e) {
-                    System.out.println("Invalid Input. Please enter 'true' or 'false'");
-                    scan.nextLine();
-                }
-
-            }
-            catch (Exception e) {
-                System.out
-                    .println("Invalid Input. Please try again, with a pilot number from the list.");
-                scan.nextLine();
-            }
-
-        } // more loop
-
-        // scan.close();
+        } // End of try block.
+        catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SQL insert Exception");
+        } // End of catch block.
     }
 
     public static void addCustomer() {
@@ -281,30 +263,26 @@ public class AirlineDriverDB {
         }
     }
 
-    public static void printCustomerByNum(ArrayList<Customer> c) {
-        Scanner scan = new Scanner(System.in);
-        boolean more = true;
+    /* Print the customer table using a ResultSet and the all_customers stored procedure */
+    public static void printCustomerByNum() {
+        // Call the checkConnect method for database connectivity.
+        checkConnect();
+        String stored = "CALL macaws.all_customers();";
 
-        // 12. We need an option for printing all the reservations for a give Customer if given
-        // their customer number.
-        System.out.println();
-        System.out.println("***Current Customers***");
-        System.out.println();
-        while (more) {
-            for (int i = 0; i < c.size(); i++) {
-                System.out.println(c.get(i).toString());
+        try {
+            stmt = conn.prepareCall(stored);
+            ResultSet rs = stmt.executeQuery(stored);
+            while (rs.next()) {
+                System.out
+                    .println("Customer ID: " + rs.getInt("customer_id") + 
+                             " | Name: " + rs.getString("Name") + 
+                             " | Email: " + rs.getString("email"));
             }
-            try {
-                System.out.println();
-                System.out.println("More Customers? true/false");
-                more = scan.nextBoolean();
-
-            }
-            catch (Exception e) {
-                System.out.println("Invalid Input. Please enter 'true' or 'false'");
-                scan.nextLine();
-            }
-        }
+        } // End of try block.
+        catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SQL insert Exception");
+        } // End of catch block.
     }
 
     public static void bookReservation(ArrayList<Customer> c, ArrayList<Pilot> p,
