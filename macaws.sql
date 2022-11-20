@@ -561,9 +561,15 @@ DROP PROCEDURE IF EXISTS all_pilots;
 DELIMITER //
 CREATE PROCEDURE all_pilots()
 BEGIN
-  SELECT pilot.name, pilot.pilot_id, flight.flight_id, route.origin, route.destination, flight.depart_date, route.time
+  SELECT 
+	  flight.flight_id AS 'Flight ID', 
+    pilot.name AS 'Pilot Name', 
+    route.origin AS 'Origin', 
+    route.destination AS 'Destination', 
+    flight.depart_date AS 'Departing', 
+    route.time AS 'Time'
     FROM pilot NATURAL JOIN flight NATURAL JOIN route
-    ORDER BY pilot_id, flight_id;
+    ORDER BY flight_id, pilot_id;
 END //
 
 /* Procedure to print all customers in customer table */
