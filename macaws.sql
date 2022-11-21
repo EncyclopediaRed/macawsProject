@@ -81,6 +81,17 @@ CREATE TABLE flight_seat_availability (
   FOREIGN KEY (seat_id) REFERENCES seat (seat_id)
 );
 
+CREATE TABLE reservation_cancel (
+  cancel_id int NOT NULL AUTO_INCREMENT,
+  reservation_id int NOT NULL,
+  fs_id int NOT NULL,
+  flight_id int NOT NULL,
+  PRIMARY KEY (cancel_id),
+  FOREIGN KEY (reservation_id) REFERENCES reservation (reservation_id),
+  FOREIGN KEY (fs_id) REFERENCES flight_seat_availability (fs_id),
+  FOREIGN KEY (flight_id) REFERENCES flight (flight_id)
+);
+
 /* DEMO DATA INSERTS */
 INSERT INTO customer (customer_id, first_name, last_name, email) 
 VALUES
@@ -670,8 +681,8 @@ DELIMITER //
 CREATE PROCEDURE add_seat_to_reservation(reservation_id INT, fs_id INT)
 BEGIN
   UPDATE flight_seat_availability
-    SET available = 0 AND
-	  reservation_id = reservation_id /* reservation_id is held as variable in Java */
+    SET reservation_id = reservation_id,
+    available = 0
     WHERE fs_id = fs_id;
 END //
 DELIMITER ;
@@ -685,18 +696,30 @@ DELIMITER ;
 reservation_id and change the available value to 1 (OPEN) */
 DROP PROCEDURE IF EXISTS cancel_reservation;
 DELIMITER //
-CREATE PROCEDURE cancel_reservation(reservation_id INT)
+CREATE PROCEDURE cancel_reservation(reservation_id INT, fs_id INT)
 BEGIN
- UPDATE reservation, flight_seat_availability
+  INSERT INTO reservation_cancel (reservation_id, fs_id, flight_id)
+    VALUES (reservation_id, fs_id, flight_id);
+  UPDATE reservation, flight_seat_availability
     SET reservation.status_id = 2,
-    flight_seat_availability.available = 1,
-    flight_seat_availability.reservation_id = 1
-    WHERE reservation.reservation_id = reservation_id AND
-    flight_seat_availability.reservation_id = reservation_id;
+      flight_seat_availability.available = 1,
+      flight_seat_availability.reservation_id = 1
+    WHERE reservation.reservation_id = reservation_id AND 
+      flight_seat_availability.reservation_id = reservation_id; /* variables from user input */
 END //
 DELIMITER ;
 
-/* Procedure to print all 
+/* Procedure to print all cancelled reservations in reservation_cancel table */
+/* print flight_id and seat_id too */
+/* use the reservation_cancel, flight_seat_availability, and seat tables */
+DROP PROCEDURE IF EXISTS print_cancelled_reservations;
+DELIMITER //
+CREATE PROCEDURE print_cancelled_reservations(reservation_id INT)
+BEGIN
+  SELECT * FROM reservation_cancel
+    WHERE reservation_id = reservation_id;
+END //
+DELIMITER ;
 
 /* Procedure to ADD a new customer */
 DROP PROCEDURE IF EXISTS add_customer;
