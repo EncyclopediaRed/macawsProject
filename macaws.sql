@@ -764,6 +764,7 @@ BEGIN
 	NATURAL JOIN flight_seat_availability NATURAL JOIN seat NATURAL JOIN section
     WHERE flight_seat_availability.available = 0 
     AND flight_seat_availability.flight_id LIKE CONCAT ('%', input, '%');
+END //
 DELIMITER ;
 
 /* Procedure to display all flight numbers */
