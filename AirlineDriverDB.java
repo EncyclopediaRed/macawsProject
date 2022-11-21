@@ -13,82 +13,82 @@ import java.sql.Statement;
 /**
  * AirlineDriver Class
  * 
- * Creates a driver class to test the functionality of the airline reservation system
- * Uses MySQL stored procedures to access the database and perform CRUD operations
+ * Creates a driver class to test the functionality of the airline reservation system Uses MySQL
+ * stored procedures to access the database and perform CRUD operations
  * 
  * @authors R. Barrowclift, C. Hogg, M. Porter - ITP 220
  *
  */
 public class AirlineDriverDB {
 
-
     // Create static instances of the Connection, Statement, and Scanner Classes.
-	static Connection conn = null;
-	static Statement stmt = null;
-    
-	// Create a method that creates a new connection to a database.
-	@SuppressWarnings("deprecation")
+    static Connection conn = null;
+    static Statement stmt = null;
+
+    // Create a method that creates a new connection to a database.
+    @SuppressWarnings("deprecation")
     public static Connection createConnection() {
-		
-		// Ask the user for user name, password, and database name.
-		String user = "itp220";
-		String pass = "itp220";
-		String name = "macaws";
-		String driver = "com.mysql.jdbc.Driver";
-		String url = "jdbc:mysql://localhost:3306/" + name;
 
-		System.out.println(driver);
-		System.out.println(url);
-		
-		// Create a try block that attempts to find the database.
-		try {
-			Class.forName(driver).newInstance();
-			conn = DriverManager.getConnection(url, user, pass);
-			System.out.println("Connection really is from : " + conn.getClass().getName());
-			System.out.println("Connection successful!");
+        // Ask the user for user name, password, and database name.
+        String user = "itp220";
+        String pass = "itp220";
+        String name = "macaws";
+        String driver = "com.mysql.jdbc.Driver";
+        String url = "jdbc:mysql://localhost:3306/" + name;
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		// Return the connection.
-		return conn;
-	} // End of method createConnection.
-	
-	// Create a method that will close the connection to the database.
-	public static void closeConnection() {
-		
-		// Check if connection is null.
-		if (conn != null) {
-			// Close the connection.
-			try {
-				conn.close();
-				conn = null;
-				// stmt.close();
-				System.out.println("The connection was successfully closed");
-			} 
-			catch (SQLException e) {
-				e.printStackTrace();
-			}
-		} // End of if block.
-	} // End of method closeConnection.
-	
-	// Create a method that checks the connection status of the database.
-	public static void checkConnect() {
-		
-		// Check to see if the connection is null.
-		if (conn == null) {
-			conn = createConnection();
-		}
-		// Check to see if the Statement is null.
-		if (stmt == null) {
-			try {
-				stmt = conn.createStatement();
-			} 
-			catch (SQLException e) {
-				System.out.println("Cannot create the statement");
-			}
-		} // End of if block.
-	} // End of method checkConnect.
+        System.out.println(driver);
+        System.out.println(url);
+
+        // Create a try block that attempts to find the database.
+        try {
+            Class.forName(driver).newInstance();
+            conn = DriverManager.getConnection(url, user, pass);
+            System.out.println("Connection really is from : " + conn.getClass().getName());
+            System.out.println("Connection successful!");
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Return the connection.
+        return conn;
+    } // End of method createConnection.
+
+    // Create a method that will close the connection to the database.
+    public static void closeConnection() {
+
+        // Check if connection is null.
+        if (conn != null) {
+            // Close the connection.
+            try {
+                conn.close();
+                conn = null;
+                // stmt.close();
+                System.out.println("The connection was successfully closed");
+            }
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } // End of if block.
+    } // End of method closeConnection.
+
+    // Create a method that checks the connection status of the database.
+    public static void checkConnect() {
+
+        // Check to see if the connection is null.
+        if (conn == null) {
+            conn = createConnection();
+        }
+        // Check to see if the Statement is null.
+        if (stmt == null) {
+            try {
+                stmt = conn.createStatement();
+            }
+            catch (SQLException e) {
+                System.out.println("Cannot create the statement");
+            }
+        } // End of if block.
+    } // End of method checkConnect.
 
     /**
      * Print a the seat map of the airplane Each Seat is represented by a row number and seat letter
@@ -176,13 +176,12 @@ public class AirlineDriverDB {
             ResultSet rs = stmt.executeQuery(stored);
             while (rs.next()) {
                 System.out.println(
-                    "Flight ID: " + rs.getInt("Flight ID") + 
-                    " | Pilot Name: " + rs.getString("Pilot Name") + 
-                    " | Origin: " + rs.getString("Origin") +
-                    " | Destination: " + rs.getString("Destination") +
-                    " | Departing: " + rs.getString("Departing") +
-                    " | Time: " + rs.getString("Time")
-                    );
+                    "Flight ID: " + rs.getInt("Flight ID") +
+                        " | Pilot Name: " + rs.getString("Pilot Name") +
+                        " | Origin: " + rs.getString("Origin") +
+                        " | Destination: " + rs.getString("Destination") +
+                        " | Departing: " + rs.getString("Departing") +
+                        " | Time: " + rs.getString("Time"));
             }
         } // End of try block.
         catch (SQLException e) {
@@ -192,8 +191,8 @@ public class AirlineDriverDB {
     }
 
     public static void addCustomer() {
-		// Call the checkConnect method for database connectivity.
-		checkConnect();
+        // Call the checkConnect method for database connectivity.
+        checkConnect();
         Scanner scan = new Scanner(System.in);
         boolean more = true;
         while (more) {
@@ -203,19 +202,20 @@ public class AirlineDriverDB {
             String lName = scan.nextLine();
             System.out.println("What's the Customer's email?");
             String email = scan.nextLine();
-            
-			// Store a procedure call in a String variable to add a new customer.
-			String stored = "CALL macaws.add_customer('" + fName + "', '" + lName + "', '" + email + "');";
-			
-			// Try to execute the SQL statement in stored variable.
-			try {
-				stmt = conn.prepareCall(stored);
-				stmt.executeUpdate(stored);
-			} // End of try block.
-			catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("SQL insert Exception");
-			} // End of catch block.
+
+            // Store a procedure call in a String variable to add a new customer.
+            String stored = "CALL macaws.add_customer('" + fName + "', '" + lName + "', '" + email
+                + "');";
+
+            // Try to execute the SQL statement in stored variable.
+            try {
+                stmt = conn.prepareCall(stored);
+                stmt.executeUpdate(stored);
+            } // End of try block.
+            catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("SQL insert Exception");
+            } // End of catch block.
 
             System.out.println();
             System.out.println("***Customer Added!***");
@@ -235,32 +235,27 @@ public class AirlineDriverDB {
         }
     }
 
-    public static void printReservation(ArrayList<Reservation> r) {
-        // print who is sitting in a certain seat not a requirement but probably a good idea
-        Scanner scan = new Scanner(System.in);
-        boolean more = true;
-        System.out.println();
-        System.out.println("***Current Reservations***");
-        // Search for zero reservations.
-        if (r.size() == 0 || r == null) {
-            System.out.println();
-            System.out.println("(No Reservations were found)");
-        }
-        System.out.println();
-        while (more) {
-            for (int i = 0; i < r.size(); i++)
-                System.out.println(r.get(i).toString());
-            try {
-                System.out.println();
-                System.out.println("More Reservations? true/false");
-                more = scan.nextBoolean();
+    public static void printReservation() {
+        // Call the checkConnect method for database connectivity.
+        checkConnect();
+        String stored = "CALL macaws.print_reservations();";
 
+        try {
+            stmt = conn.prepareCall(stored);
+            ResultSet rs = stmt.executeQuery(stored);
+            while (rs.next()) {
+                System.out.printf(
+                    "Flight ID: %-10d | Reservation: %-2d | Customer: %-20s | Seat: %-2s %n",
+                    rs.getInt("Flight ID"),
+                    rs.getInt("Reservation ID"),
+                    rs.getString("Customer Name"),
+                    rs.getString("Seat #"));
             }
-            catch (Exception e) {
-                System.out.println("Invalid Input. Please enter 'true' or 'false'");
-                scan.nextLine();
-            }
-        }
+        } // End of try block.
+        catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SQL insert Exception");
+        } // End of catch block.
     }
 
     /* Print the customer table using a ResultSet and the all_customers stored procedure */
@@ -274,9 +269,9 @@ public class AirlineDriverDB {
             ResultSet rs = stmt.executeQuery(stored);
             while (rs.next()) {
                 System.out
-                    .println("Customer ID: " + rs.getInt("customer_id") + 
-                             " | Name: " + rs.getString("Name") + 
-                             " | Email: " + rs.getString("email"));
+                    .println("Customer ID: " + rs.getInt("customer_id") +
+                        " | Name: " + rs.getString("Name") +
+                        " | Email: " + rs.getString("email"));
             }
         } // End of try block.
         catch (SQLException e) {
@@ -300,17 +295,17 @@ public class AirlineDriverDB {
 
         // the following are base arrays
         String[][] seatMString = { { "NA", "1A", "1B", "NA" },
-                                   { "NA", "2A", "2B", "NA" },
-                                   { "3A", "3B", "3C", "3D", },
-                                   { "4A", "4B", "4C", "4D", } };
+            { "NA", "2A", "2B", "NA" },
+            { "3A", "3B", "3C", "3D", },
+            { "4A", "4B", "4C", "4D", } };
         int[][] seatMID = { { -1, 1, 1, -1 },
-                            { -1, 1, 1, -1 },
-                            { 2, 2, 2, 2 },
-                            { 2, 2, 2, 2 } };
+            { -1, 1, 1, -1 },
+            { 2, 2, 2, 2 },
+            { 2, 2, 2, 2 } };
         int[][] seatscust = { { -1, 0, 0, -1 },
-                              { -1, 0, 0, -1 },
-                              { 0, 0, 0, 0 },
-                              { 0, 0, 0, 0 } };
+            { -1, 0, 0, -1 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 } };
 
         // base rows for 2d arrays
         int row1 = 0;
@@ -604,11 +599,10 @@ public class AirlineDriverDB {
         // print the Gross income of the flight by flight number
         Scanner scan = new Scanner(System.in);
         boolean more = true;
-		// Call the checkConnect method for database connectivity.
-		checkConnect();
-    	// Store the procedure call in a String variable.
-    	String stored = null
-    			;
+        // Call the checkConnect method for database connectivity.
+        checkConnect();
+        // Store the procedure call in a String variable.
+        String stored = null;
         while (more) {
             NumberFormat nf = NumberFormat.getCurrencyInstance();
             System.out.println();
@@ -619,54 +613,54 @@ public class AirlineDriverDB {
             try {
                 int answer = scan.nextInt();
                 double profit = 0;
-                
+
                 // User selected menu 1.
                 if (answer == 1) {
-                	stored = "CALL macaws.calc_total_profit();";
-                
-        			stmt = conn.prepareCall(stored);  		
-        			ResultSet rs = stmt.executeQuery(stored);
-        			// Get the Gross profit.
-        			while(rs.next()) {
-        				// Store the profit at the variable.
-        				profit = rs.getDouble("Total Gross Profit"); 
-        			} // Bottom of while loop.
-        				// Display the Gross Profit.
-                    	System.out.println();
-                    	System.out.println("***Total profit is: " + nf.format(profit) + "***");
-                } // End of if block. 
-                
+                    stored = "CALL macaws.calc_total_profit();";
+
+                    stmt = conn.prepareCall(stored);
+                    ResultSet rs = stmt.executeQuery(stored);
+                    // Get the Gross profit.
+                    while (rs.next()) {
+                        // Store the profit at the variable.
+                        profit = rs.getDouble("Total Gross Profit");
+                    } // Bottom of while loop.
+                      // Display the Gross Profit.
+                    System.out.println();
+                    System.out.println("***Total profit is: " + nf.format(profit) + "***");
+                } // End of if block.
+
                 // User selected menu 2.
                 else {
-                    
+
                     stored = "CALL macaws.print_flight_nums()";
-            		stmt = conn.prepareCall(stored);  		
-        			ResultSet rs = stmt.executeQuery(stored);
-        			
-        			// Loop through and display each flight ID.
-        			while(rs.next()) {
-        				
-        				int flightNum = rs.getInt("flight_id");
-        				System.out.println(flightNum);
-        				System.out.println("---------");
-        			} // Bottom of while loop.
+                    stmt = conn.prepareCall(stored);
+                    ResultSet rs = stmt.executeQuery(stored);
+
+                    // Loop through and display each flight ID.
+                    while (rs.next()) {
+
+                        int flightNum = rs.getInt("flight_id");
+                        System.out.println(flightNum);
+                        System.out.println("---------");
+                    } // Bottom of while loop.
                     System.out.println(
-                            "***Input the Flight Number that you want to print out Gross Income for***");
-        			System.out.println();
+                        "***Input the Flight Number that you want to print out Gross Income for***");
+                    System.out.println();
                     int flightss = scan.nextInt();
                     scan.nextLine();
-                    
+
                     stored = "CALL macaws.calc_flight_profit('" + flightss + "');";
-               		stmt = conn.prepareCall(stored);  		
-            		rs = stmt.executeQuery(stored);
-            		
-            		// Loop through the price column and get the profit for this flight number.
-            		while(rs.next()) {
-            			
-            			profit = rs.getDouble("Total Flight Profit");
-            		} // Bottom of while loop.
-            		
-            		// Display the profit for this flight.
+                    stmt = conn.prepareCall(stored);
+                    rs = stmt.executeQuery(stored);
+
+                    // Loop through the price column and get the profit for this flight number.
+                    while (rs.next()) {
+
+                        profit = rs.getDouble("Total Flight Profit");
+                    } // Bottom of while loop.
+
+                    // Display the profit for this flight.
                     System.out.println();
                     System.out.println("***Gross income for flight number " + flightss + " is "
                         + nf.format(profit) + "***");
@@ -693,108 +687,73 @@ public class AirlineDriverDB {
 
     } // End of method print gross income.
 
-    public static void searchReservation(ArrayList<Reservation> r) {
+    /**
+     * Search reservations by Reservation ID or ask to to print all reservations using printReservations method.
+     */
+    public static void searchReservation() {
         Scanner scan = new Scanner(System.in);
         boolean more = true;
+        // Call the checkConnect method for database connectivity.
+        checkConnect();
+        // Store the procedure call in a String variable.
+        String stored = null;
+
         while (more) {
-            // Search for an empty reservation array.
             System.out.println();
-            if (r.size() == 0) {
-                System.out.println("***No Reservations were found***");
-                break;
-            }
+            System.out.println("***Search Reservation?***");
             System.out.println();
-            System.out.println("How would you like to search the Reservations?");
-            System.out.println("1.     By Last Name.");
-            System.out.println("2.     By Email.");
-            System.out.println("3.     By Reservation Number.");
-            System.out.println("4.     By Customer Number.");
-            System.out.println("5.     Just list them.");
-            int find = scan.nextInt();
-            scan.nextLine();// scanner problems
-            boolean wastrue = true;
-
-            if (find == 1) {
-                System.out.println("Please enter the Customer's last name:");
-                String enter = scan.nextLine();
-                for (int i = 0; i < r.size(); i++) {
-                    if (enter.equalsIgnoreCase(r.get(i).getCust().getlastName())) {
-                        System.out.println(r.get(i).toString());
-                        wastrue = false;
-                    } else if (wastrue && i == r.size() - 1) {
-                        System.out.println("***There are no records under that parameter***");
-                        System.out.println();
-                    }
-                }
-            } else if (find == 2) {
-                System.out.println("Please enter the Customers email:");
-                String enter = scan.nextLine();
-                for (int i = 0; i < r.size(); i++) {
-                    if (enter.equalsIgnoreCase(r.get(i).getCust().getEmail())) {
-                        System.out.println(r.get(i).toString());
-                        wastrue = false;
-                    } else if (wastrue && i == r.size() - 1) {
-                        System.out.println("***There are no records under that parameter***");
-                        System.out.println();
-                    }
-                }
-            } else if (find == 3) {
-                System.out.println("Please enter the Reservation Number:");
-                int enter = scan.nextInt();
-                scan.nextLine();
-                for (int i = 0; i < r.size(); i++) {
-                    if (enter == r.get(i).getResNum()) {
-                        System.out.println(r.get(i).toString());
-                        wastrue = false;
-                    } else if (wastrue && i == r.size() - 1) {
-                        System.out.println("***There are no records under that parameter***");
-                        System.out.println();
-                    }
-                }
-            } else if (find == 4) {
-                System.out.println("Please enter the Customer Number:");
-                int enter = scan.nextInt();
-                scan.nextLine();
-                for (int i = 0; i < r.size(); i++) {
-                    if (enter == r.get(i).getCust().getCustNum()) {
-                        System.out.println(r.get(i).toString());
-                        wastrue = false;
-                    } else if (wastrue && i == r.size() - 1) {
-                        System.out.println("***There are no records under that parameter***");
-                        System.out.println();
-                    }
-                }
-            } else if (find == 5) {
-                System.out.println("***Displaying All Reservations***");
-                System.out.println();
-                for (int i = 0; i < r.size(); i++) {
-                    System.out.println((i + 1) + ": Reservation for: "
-                        + r.get(i).getCust().getfirstName()
-                        + " " + r.get(i).getCust().getlastName() + " Customer Number: "
-                        + r.get(i).getCust().getCustNum()
-                        + " (" + r.get(i).getCust().getEmail() + ")" + " Reservation Number: " +
-                        +r.get(i).getResNum() + " on flight " + r.get(i).getF().getFlightNum()
-                        + " flying "
-                        + r.get(i).getF().getRoute() + " on " + r.get(i).getF().getDate() + " at "
-                        + r.get(i).getF().getTime()
-                        + "\n--------------------------------------------------------------------------------------------"
-                        + "--------------------------------------------------------------------");
-
-                }
-                System.out.println();
-            }
+            System.out.println("1.   Search by Reservation ID.");
+            System.out.println("2.   Print all reservations.");
             try {
-                System.out.println();
-                System.out.println("More Searches? true/false");
-                more = scan.nextBoolean();
+                int answer = scan.nextInt();
+                // User selected menu 1.
+                if (answer == 1) {
+                    System.out.println();
+                    System.out.println("*** Input the Reservation ID that you want to search for ***");
+                    System.out.println();
+                    int resID = scan.nextInt(); // Get the reservation ID from the user.
+                    scan.nextLine(); // Clear the buffer.
+                    
+                    stored = "CALL macaws.search_reservations('" + resID + "');"; // Call the stored procedure.
+                    stmt = conn.prepareCall(stored); // Prepare the statement.
+                    ResultSet rs = stmt.executeQuery(stored); // Execute the query.
+                    
+                    // Loop through and display each reservation.
+                    while (rs.next()) { // Loop through the result set.
+                        int fltNum = rs.getInt("Flight ID"); // Get the flight ID.
+                        int resNum = rs.getInt("Reservation ID"); // Get the reservation ID.
+                        String custName = rs.getString("Customer Name"); // Get the customer name.
+                        String seat = rs.getString("Seat #"); // Get the seat number.
+                        double cost = rs.getDouble("Cost"); // Get the cost.
+                        System.out.printf(
+                            "Flight ID: %-10d | Reservation: %-2d | Customer: %-20s | Seat: %-2s | Cost: %-2d %n",
+                                fltNum, resNum, custName, seat, cost);                                 
+                    } // Bottom of while loop.
+                } // End of if block.
 
-            }
+                // User selected menu 2.
+                else {
+                    printReservation();
+                } // End of else block.
+
+                System.out.println();
+                try {
+                    System.out.println();
+                    System.out.println("More Reservation searching? true/false");
+                    more = scan.nextBoolean();
+
+                }
+                catch (Exception e) {
+                    System.out.println("Invalid Input. Please enter 'true' or 'false'");
+                    scan.nextLine();
+                }
+
+            } // End of try block.
             catch (Exception e) {
-                System.out.println("Invalid Input. Please enter 'true' or 'false'");
+                System.out.println("That Reservation does not exist. Please choose a valid Reservation ID");
                 scan.nextLine();
             }
-        }
-
+        } // Bottom of while loop.
     }
 
     public static void searchDeleted(ArrayList<Reservation> cr) {

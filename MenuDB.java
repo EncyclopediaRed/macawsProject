@@ -3,8 +3,8 @@ package macawsProject;
 import java.util.Scanner;
 
 /**
- * Creates a Menu Class to detail what makes up a UI menu for a airline reservation system
- * Uses MySQL stored procedures to access the database and perform CRUD operations
+ * Creates a Menu Class to detail what makes up a UI menu for a airline reservation system Uses
+ * MySQL stored procedures to access the database and perform CRUD operations
  *
  * @author R. Barrowclift, C. Hogg, M. Porter - ITP 220
  *
@@ -26,25 +26,25 @@ public class MenuDB {
 //                AirlineDriverDB.printSeatMap();
 //            } else if (choice == 2) {
 //                AirlineDriverDB.printFlightInfo();
-              } else if (choice == 3) {
+            } else if (choice == 3) {
                 AirlineDriverDB.printPilots();
-//            } else if (choice == 4) {
-//                AirlineDriverDB.printReservation();
-              } else if (choice == 5) {
-                  AirlineDriverDB.printCustomerByNum();
+            } else if (choice == 4) {
+                AirlineDriverDB.printReservation();
+            } else if (choice == 5) {
+                AirlineDriverDB.printCustomerByNum();
 //            } else if (choice == 6) {
 //                AirlineDriverDB.bookReservation();
 //            } else if (choice == 7) {
 //                AirlineDriverDB.cancelReservation();
-              } else if (choice == 8) {
-            	  AirlineDriverDB.printGrossIncome();
-//            } else if (choice == 9) {
-//                AirlineDriverDB.searchReservation();
+            } else if (choice == 8) {
+                AirlineDriverDB.printGrossIncome();
+            } else if (choice == 9) {
+                AirlineDriverDB.searchReservation();
 //            } else if (choice == 10) {
 //                AirlineDriverDB.searchDeleted();
-              } else if (choice == 11) {
+            } else if (choice == 11) {
                 AirlineDriverDB.addCustomer();
-              } else if (choice == 12) {
+            } else if (choice == 12) {
                 AirlineDriverDB.closeConnection();
                 System.out.println("Thank you for choosing Java Airlines!\nHave a good day :)");
                 System.exit(0);

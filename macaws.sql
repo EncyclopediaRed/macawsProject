@@ -600,19 +600,46 @@ DELIMITER ;
 
 /* Procedure to print ALL Reservations in the system */
 /* use the reservation, flight_seat_availabilty, and the customer tables */
+/* Combine first name and last name into one column */
+/* Use the seat_id to combine seat column and row column into one EX: 1A */
+/* Sort by flight_id then by seat
 /* Exclude reservation id 1 */
 DROP PROCEDURE IF EXISTS print_reservations;
 DELIMITER //
 CREATE PROCEDURE print_reservations()
 BEGIN
   SELECT 
-    reservation.reservation_id,
-    CONCAT(customer.first_name, ' ', customer.last_name) AS 'Name',
-    flight_seat_availability.flight_id
-    FROM reservation NATURAL JOIN flight_seat_availability NATURAL JOIN customer
+	  flight_seat_availability.flight_id AS 'Flight ID', 
+    reservation.reservation_id AS 'Reservation ID', 
+    CONCAT(customer.first_name, ' ', customer.last_name) AS 'Customer Name',
+    CONCAT(seat.row, seat.col) AS 'Seat #'
+    FROM reservation NATURAL JOIN flight_seat_availability NATURAL JOIN customer NATURAL JOIN seat
     WHERE reservation.reservation_id != 1
-    ORDER BY reservation_id;
+    ORDER BY flight_id, seat.row, seat.col;
 END //
+DELIMITER ;
+
+/* Procedure to print reservations for a specific reservation the user inputs */
+/* use the reservation, flight_seat_availabilty, and the customer tables */
+/* Combine first name and last name into one column */
+/* Use the seat_id to combine seat column and row column into one EX: 1A */
+/* Sort by flight_id then by seat */
+/* Exclude reservation id 1 */
+DROP PROCEDURE IF EXISTS search_reservation;
+DELIMITER //
+CREATE PROCEDURE search_reservation(resID INT)
+BEGIN
+  SELECT 
+    flight_seat_availability.flight_id AS 'Flight ID', 
+    reservation.reservation_id AS 'Reservation ID', 
+    CONCAT(customer.first_name, ' ', customer.last_name) AS 'Customer Name',
+    CONCAT(seat.row, seat.col) AS 'Seat #',
+    section.price AS 'Cost'
+    FROM reservation NATURAL JOIN flight_seat_availability NATURAL JOIN customer NATURAL JOIN seat NATURAL JOIN section
+    WHERE reservation.reservation_id LIKE CONCAT('%', resID, '%') /* from user input held in a variable */
+    ORDER BY flight_id, seat.row, seat.col;
+END //
+DELIMITER ;
 
 /* Procedure to print ALL Reservations for a given customer */
 DROP PROCEDURE IF EXISTS print_customer_reservations;
@@ -759,7 +786,7 @@ DROP PROCEDURE IF EXISTS calc_flight_profit;
 DELIMITER //
 CREATE PROCEDURE calc_flight_profit(input INT)
 BEGIN
-	SELECT SUM(section.price) AS 'Total Flight Profit'
+	SELECT SUM(section.price) AS 'Total Flight Profit' 
     FROM reservation 
 	NATURAL JOIN flight_seat_availability NATURAL JOIN seat NATURAL JOIN section
     WHERE flight_seat_availability.available = 0 
