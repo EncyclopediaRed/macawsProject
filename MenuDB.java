@@ -26,7 +26,7 @@ public class MenuDB {
 //                AirlineDriverDB.printSeatMap();
 //            } else if (choice == 2) {
 //                AirlineDriverDB.printFlightInfo();
-            } else if (choice == 3) {
+              } else if (choice == 3) {
                 AirlineDriverDB.printPilots();
 //            } else if (choice == 4) {
 //                AirlineDriverDB.printReservation();
@@ -36,8 +36,8 @@ public class MenuDB {
 //                AirlineDriverDB.bookReservation();
 //            } else if (choice == 7) {
 //                AirlineDriverDB.cancelReservation();
-//            } else if (choice == 8) {
-//                AirlineDriverDB.printGrossIncome();
+              } else if (choice == 8) {
+            	  AirlineDriverDB.printGrossIncome();
 //            } else if (choice == 9) {
 //                AirlineDriverDB.searchReservation();
 //            } else if (choice == 10) {

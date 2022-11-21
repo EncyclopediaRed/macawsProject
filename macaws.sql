@@ -718,3 +718,37 @@ BEGIN
     WHERE customer_id = customer_id;
 END //
 DELIMITER ;
+
+/* Procedure to CALCULATE total profit of all reservations */
+DROP PROCEDURE IF EXISTS calc_total_profit;
+DELIMITER //
+CREATE PROCEDURE calc_total_profit()
+BEGIN
+	SELECT SUM(section.price) AS 'Total Gross Profit'
+	FROM reservation 
+	NATURAL JOIN flight_seat_availability NATURAL JOIN seat NATURAL JOIN section
+	WHERE flight_seat_availability.available = 0;
+END //
+DELIMITER ;
+
+/* Procedure to CALCULATE profit of a specified flight */
+DROP PROCEDURE IF EXISTS calc_flight_profit;
+DELIMITER //
+CREATE PROCEDURE calc_flight_profit(input INT)
+BEGIN
+	SELECT SUM(section.price) AS 'Total Flight Profit'
+    FROM reservation 
+	NATURAL JOIN flight_seat_availability NATURAL JOIN seat NATURAL JOIN section
+    WHERE flight_seat_availability.available = 0 
+    AND flight_seat_availability.flight_id LIKE CONCAT ('%', input, '%');
+DELIMITER ;
+
+/* Procedure to display all flight numbers */
+DROP PROCEDURE IF EXISTS print_flight_nums;
+DELIMITER //
+CREATE PROCEDURE print_flight_nums()
+BEGIN
+	SELECT flight_id
+	FROM flight;
+END //
+DELIMITER ;

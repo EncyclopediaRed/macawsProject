@@ -600,10 +600,15 @@ public class AirlineDriverDB {
         }
     }
 
-    public static void printGrossIncome(ArrayList<Flight> f, ArrayList<Reservation> r) {
+    public static void printGrossIncome() {
         // print the Gross income of the flight by flight number
         Scanner scan = new Scanner(System.in);
         boolean more = true;
+		// Call the checkConnect method for database connectivity.
+		checkConnect();
+    	// Store the procedure call in a String variable.
+    	String stored = null
+    			;
         while (more) {
             NumberFormat nf = NumberFormat.getCurrencyInstance();
             System.out.println();
@@ -613,37 +618,59 @@ public class AirlineDriverDB {
             System.out.println("2.   An individual flight.");
             try {
                 int answer = scan.nextInt();
-
                 double profit = 0;
-                double add = 0;
-                double total = 0;
+                
+                // User selected menu 1.
                 if (answer == 1) {
-                    for (int i = 0; i < r.size(); i++) {
-                        add = r.get(i).getCost();
-                        total = total + add;
-                    }
-                    System.out.println();
-                    System.out.println("***Total profit is: " + nf.format(total) + "***");
-                } else {
+                	stored = "CALL macaws.calc_total_profit();";
+                
+        			stmt = conn.prepareCall(stored);  		
+        			ResultSet rs = stmt.executeQuery(stored);
+        			// Get the Gross profit.
+        			while(rs.next()) {
+        				// Store the profit at the variable.
+        				profit = rs.getDouble("Total Gross Profit"); 
+        			} // Bottom of while loop.
+        				// Display the Gross Profit.
+                    	System.out.println();
+                    	System.out.println("***Total profit is: " + nf.format(profit) + "***");
+                } // End of if block. 
+                
+                // User selected menu 2.
+                else {
+                    
+                    stored = "CALL macaws.print_flight_nums()";
+            		stmt = conn.prepareCall(stored);  		
+        			ResultSet rs = stmt.executeQuery(stored);
+        			
+        			// Loop through and display each flight ID.
+        			while(rs.next()) {
+        				
+        				int flightNum = rs.getInt("flight_id");
+        				System.out.println(flightNum);
+        				System.out.println("---------");
+        			} // Bottom of while loop.
                     System.out.println(
-                        "***Input the Flight Number that you want to print out Gross Income for***");
-                    System.out.println();
-                    for (int i = 0; i < f.size(); i++) {
-                        System.out.println("Flight Number: " + f.get(i).getFlightNum()
-                            + "\n-------------------");
-                    }
+                            "***Input the Flight Number that you want to print out Gross Income for***");
+        			System.out.println();
                     int flightss = scan.nextInt();
                     scan.nextLine();
-                    for (int i = 0; i < r.size(); i++) {
-                        if (r.get(i).getF().getFlightNum() == flightss) {
-                            add = r.get(i).getCost();
-                            profit = profit + add;
-                        }
-                    }
+                    
+                    stored = "CALL macaws.calc_flight_profit('" + flightss + "');";
+               		stmt = conn.prepareCall(stored);  		
+            		rs = stmt.executeQuery(stored);
+            		
+            		// Loop through the price column and get the profit for this flight number.
+            		while(rs.next()) {
+            			
+            			profit = rs.getDouble("Total Flight Profit");
+            		} // Bottom of while loop.
+            		
+            		// Display the profit for this flight.
                     System.out.println();
                     System.out.println("***Gross income for flight number " + flightss + " is "
                         + nf.format(profit) + "***");
-                }
+                } // End of else block.
 
                 System.out.println();
                 try {
@@ -657,14 +684,14 @@ public class AirlineDriverDB {
                     scan.nextLine();
                 }
 
-            }
+            } // End of try block.
             catch (Exception e) {
                 System.out.println("Invalid Input. Please enter '1' or '2'");
                 scan.nextLine();
             }
-        }
+        } // Bottom of while loop.
 
-    }
+    } // End of method print gross income.
 
     public static void searchReservation(ArrayList<Reservation> r) {
         Scanner scan = new Scanner(System.in);
