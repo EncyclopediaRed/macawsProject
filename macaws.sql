@@ -803,3 +803,17 @@ BEGIN
 	FROM flight;
 END //
 DELIMITER ;
+
+/* Procedure to display all of the flight information */
+DROP PROCEDURE IF EXISTS print_flight_info;
+DELIMITER //
+CREATE PROCEDURE print_flight_info(num INT)
+BEGIN
+	SELECT flight.flight_id, flight.route_id, flight.depart_date,
+		route.time
+	FROM route
+	INNER JOIN flight
+		ON route.route_id = flight.route_id
+	WHERE flight.flight_id LIKE CONCAT ('%', num, '%');
+END //
+DELIMITER ;
