@@ -714,7 +714,7 @@ public class AirlineDriverDB {
                     int resID = scan.nextInt(); // Get the reservation ID from the user.
                     scan.nextLine(); // Clear the buffer.
                     
-                    stored = "CALL macaws.search_reservations('" + resID + "');"; // Call the stored procedure.
+                    stored = "CALL macaws.search_reservation('" + resID + "');"; // Call the stored procedure.
                     stmt = conn.prepareCall(stored); // Prepare the statement.
                     ResultSet rs = stmt.executeQuery(stored); // Execute the query.
                     
@@ -724,7 +724,7 @@ public class AirlineDriverDB {
                         int resNum = rs.getInt("Reservation ID"); // Get the reservation ID.
                         String custName = rs.getString("Customer Name"); // Get the customer name.
                         String seat = rs.getString("Seat #"); // Get the seat number.
-                        double cost = rs.getDouble("Cost"); // Get the cost.
+                        int cost = rs.getInt("Cost"); // Get the cost.
                         System.out.printf(
                             "Flight ID: %-10d | Reservation: %-2d | Customer: %-20s | Seat: %-2s | Cost: %-2d %n",
                                 fltNum, resNum, custName, seat, cost);                                 
