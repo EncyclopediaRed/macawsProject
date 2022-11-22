@@ -128,10 +128,10 @@ public class AirlineDriverDB {
      * 6. If yes, repeat steps 1-5
      * 7. If no, return to the main menu
      */
-    public static void printSeatMap() {
+    public static void printSeatMap(String flight_id) {
         checkConnect();
         Scanner input = new Scanner(System.in);
-        String flight_id = ""; // Initialize flight_id to an empty string.
+        flight_id = ""; // Initialize flight_id to an empty string.
         String answer = ""; // Variable to hold user's answer.
         do {
             printFlightAll(); // Call the printFlightAll method.
@@ -275,7 +275,6 @@ public class AirlineDriverDB {
             catch (Exception e) {
                 System.out.println("Invalid Input. Please enter 'true' or 'false'");
                 scan.nextLine();
-                scan.nextLine();
             }
         }
     }
@@ -352,7 +351,82 @@ public class AirlineDriverDB {
      * 15. If false go back to main menu.
      */
     public static void bookReservation() {
+        // Call the checkConnect method for database connectivity.
+        checkConnect();
+        Scanner scan = new Scanner(System.in);
+        boolean more = true;
+        while (more) {
+            System.out.println("Let's start a new reservation.");
+            System.out.println("Is this for a new customer? (true/false)");
+            boolean newCustomer = scan.nextBoolean();
+            scan.nextLine();
+            if (newCustomer) {
+                addCustomer();
+            }
+            else {
+                printCustomerByNum();
+            }
+            System.out.println("Please enter a customer number from the list.");
+            int customerNum = scan.nextInt();
+            scan.nextLine();
 
+            // Store a procedure call in a String variable to add a new reservation.
+            String stored = "CALL macaws.add_reservation(" + customerNum + ");";
+
+            // Try to execute the SQL statement in stored variable.
+            try {
+                stmt = conn.prepareCall(stored);
+                stmt.executeUpdate(stored);
+            } // End of try block.
+            catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("SQL insert Exception");
+            } // End of catch block.
+
+            // Query the database for the reservation number we just created and store it in a variable.
+            String stored2 = "CALL macaws.get_last_reservation_id(" + customerNum + ");";
+
+            // Try to execute the SQL statement in stored variable.
+            try {
+                stmt = conn.prepareCall(stored2);
+                ResultSet rs = stmt.executeQuery(stored2);
+                while (rs.next()) {
+                    int reservationNum = rs.getInt("reservation_id");
+                    System.out.println("Your Reservation Number Is: " + reservationNum);
+                    printFlightAll();
+                    System.out.println("Please enter a flight number from the list.");
+                    String flightNum = scan.nextLine();
+                    // printSeatMap of the flight entered by the user in the previous step.
+                    printSeatMap(flightNum);
+                    System.out.println("Please enter the Seat ID you would like to reserve. \n"
+                        + "Only seats with an Availability of OPEN are able to be reserved.");                      
+                    int seatNum = scan.nextInt();
+                    scan.nextLine();
+
+                    // Store a procedure call in a String variable to add a new reservation.
+                    String stored3 = "CALL macaws.add_seat_to_reservation(" + reservationNum + ", "
+                        + seatNum + ");";
+
+                    // Try to execute the SQL statement in stored variable.
+                    try {
+                        stmt = conn.prepareCall(stored3);
+                        stmt.executeUpdate(stored3);
+                    } // End of try block.
+                    catch (SQLException e) {
+                        e.printStackTrace();
+                        System.out.println("SQL insert Exception");
+                    } // End of catch block.
+
+                    System.out.println("Would you like to add another seat to this reservation? (true/false)");
+                    more = scan.nextBoolean();
+                    scan.nextLine();
+                }
+            } // End of try block.
+            catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("SQL insert Exception");
+            } // End of catch block.
+        } // End of while loop.                   
     }
 
     public static void printGrossIncome() {
@@ -368,8 +442,8 @@ public class AirlineDriverDB {
             System.out.println();
             System.out.println("***What do you want?***");
             System.out.println();
-            System.out.println("1.   The total profit for all scheduled flights.");
-            System.out.println("2.   An individual flight.");
+            System.out.println("1. The total profit for all scheduled flights.");
+            System.out.println("2. An individual flight.");
             try {
                 int answer = scan.nextInt();
                 double profit = 0;
@@ -460,16 +534,15 @@ public class AirlineDriverDB {
 
         while (more) {
             System.out.println();
-            System.out.println("***Search Reservation?***");
-            System.out.println();
-            System.out.println("1.   Search by Reservation ID.");
-            System.out.println("2.   Print all reservations.");
+            System.out.println("1. Search by Reservation ID.");
+            System.out.println("2. Print all reservations.");
             try {
                 int answer = scan.nextInt();
                 // User selected menu 1.
                 if (answer == 1) {
                     System.out.println();
-                    System.out.println("*** Input the Reservation ID that you want to search for ***");
+                    printReservation();
+                    System.out.println("Input the Reservation ID that you want to search for");
                     System.out.println();
                     int resID = scan.nextInt(); // Get the reservation ID from the user.
                     scan.nextLine(); // Clear the buffer.

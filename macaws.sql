@@ -672,17 +672,19 @@ DELIMITER ;
 
 /******* MULTI-PART BOOK RESERVATION PROCEDURES *******/
 
-/* Procedure to add a reservation to the system */
-/* reservation table auto-increments reservation_id */
-/* need customer_id and change reservation status_id to 1 */
+/* Procedure to add a reservation to the reservation table  and return the reservation_id just added */
 DROP PROCEDURE IF EXISTS add_reservation;
 DELIMITER //
 CREATE PROCEDURE add_reservation(customer_id INT)
 BEGIN
   INSERT INTO reservation (customer_id, status_id)
     VALUES (customer_id, 1);
+  SELECT reservation_id
+  FROM reservation
+  WHERE customer_id LIKE CONCAT ('%', customer_id, '%')
+  ORDER BY reservation_id DESC
+  LIMIT 1;
 END //
-DELIMITER ;
 
 /* Procedure to print all seats and their availability for a flight */
 /* From flight_seat_availability table */
@@ -696,6 +698,7 @@ BEGIN
     flight_seat_availability.flight_id AS 'Flight ID',
     CONCAT(seat.row, seat.col) AS 'Seat #',
     reservation_id AS 'Reservation ID',
+    flight_seat_availability.fs_id AS 'Seat ID',
     CASE WHEN flight_seat_availability.available = 0 THEN 'Reserved'
       ELSE 'Open'
       END AS 'Availability',
@@ -706,18 +709,15 @@ BEGIN
 END //
 DELIMITER ;
 
-
-/* Procedure to add a reservation to a seat on a flight and changes the seat availability to 0 (reserved)*/
+/* Procedure to UPDATE flight_seat_availability table with a reservation_id and set available to 0 to fs_id the user inputs */
 DROP PROCEDURE IF EXISTS add_seat_to_reservation;
 DELIMITER //
-CREATE PROCEDURE add_seat_to_reservation(reservation_id INT, fs_id INT)
+CREATE PROCEDURE add_seat_to_reservation(IN reservation_id INT, fs_id INT)
 BEGIN
   UPDATE flight_seat_availability
-    SET reservation_id = reservation_id,
-    available = 0
-    WHERE fs_id = fs_id;
+    SET reservation_id = reservation_id, available = 0
+    WHERE fs_id LIKE CONCAT('%', fs_id, '%');
 END //
-DELIMITER ;
 
 /******* END MULTI-PART BOOK RESERVATION PROCEDURES *******/
 
@@ -841,4 +841,16 @@ BEGIN
   INNER JOIN route
     ON flight.route_id = route.route_id
   GROUP BY flight.flight_id;
+END //
+
+/* Procedure to SELECT a reservation_id  from reservation table  where customer_id = input ordered by reservation_id DESC LIMIT 1 */
+DROP PROCEDURE IF EXISTS get_last_reservation_id;
+DELIMITER //
+CREATE PROCEDURE get_last_reservation_id(input INT)
+BEGIN
+  SELECT reservation_id
+  FROM reservation
+  WHERE customer_id LIKE CONCAT ('%', input, '%')
+  ORDER BY reservation_id DESC
+  LIMIT 1;
 END //

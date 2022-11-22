@@ -23,7 +23,7 @@ public class MenuDB {
             if (choice == 0) {
                 AirlineDriverDB.createConnection();
             } else if (choice == 1) { 
-                AirlineDriverDB.printSeatMap();
+                AirlineDriverDB.printSeatMap(null);
 //            } else if (choice == 2) {
 //                AirlineDriverDB.printFlightInfo();
             } else if (choice == 3) {
