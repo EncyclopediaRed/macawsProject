@@ -35,13 +35,13 @@ public class MenuDB {
             } else if (choice == 6) {
                 AirlineDriverDB.bookReservation();
             } else if (choice == 7) {
-//                AirlineDriverDB.cancelReservation();
+                AirlineDriverDB.cancelReservation();
             } else if (choice == 8) {
                 AirlineDriverDB.printGrossIncome();
             } else if (choice == 9) {
                 AirlineDriverDB.searchReservation();
-//            } else if (choice == 10) {
-//                AirlineDriverDB.searchDeleted();
+            } else if (choice == 10) {
+                AirlineDriverDB.searchDeleted();
             } else if (choice == 11) {
                 AirlineDriverDB.addCustomer();
             } else if (choice == 12) {

@@ -739,7 +739,7 @@ BEGIN
       flight_seat_availability.available = 1,
       flight_seat_availability.reservation_id = 1
     WHERE reservation.reservation_id = reservation_id AND 
-      flight_seat_availability.reservation_id = reservation_id; /* variables from user input */
+      flight_seat_availability.reservation_id LIKE CONCAT('%', reservation_id, '%'); /* variables from user input */
 END //
 DELIMITER ;
 

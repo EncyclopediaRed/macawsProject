@@ -634,103 +634,156 @@ public class AirlineDriverDB {
         } // Bottom of while loop.
     }
 
-    public static void searchDeleted(ArrayList<Reservation> cr) {
-        // search deleted reservations
+    /**
+     * Cancel a reservation by Reservation ID.
+     * Uses the cancel_reservation stored procedure.
+     * 1. Print all reservations.
+     * 2. Input the reservation ID that you want to cancel.
+     * 3. Call the cancel_reservation stored procedure.
+     * 4. Display the reservation that was canceled.
+     * 5. Ask the user if they want to cancel another reservation.
+     * 6. If yes, go back to step 1.
+     * 7. If no, go back to the main menu.
+     */
+    public static void cancelReservation() {
         Scanner scan = new Scanner(System.in);
         boolean more = true;
+        // Call the checkConnect method for database connectivity.
+        checkConnect();
+        // Store the procedure call in a String variable.
+        String stored = null;
+        try {
+            while (more) {
+                System.out.println();
+                printReservation();
+                System.out.println("Input the Reservation ID that you want to cancel");
+                System.out.println();
+                int resID = scan.nextInt(); // Get the reservation ID from the user.
+                scan.nextLine(); // Clear the buffer.
+                
+                stored = "CALL macaws.cancel_reservation('" + resID + "');"; // Call the stored procedure.
+                stmt = conn.prepareCall(stored); // Prepare the statement.
+                ResultSet rs = stmt.executeQuery(stored); // Execute the query.
+                
+                // Loop through and display each reservation.
+                while (rs.next()) { // Loop through the result set.
+                    int fltNum = rs.getInt("Flight ID"); // Get the flight ID.
+                    int resNum = rs.getInt("Reservation ID"); // Get the reservation ID.
+                    String custName = rs.getString("Customer Name"); // Get the customer name.
+                    String seat = rs.getString("Seat #"); // Get the seat number.
+                    int cost = rs.getInt("Cost"); // Get the cost.
+                    System.out.printf(
+                        "Flight ID: %-10d | Reservation: %-2d | Customer: %-20s | Seat: %-2s | Cost: %-2d %n",
+                            fltNum, resNum, custName, seat, cost);                                 
+                } // Bottom of while loop.
+                
+                System.out.println();
+                try {
+                    System.out.println();
+                    System.out.println("More Reservation canceling? true/false");
+                    more = scan.nextBoolean();
+
+                }
+                catch (Exception e) {
+                    System.out.println("Invalid Input. Please enter 'true' or 'false'");
+                    scan.nextLine();
+                }
+            } // Bottom of while loop.
+        } // End of try block.
+        catch (Exception e) {
+            System.out.println("That Reservation does not exist. Please choose a valid Reservation ID");
+            scan.nextLine();
+        }
+    }
+
+    public static void printCanceledReservation() {
+        // Call the checkConnect method for database connectivity.
+        checkConnect();
+        // Store the procedure call in a String variable.
+        String stored = null;
+        stored = "CALL macaws.print_canceled_reservations();";
+        try {
+            stmt = conn.prepareCall(stored);
+            ResultSet rs = stmt.executeQuery(stored);
+            // Loop through and display each reservation.
+            while (rs.next()) {
+                int fltNum = rs.getInt("Flight ID");
+                int resNum = rs.getInt("Reservation ID");
+                String custName = rs.getString("Customer Name");
+                String seat = rs.getString("Seat #");
+                int cost = rs.getInt("Cost");
+                System.out.printf(
+                    "Flight ID: %-10d | Reservation: %-2d | Customer: %-20s | Seat: %-2s | Cost: %-2d %n",
+                        fltNum, resNum, custName, seat, cost);
+            } // Bottom of while loop.
+        } // End of try block.
+        catch (Exception e) {
+            System.out.println("Invalid input");
+        }
+    }
+
+    public static void searchDeleted() {
+        Scanner scan = new Scanner(System.in);
+        boolean more = true;
+        // Call the checkConnect method for database connectivity.
+        checkConnect();
+        // Store the procedure call in a String variable.
+        String stored = null;
+
         while (more) {
             System.out.println();
-            System.out.println("How would you like to search the Canceled Reservations?");
-            System.out.println("1.     By Last Name.");
-            System.out.println("2.     By Email.");
-            System.out.println("3.     By Reservation Number.");
-            System.out.println("4.     By Customer Number.");
-            System.out.println("5.     Just list them.");
-            System.out.println();
-            int find = scan.nextInt();
-            scan.nextLine();// scanner problems
-            boolean wastrue = true;
-            if (find == 1) {
-                System.out.println("Please enter the Customer's last name:");
-                String enter = scan.nextLine();
-                for (int i = 0; i < cr.size(); i++) {
-                    if (enter.equalsIgnoreCase(cr.get(i).getCust().getlastName())) {
-                        System.out.println(cr.get(i).toCString());
-                        wastrue = false;
-                    } else if (wastrue && i == cr.size() - 1) {
-                        System.out.println("***There are no records under that parameter***");
-                        System.out.println();
-                    }
-                }
-            } else if (find == 2) {
-                System.out.println("Please enter the Customer's email:");
-                String enter = scan.nextLine();
-                for (int i = 0; i < cr.size(); i++) {
-                    if (enter.equalsIgnoreCase(cr.get(i).getCust().getEmail())) {
-                        System.out.println(cr.get(i).toCString());
-                        wastrue = false;
-                    }
-
-                    else if (wastrue && i == cr.size() - 1) {
-                        System.out.println("***There are no records under that parameter***");
-                        System.out.println();
-                    }
-                }
-            } else if (find == 3) {
-                System.out.println("Please enter the Reservation Number:");
-                int enter = scan.nextInt();
-                scan.nextLine();
-                for (int i = 0; i < cr.size(); i++) {
-                    if (enter == cr.get(i).getResNum()) {
-                        System.out.println(cr.get(i).toCString());
-                        wastrue = false;
-                    } else if (wastrue && i == cr.size() - 1) {
-                        System.out.println("***There are no records under that parameter***");
-                        System.out.println();
-                    }
-                }
-            } else if (find == 4) {
-                System.out.println("Please enter the Customer's number:");
-                int enter = scan.nextInt();
-                scan.nextLine();
-                for (int i = 0; i < cr.size(); i++) {
-                    if (enter == cr.get(i).getCust().getCustNum()) {
-                        System.out.println(cr.get(i).toCString());
-                        wastrue = false;
-                    } else if (wastrue && i == cr.size() - 1) {
-                        System.out.println("***There are no records under that parameter***");
-                        System.out.println();
-                    }
-                }
-            } else if (find == 5) {
-                System.out.println("***Displaying All Canceled Reservations***");
-                System.out.println();
-                for (int i = 0; i < cr.size(); i++) {
-                    System.out.println((i + 1) + ": Canceled Reservation for: "
-                        + cr.get(i).getCust().getfirstName()
-                        + " " + cr.get(i).getCust().getlastName() + " Customer Number: "
-                        + cr.get(i).getCust().getCustNum()
-                        + " (" + cr.get(i).getCust().getEmail() + ")" + " Reservation Number: " +
-                        +cr.get(i).getResNum() + " on flight " + cr.get(i).getF().getFlightNum()
-                        + " flying "
-                        + cr.get(i).getF().getRoute() + " on " + cr.get(i).getF().getDate() + " at "
-                        + cr.get(i).getF().getTime()
-                        + "\n--------------------------------------------------------------------------------------------"
-                        + "----------------------------------------------------------------------------");
-
-                }
-                System.out.println();
-            }
+            System.out.println("1. Search by Reservation ID.");
+            System.out.println("2. Print all canceled reservations.");
             try {
-                System.out.println();
-                System.out.println("More Searches? true/false");
-                more = scan.nextBoolean();
+                int answer = scan.nextInt();
+                // User selected menu 1.
+                if (answer == 1) {
+                    System.out.println();
+                    printCanceledReservation();
+                    System.out.println("Input the Reservation ID that you want to search for");
+                    System.out.println();
+                    int resID = scan.nextInt(); // Get the reservation ID from the user.
+                    scan.nextLine(); // Clear the buffer.
+                    
+                    stored = "CALL macaws.search_deleted('" + resID + "');"; // Call the stored procedure.
+                    stmt = conn.prepareCall(stored); // Prepare the statement.
+                    ResultSet rs = stmt.executeQuery(stored); // Execute the query.
+                    
+                    // Loop through and display each reservation.
+                    while (rs.next()) { // Loop through the result set.
+                        int fltNum = rs.getInt("Flight ID"); // Get the flight ID.
+                        int resNum = rs.getInt("Reservation ID"); // Get the reservation ID.
+                        String custName = rs.getString("Customer Name"); // Get the customer name.
+                        String seat = rs.getString("Seat #"); // Get the seat number.
+                        int cost = rs.getInt("Cost"); // Get the cost.
+                        System.out.printf(
+                            "Flight ID: %-10d | Reservation: %-2d | Customer: %-20s | Seat: %-2s | Cost: %-2d %n",
+                                fltNum, resNum, custName, seat, cost);                                 
+                    } // Bottom of while loop.
+                } // End of if block.
 
-            }
+                // User selected menu 2.
+                else {
+                    printCanceledReservation();
+                } // End of else block.
+
+                System.out.println();
+                try {
+                    System.out.println();
+                    System.out.println("More Reservation searching? true/false");
+                    more = scan.nextBoolean();
+
+                }
+                catch (Exception e) {
+                    System.out.println("Invalid Input. Please enter 'true' or 'false'");
+                    scan.nextLine();
+                }
+
+            } // End of try block.
             catch (Exception e) {
-                System.out.println("Invalid Input. Please enter 'true' or 'false'");
+                System.out.println("That Reservation does not exist. Please choose a valid Reservation ID");
                 scan.nextLine();
             }
-        }
+        } // Bottom of while loop.
     }
 }
