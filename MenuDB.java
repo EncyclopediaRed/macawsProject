@@ -24,8 +24,8 @@ public class MenuDB {
                 AirlineDriverDB.createConnection();
             } else if (choice == 1) { 
                 AirlineDriverDB.printSeatMap();
-//            } else if (choice == 2) {
-//                AirlineDriverDB.printFlightInfo();
+            } else if (choice == 2) {
+                AirlineDriverDB.printFlightInfo();
             } else if (choice == 3) {
                 AirlineDriverDB.printPilots();
             } else if (choice == 4) {
