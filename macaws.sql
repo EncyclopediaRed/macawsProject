@@ -812,14 +812,14 @@ DELIMITER ;
 /* Procedure to display all of the flight information */
 DROP PROCEDURE IF EXISTS print_flight_info;
 DELIMITER //
-CREATE PROCEDURE print_flight_info(num INT)
+CREATE PROCEDURE print_flight_info(flight INT)
 BEGIN
-	SELECT flight.flight_id, flight.route_id, flight.depart_date,
+	SELECT flight.flight_id, route.origin, route.destination, flight.depart_date,
 		route.time
 	FROM route
 	INNER JOIN flight
 		ON route.route_id = flight.route_id
-	WHERE flight.flight_id LIKE CONCAT ('%', num, '%');
+	WHERE flight.flight_id LIKE CONCAT ('%', flight, '%');
 END //
 DELIMITER ;
 

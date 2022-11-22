@@ -159,48 +159,93 @@ public class AirlineDriverDB {
         while (answer.equalsIgnoreCase("y"));
     } // End of method printSeatMap.
 
-    public static void printFlightInfo(ArrayList<Flight> f) {
-        Scanner scan = new Scanner(System.in);
-        boolean more = true;
-        while (more) {
-            System.out.println();
-            System.out.println(
-                "***Please select the numerical value for the Flight that you would like to print information on***");
-            System.out.println();
-            for (int i = 0; i < f.size(); i++) {
-                System.out.println((i + 1) + ":     Flight Number " + f.get(i).getFlightNum()
-                    + " Flying " + f.get(i).getRoute() + " on " + f.get(i).getDate() + " at "
-                    + f.get(i).getTime()
-                    + ".\n----------------------------------------------------------------");
-            }
+    public static void printFlightInfo() {
 
-            try {
-                int flightnum = scan.nextInt();
-                scan.nextLine();
-                flightnum = flightnum - 1;
-                System.out.println(f.get(flightnum).toMString());
+    	// Call the checkConnect method for database connectivity.
+    	checkConnect();
+    	// Build an ArrayList for the flights.
+    	ArrayList<Integer> fNums = new ArrayList<>();;
+    	String stored = null;
+    	int choice = 0;
+    	ResultSet rs = null;
+    	Scanner scan = new Scanner(System.in);
+    	
+    	boolean more = true;
+    	while(more) {
+    		
+    		stored = "CALL macaws.print_flight_nums();";
 
-                try {
-                    System.out.println();
-                    System.out.println("More flights? true/false");
-                    more = scan.nextBoolean();
+    		try {
+    			
+    			stmt = conn.prepareCall(stored);			
+    			rs = stmt.executeQuery(stored);
+    			System.out.println();
+    			System.out.println("Flight Numbers:");
+    			System.out.println();
+    			
+    			// Create a while loop to cycle through each column and store each query item.
+    			while(rs.next()) {
+    				
+    				// Store each query item at a variable.
+    				int fNum = rs.getInt("flight_id");
+    			
+    				// Display the flight numbers.
+    				System.out.println(fNum);
+    				System.out.println("-----------");
+    			} // Bottom of while loop.
+    			
+    			System.out.println();
+    			System.out.println("***Please input a Flight Number for a flight's information***");
+    		
+    			choice = scan.nextInt();   			
+    			
+    			stored = "CALL macaws.print_flight_info('" + choice + "');";
+    			
+    			try {
+    				
+        			stmt = conn.prepareCall(stored);			
+        			rs = stmt.executeQuery(stored);
+        			
+        			System.out.println();       			
+        			System.out.println("Flight Number:    |    Route:    |     Depart Date:    |     Time:");
+        			System.out.println();
+        			
+        			while(rs.next()) {
+        				
+        				int flightNum = rs.getInt("flight_id");
+        				String origin = rs.getString("origin");
+        				String des = rs.getString("destination");
+        				String date = rs.getString("depart_date");
+        				String time = rs.getString("time");
+        				
+            			System.out.println(flightNum + "           " + origin + " to " + des + "          " + date + "            " + time);
+        			} // Bottom of while loop.   				
+    			} // End of try block.
+    			
+        		catch(SQLException e) {
+        			System.out.println("SQL Exception");
+        			e.printStackTrace();
+        		} // End of catch block.
+    				
+    			try {
+    				System.out.println();
+    				System.out.println("More flights? true/false");
+    				more = scan.nextBoolean();
 
-                }
-                catch (Exception e) {
-                    System.out.println("Invalid Input. Please enter 'true' or 'false'");
-                    scan.nextLine();
-                }
-
-            }
-            catch (Exception e) {
-                System.out.println(
-                    "Invalid Input. Please try again, with a flight number from the list.");
-                scan.nextLine();
-            }
-
-        }
-
-    }
+    			}
+    			catch (Exception e) {
+    				System.out.println("Invalid Input. Please enter 'true' or 'false'");
+    				scan.nextLine();
+    			}
+    		} // End of try block.
+    		
+    		catch(SQLException e) {
+    			System.out.println("SQL Exception");
+    			e.printStackTrace();
+    		} // End of catch block.
+    		
+    	} // Bottom of while loop.
+    } // End of method printFlightInfo.
 
     /**
      * Prints all the pilots and their corresponding schedules
