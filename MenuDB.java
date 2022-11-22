@@ -22,8 +22,8 @@ public class MenuDB {
             choice = menu(); // call menu method and assign choice to the returned value
             if (choice == 0) {
                 AirlineDriverDB.createConnection();
-//            } else if (choice == 1) { 
-//                AirlineDriverDB.printSeatMap();
+            } else if (choice == 1) { 
+                AirlineDriverDB.printSeatMap();
 //            } else if (choice == 2) {
 //                AirlineDriverDB.printFlightInfo();
             } else if (choice == 3) {
@@ -32,9 +32,9 @@ public class MenuDB {
                 AirlineDriverDB.printReservation();
             } else if (choice == 5) {
                 AirlineDriverDB.printCustomerByNum();
-//            } else if (choice == 6) {
-//                AirlineDriverDB.bookReservation();
-//            } else if (choice == 7) {
+            } else if (choice == 6) {
+                AirlineDriverDB.bookReservation();
+            } else if (choice == 7) {
 //                AirlineDriverDB.cancelReservation();
             } else if (choice == 8) {
                 AirlineDriverDB.printGrossIncome();

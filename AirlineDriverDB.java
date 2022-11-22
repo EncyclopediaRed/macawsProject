@@ -90,32 +90,73 @@ public class AirlineDriverDB {
         } // End of if block.
     } // End of method checkConnect.
 
+
     /**
-     * Print a the seat map of the airplane Each Seat is represented by a row number and seat letter
-     * First Class is rows 1-2 and Economy is rows 3-4 First Class has 2 seats per row and Economy
-     * has 4 seats per row both divided by a aisle. Use the seat_map procedure to get the seat map
-     * 
-     * @param f - Flight seat map
+     * Print all flights
+     * by flight_id showing the origin, destination, departure date, time, and seats available
+     * Use the stored procedure: print_flight_all
      */
-    public static void printSeatMap(ArrayList<Flight> f) {
-        // Create a for loop to print the seat map.
-        for (int i = 0; i < f.size(); i++) {
-            // Create a try block that attempts to print the seat map.
+    public static void printFlightAll() {
+        checkConnect();
+        try {
+            ResultSet rs = stmt.executeQuery("CALL print_flight_all();");
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int columnsNumber = rsmd.getColumnCount();
+            while (rs.next()) {
+                for (int i = 1; i <= columnsNumber; i++) {
+                    if (i > 1) System.out.print("  |  ");
+                    String columnValue = rs.getString(i);
+                    System.out.print(rsmd.getColumnName(i) + ": " + columnValue);
+                }
+                System.out.println("");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    } // End of method printFlightAll.
+
+
+    /**
+     * Print the seat map of a given flight
+     * Use the stored procedure: print_flight_seats
+     * 1. Call the printFlightAll() method to display all flights
+     * 2. Ask the user to enter a flight_id from the list
+     * 3. Call the stored procedure print_flight_seats(flight_id)
+     * 4. Display the seat map for that flight_id entered by the user
+     * 5. Ask the the user if they want to see a different flight
+     * 6. If yes, repeat steps 1-5
+     * 7. If no, return to the main menu
+     */
+    public static void printSeatMap() {
+        checkConnect();
+        Scanner input = new Scanner(System.in);
+        String flight_id = ""; // Initialize flight_id to an empty string.
+        String answer = ""; // Variable to hold user's answer.
+        do {
+            printFlightAll(); // Call the printFlightAll method.
+            System.out.println("Enter a Flight ID from the list above: "); // Prompt user for flight_id.
+            flight_id = input.nextLine(); // Store user's input in flight_id.
             try {
-                // Create a String variable to hold the seat map.
-                String seatMap = "CALL seat_map(" + f.get(i).getFlightNum() + ")";
-                // Create a ResultSet variable to hold the seat map.
-                java.sql.ResultSet rs = stmt.executeQuery(seatMap);
-                // Create a while loop to print the seat map.
-                while (rs.next()) {
-                    // Print the seat map.
-                    System.out.println(rs.getString(1));
-                } // End of while loop.
-            } // End of try block.
+                ResultSet rs = stmt.executeQuery("CALL print_flight_seats(" + flight_id + ");"); // Call the stored procedure.
+                ResultSetMetaData rsmd = rs.getMetaData(); // Get the metadata.
+                int columnsNumber = rsmd.getColumnCount(); // Get the number of columns.
+                while (rs.next()) { // Loop through the result set.
+                    for (int i = 1; i <= columnsNumber; i++) { // Loop through the columns. As long as i is less than or equal to the number of columns, increment i.
+                        if (i > 1) System.out.print("  |  "); // If i is greater than 1, print a separator.
+                        String columnValue = rs.getString(i); // Store the value of the column in columnValue.
+                        System.out.print(rsmd.getColumnName(i) + ": " + columnValue); // Print the column name and the value.
+                    }
+                    System.out.println("");
+                }
+            }
             catch (SQLException e) {
                 e.printStackTrace();
-            } // End of catch block.
-        } // End of for loop.
+            }
+            System.out.println("Would you like to see a different flight? (y/n)");
+            answer = input.nextLine();
+        }
+        while (answer.equalsIgnoreCase("y"));
     } // End of method printSeatMap.
 
     public static void printFlightInfo(ArrayList<Flight> f) {
@@ -162,9 +203,8 @@ public class AirlineDriverDB {
     }
 
     /**
-     * Print the flight information for the flight number given
-     * 
-     * @param f - Flight information
+     * Prints all the pilots and their corresponding schedules
+     * Uses the stored procedure: all_pilots()
      */
     public static void printPilots() {
         // Call the checkConnect method for database connectivity.
@@ -190,6 +230,11 @@ public class AirlineDriverDB {
         } // End of catch block.
     }
 
+    /**
+     * Let's the user add a new customer to the database
+     * Uses the stored procedure: add_customer()
+     * A customer must have a first name, last name, and email
+     */
     public static void addCustomer() {
         // Call the checkConnect method for database connectivity.
         checkConnect();
@@ -235,6 +280,10 @@ public class AirlineDriverDB {
         }
     }
 
+    /**
+     * Prints all the reservations in the system
+     * Uses the stored procedure: print_reservations()
+     */
     public static void printReservation() {
         // Call the checkConnect method for database connectivity.
         checkConnect();
@@ -258,7 +307,10 @@ public class AirlineDriverDB {
         } // End of catch block.
     }
 
-    /* Print the customer table using a ResultSet and the all_customers stored procedure */
+    /**
+     * Prints all the customers in the system ordering by Customer ID
+     * Uses the stored procedure: all_customers()
+     */
     public static void printCustomerByNum() {
         // Call the checkConnect method for database connectivity.
         checkConnect();
@@ -280,319 +332,27 @@ public class AirlineDriverDB {
         } // End of catch block.
     }
 
-    public static void bookReservation(ArrayList<Customer> c, ArrayList<Pilot> p,
-        ArrayList<Reservation> r, ArrayList<Flight> f) {
-        Scanner scan = new Scanner(System.in);
+    // Using the stored procedures add_reservation and then add_seat_to_reservation to add a reservation
+    // to the database.
+    /*
+     * 1. "Let's start a new reservation."
+     * 2. "Is this for a new customer? (true/false)"
+     * 3. If true run the addCustomer() method.
+     * 4. If false run the printCustomerByNum() method.
+     * 5. "Please enter a customer number from the list."
+     * 6. Take input and input into the add_reservation stored procedure.
+     * 7. Query the database for the reservation number we just created and store it in a variable.
+     * 8. Use the printFlightAll() method to print all the flights.
+     * 9. Use the  "Please enter a flight number from the list."
+     * 10. Use the printSeatMap() method to print the seat map.
+     * 11. "Please enter the Seat ID you would like to reserve."
+     * 12. Take input and input into the add_seat_to_reservation stored procedure.
+     * 13. "Would you like to add another seat to this reservation? (true/false)"
+     * 14. If true go back to step 10.
+     * 15. If false go back to main menu.
+     */
+    public static void bookReservation() {
 
-        boolean more = true;
-        int moreseats = 0;// base counter
-        double cost = 0;// base cost holder
-        Flight ff = f.get(0);// base flight holder
-        int findnums = 0;
-        int partyNum = 0;// amount of people in the party
-        int flightnum = 0;// flight
-        ArrayList<String> seatn = new ArrayList<String>();// array to hold seat numbers
-
-        // the following are base arrays
-        String[][] seatMString = { { "NA", "1A", "1B", "NA" },
-            { "NA", "2A", "2B", "NA" },
-            { "3A", "3B", "3C", "3D", },
-            { "4A", "4B", "4C", "4D", } };
-        int[][] seatMID = { { -1, 1, 1, -1 },
-            { -1, 1, 1, -1 },
-            { 2, 2, 2, 2 },
-            { 2, 2, 2, 2 } };
-        int[][] seatscust = { { -1, 0, 0, -1 },
-            { -1, 0, 0, -1 },
-            { 0, 0, 0, 0 },
-            { 0, 0, 0, 0 } };
-
-        // base rows for 2d arrays
-        int row1 = 0;
-        int seatNum = 0;
-
-        while (more) {
-            // do you want a new customer?
-            boolean repeat = true;
-            System.out.println();
-            System.out.println("Do you need to add a New Customer? Yes/No");
-            String answer = scan.nextLine();
-            if (answer.equalsIgnoreCase("yes")) {
-                addCustomer(c);
-            }
-
-            // customer selection
-            System.out.println();
-            System.out.println("***Please select a numerical value for the Customer you want***");
-            System.out.println();
-            for (int i = 0; i < c.size(); i++) {
-                System.out.println((i + 1) + ":    " + c.get(i).toString());
-            }
-
-            try {
-                int custNum = scan.nextInt();
-                custNum = custNum - 1;
-                Customer cc = c.get(custNum);// needed to add into the reservation at the bottom
-
-                // selects the amount of seats needed
-                System.out.println("How many people are in your party (seats needed)?");
-                partyNum = scan.nextInt();
-
-                // function to select the flight, and pick their individual seats. They are asked
-                // after
-                // seeing available seats if they want to switch planes.
-                while (repeat) {
-                    System.out.println();
-                    System.out
-                        .println("***Please select a numerical value for the Flight you want***");
-                    System.out.println();
-                    for (int i = 0; i < f.size(); i++) {
-                        System.out.println((i + 1) + ":     Flight Number "
-                            + f.get(i).getFlightNum()
-                            + " Flying " + f.get(i).getRoute() + " on " + f.get(i).getDate()
-                            + " at "
-                            + f.get(i).getTime() + "."
-                            + "\n----------------------------------------------------------------");
-                    }
-                    flightnum = scan.nextInt();
-                    flightnum = flightnum - 1;
-                    ff = f.get(flightnum);
-                    scan.nextLine();// scanner problem
-                    moreseats = 0;
-
-                    System.out.println(
-                        "Rows 1 and 2 seats cost $850. Coach seats are $450. 'na' Seats are not available.");
-                    System.out.println(f.get(flightnum).toMPString());
-                    System.out
-                        .println(
-                            "Does the following flight have the seat(s) you need? (Enter yes/no)"
-                                + "\n***Seats labeled with all numbers or 'na' are NOT available***");
-                    String answ = scan.nextLine();
-                    if (answ.equalsIgnoreCase("yes")) {
-                        System.out.println("Rows 1 and 2 seats cost $850. Coach seats are $450."
-                            + " 'na' Seats are not available.");
-                        System.out.println(f.get(flightnum).toMPString());
-                        repeat = false;
-                    } else {
-                        System.out.println("Try again");
-                    }
-                }
-
-                // function to add seats each run through adds one seat, with the actual added to
-                // the
-                // ArrayList
-                // for a reservation happening at the end after the total loop is done
-                while (moreseats != partyNum) {
-
-                    // gets the private maps from the flight
-                    boolean fix = true;
-                    while (fix) {
-                        seatMID = (f.get(flightnum).getIdmap());
-                        seatMString = (f.get(flightnum).getPmap());
-                        seatscust = (f.get(flightnum).getCustidmap());
-                        System.out.println("Please enter the seat's Row (rows range from 1 - 4):");
-                        row1 = scan.nextInt();
-                        scan.nextLine();// scanner problem
-                        System.out
-                            .println("Please enter the seat's Number (seats range from 1 - 4):");
-                        seatNum = scan.nextInt();
-                        scan.nextLine();// scanner problem
-
-                        // sets the seats back to the correct index also checks to see if they can
-                        // book
-                        // the seat
-                        row1 = row1 - 1;
-                        seatNum = seatNum - 1;
-                        String seatfix = seatMString[row1][seatNum];
-                        if (seatfix.equalsIgnoreCase("na")) {
-                            System.out
-                                .println("Please select a different seat this is not available.");
-                        } else {
-                            fix = false;
-                        }
-                    }
-
-                    // adding the cost together
-                    String seatNums = seatMString[row1][seatNum];
-                    if (seatNums.equalsIgnoreCase("1a") || (seatNums.equalsIgnoreCase("1b"))
-                        || (seatNums.equalsIgnoreCase("2a")) || (seatNums.equalsIgnoreCase("2b"))) {
-                        cost = cost + 850;
-                    } else {
-                        cost = cost + 450;
-                    }
-                    // adds the seat to the array list
-                    seatn.add(seatNums);
-                    // sets the seat arrays
-                    seatscust[row1][seatNum] = c.get(custNum).getCustNum();
-                    seatMID[row1][seatNum] = c.get(custNum).getCustNum() + partyNum;
-                    findnums = seatMID[row1][seatNum];// important for the last function allows us
-                                                      // to
-                                                      // switch it to the reservation number
-                    seatMString[row1][seatNum] = "na";
-                    f.get(flightnum).setPmap(seatMString);
-                    f.get(flightnum).setIdmap(seatMID);
-                    f.get(flightnum).setCustidmap(seatscust);
-                    System.out.println("This is the seat number: " + seatNum);
-                    System.out.println(f.get(flightnum).toMPString());
-                    moreseats++;
-                    // added one seat and returned all arrays back to their home, this is done each
-                    // time
-                    // for each addition
-                }
-
-                // setting the profit after calculating the total cost
-                NumberFormat nf = NumberFormat.getCurrencyInstance();
-                double javaisfun = f.get(flightnum).getProfit();
-                javaisfun = javaisfun + cost;
-                f.get(flightnum).setProfit(javaisfun);
-
-                // booking reservation
-                System.out.println("Booked reservation for: " + c.get(custNum).getfirstName() + " "
-                    + c.get(custNum).getlastName() + " on flight " + f.get(flightnum).getFlightNum()
-                    + " flying " + f.get(flightnum).getRoute() + " on " + f.get(flightnum).getDate()
-                    + " at " + f.get(flightnum).getTime() + " with " + partyNum
-                    + " seat(s) for a total cost of " + nf.format(cost) + ".");
-                Reservation rr = new Reservation(partyNum, seatn, cost, cc, ff);
-                r.add(rr);
-                // finding the index of that reservation so we can set the one array to the
-                // reservation
-                // number
-                int index = r.indexOf(rr);
-                int resnum = r.get(index).getResNum();
-                seatMID = (f.get(flightnum).getIdmap());
-                for (int i = 0; i < seatMID.length; i++) {
-                    for (int j = 0; j < seatMID[i].length; j++) {
-                        if (seatMID[i][j] == findnums) {
-                            seatMID[i][j] = resnum;
-                        }
-                    }
-                }
-                f.get(flightnum).setIdmap(seatMID);
-                cost = 0;
-                // completely changes any thing that was added by the previous function to
-                // reservation
-                // number so it can be removed if a reservation is canceled
-
-                // FINALLY MORE RESERVATIONS???
-                try {
-                    System.out.println();
-                    System.out.println("More Reservations? true/false");
-                    more = scan.nextBoolean();
-
-                }
-                catch (Exception e) {
-                    System.out.println("Invalid Input. Please enter 'true' or 'false'");
-                    scan.nextLine();
-                }
-                scan.nextLine();
-
-            }
-            catch (Exception e) {
-                System.out.println("Invalid Input. Please enter a Customer number listed above");
-                scan.nextLine();
-            }
-
-        } // more reservations loop
-    }
-
-    public static void cancelReservation(ArrayList<Customer> c, ArrayList<Pilot> p,
-        ArrayList<Reservation> r, ArrayList<Reservation> cr, ArrayList<Flight> f) {
-        Scanner scan = new Scanner(System.in);
-
-        // THIS ARRAY IS NEEDED TO ALLOW US TO RETURN THE Array people see when booking reservations
-        // back to normal.
-        String[][] other = { { "NA", "1A", "1B", "NA" },
-            { "NA", "2A", "2B", "NA" },
-            { "3A", "3B", "3C", "3D", },
-            { "4A", "4B", "4C", "4D", } };
-        boolean more = true;
-        while (more) {
-
-            // Check for empty Reservation ArrayList.
-            if (r.size() == 0) {
-                System.out.println("***No Reservations were found***");
-                break;
-            }
-
-            // select which reservation you want.
-            System.out.println();
-            System.out.println(
-                "***Select the numerical value for the Reservation you want to cancel (type '0' to exit without change)***");
-            System.out.println();
-            for (int i = 0; i < r.size(); i++) {
-                System.out.println((i + 1) + ": Reservation for "
-                    + r.get(i).getCust().getfirstName()
-                    + " " + r.get(i).getCust().getlastName() + " (" + r.get(i).getCust().getEmail()
-                    + ") " + "on flight "
-                    + r.get(i).getF().getFlightNum() + " flying " + r.get(i).getF().getRoute()
-                    + " on " + r.get(i).getF().getDate() + " at " + r.get(i).getF().getTime()
-                    + "\n--------------------------------------------------------------------------------------------------------------");
-            }
-            try {
-                int resnum = scan.nextInt();
-                if (resnum == 0)
-                    break;
-                resnum = resnum - 1;
-                Reservation rr = r.get(resnum);
-                cr.add(rr);
-                // add it to our canceled ArrayList
-
-                // getting all our flight seat arrays so we can remove this reservation from them
-                String[][] seatMString = (r.get(resnum).getF().getPmap());
-                int[][] custidArray = (r.get(resnum).getF().getCustidmap());
-                int[][] seatMID = (r.get(resnum).getF().getIdmap());
-                int findnum = r.get(resnum).getResNum();
-                // removing the reservation
-                for (int i = 0; i < seatMID.length; i++) {
-                    for (int j = 0; j < seatMID[i].length; j++) {
-                        if (seatMID[i][j] == findnum) {
-                            seatMID[i][j] = 0;// this is the reservation number array
-                            seatMString[i][j] = other[i][j];// this is the array the customers see
-                                                            // when
-                                                            // booking
-                            custidArray[i][j] = 0;// this is the array we see when we want to see
-                                                  // who is
-                                                  // booking a seat
-                        }
-                    }
-                }
-                // putting the arrays back after we removed the reservation
-                r.get(resnum).getF().setIdmap(seatMID);
-                r.get(resnum).getF().setPmap(seatMString);
-                r.get(resnum).getF().setCustidmap(custidArray);
-                // removing the profit from the flight
-                double javaisfun = r.get(resnum).getF().getProfit();
-                double javaisreallyfun = r.get(resnum).getCost();
-                javaisfun = javaisfun - javaisreallyfun;
-                r.get(resnum).getF().setProfit(javaisfun);
-                r.remove(rr);// finally removing the reservation
-
-                System.out.println();
-                System.out.println("***Reservation Canceled***");
-            }
-            catch (Exception e) {
-                System.out.println("Invalid Input. Please enter a valid Reservation number");
-                scan.nextLine();
-            }
-
-            // Check for empty Reservation ArrayList.
-            if (r.size() == 0 && more) {
-                System.out.println("***No Reservations were found***");
-                more = false;
-            }
-
-            try {
-                System.out.println();
-                System.out.println("More Cancellations? true/false");
-                more = scan.nextBoolean();
-
-            }
-            catch (Exception e) {
-                System.out.println("Invalid Input. Please enter 'true' or 'false'");
-                scan.nextLine();
-            }
-
-        }
     }
 
     public static void printGrossIncome() {

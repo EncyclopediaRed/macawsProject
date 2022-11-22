@@ -687,20 +687,25 @@ DELIMITER ;
 /* Procedure to print all seats and their availability for a flight */
 /* From flight_seat_availability table */
 /* 1 = available, 0 = reserved */
+/* Sort by seat_id */
 DROP PROCEDURE IF EXISTS print_flight_seats;
 DELIMITER //
 CREATE PROCEDURE print_flight_seats(flight_id INT)
 BEGIN
   SELECT
-	  flight_seat_availability.fs_id AS 'Seat ID',
+    flight_seat_availability.flight_id AS 'Flight ID',
     CONCAT(seat.row, seat.col) AS 'Seat #',
-    reservation_id AS 'Reservation ID', 
-    CASE WHEN available = 0 THEN 'Reserved' ELSE 'Open' END AS 'Availability',
+    reservation_id AS 'Reservation ID',
+    CASE WHEN flight_seat_availability.available = 0 THEN 'Reserved'
+      ELSE 'Open'
+      END AS 'Availability',
     section.price AS 'Price'
-  FROM seat NATURAL JOIN section NATURAL JOIN flight_seat_availability
-  WHERE flight_id = flight_id; /* must get flight_id from user input */
+    FROM flight_seat_availability NATURAL JOIN seat NATURAL JOIN section
+    WHERE flight_seat_availability.flight_id LIKE CONCAT('%', flight_id, '%') /* from user input held in a variable */
+    ORDER BY seat.seat_id;
 END //
 DELIMITER ;
+
 
 /* Procedure to add a reservation to a seat on a flight and changes the seat availability to 0 (reserved)*/
 DROP PROCEDURE IF EXISTS add_seat_to_reservation;
@@ -817,3 +822,23 @@ BEGIN
 	WHERE flight.flight_id LIKE CONCAT ('%', num, '%');
 END //
 DELIMITER ;
+
+/* Procedure to print all flights by flight_id */
+/* showing the origin, destination, departure date, time, and number of seats available */
+/* If a flight has no seats available, print it but show 0 seats available */
+DROP PROCEDURE IF EXISTS print_flight_all;
+DELIMITER //
+CREATE PROCEDURE print_flight_all()
+BEGIN
+  SELECT 
+    flight.flight_id AS 'Flight ID',
+    route.origin AS 'Origin',
+    route.destination AS 'Destination',
+    flight.depart_date AS 'Departure Date',
+    route.time AS 'Departure Time',
+    (SELECT COUNT(*) FROM flight_seat_availability WHERE flight_seat_availability.flight_id = flight.flight_id AND flight_seat_availability.available = 1) AS 'Seats Available'
+  FROM flight
+  INNER JOIN route
+    ON flight.route_id = route.route_id
+  GROUP BY flight.flight_id;
+END //
