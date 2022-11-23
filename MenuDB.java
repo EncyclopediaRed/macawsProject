@@ -9,18 +9,22 @@ import java.util.Scanner;
  * @author R. Barrowclift, C. Hogg, M. Porter - ITP 220
  *
  */
+
+
+
 public class MenuDB {
 
     public static void main(String[] args) {
 
         Scanner scan = new Scanner(System.in);
-
+        
         System.out.println();
         System.out.println("***Welcome to Java Airlines!***");
         int choice = 0; // initialize choice to 0
         while (choice != 12) { // while choice is not 12, keep looping
             choice = menu(); // call menu method and assign choice to the returned value
             if (choice == 0) {
+            	GUIDB.gui();
                 AirlineDriverDB.createConnection();
             } else if (choice == 1) { 
                 AirlineDriverDB.printSeatMap(null);
