@@ -3,6 +3,7 @@ package macawsProject;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.io.IOException;
 import java.util.Scanner;
 
 import javax.swing.ImageIcon;
@@ -21,20 +22,24 @@ import javax.swing.JTextField;
 
 
 
-public class MenuDB {
+public class MenuDBGUI {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
+    	MyFrame frame = new  MyFrame(); 
+    	
+    }
+ 
+    public static void testing(int choice) {
         Scanner scan = new Scanner(System.in);
         
         System.out.println();
         System.out.println("***Welcome to Java Airlines!***");
-        int choice = 0; // initialize choice to 0
+        
         while (choice != 12) { // while choice is not 12, keep looping
-            choice = menu(); // call menu method and assign choice to the returned value
+            // call menu method and assign choice to the returned value
             if (choice == 0) {
-            	
-                AirlineDriverDB.createConnection();
+            	AirlineDriverDB.createConnection();
             } else if (choice == 1) { 
                 AirlineDriverDB.printSeatMap(null);
             } else if (choice == 2) {
@@ -66,7 +71,7 @@ public class MenuDB {
 
     }
 
-    public static int menu() {
+    public static void menudbtx() {
         Scanner scan = new Scanner(System.in);
         System.out.println("\nMenu:");
         System.out.println("0.  Connect to the Database");
@@ -82,8 +87,8 @@ public class MenuDB {
         System.out.println("10. Find canceled flights.");
         System.out.println("11. Add a Customer.");
         System.out.println("12. Exit.");
-        int ans = scan.nextInt();
-        return ans;
+ 
+
 
     }
 
